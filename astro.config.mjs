@@ -1,13 +1,25 @@
 // @ts-check
 
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
-	integrations: [mdx(), sitemap()],
+	site: 'https://pasquale-cerullo.briny-trail-7284.chatgpt.site',
+	integrations: [sitemap(), mdx()],
+	i18n: {
+		defaultLocale: 'en',
+		locales: ['it', 'en'],
+		routing: {
+			prefixDefaultLocale: true,
+			redirectToDefaultLocale: false,
+		},
+	},
+	vite: {
+		plugins: [tailwindcss()],
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

@@ -1,63 +1,85 @@
-# Astro Starter Kit: Blog
+# Sito personale — Pasquale Cerullo
+
+Portfolio bilingue e spazio didattico realizzato con Astro. Il sito raccoglie progetti,
+esperienza, articoli e materiali per gli studenti. La ricerca globale si apre con
+`Cmd + K` su macOS e `Ctrl + K` su Windows/Linux.
+
+## Comandi
 
 ```sh
-npm create astro@latest -- --template blog
+npm install
+npm run check
+npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Per lavorare in locale, il server va avviato in background:
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```sh
+npx astro dev --background
+npx astro dev status
+npx astro dev logs
+npx astro dev stop
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Aggiungere un materiale didattico
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+I materiali sono gestiti dalla collection `materials`. Crea un file Markdown in
+`src/content/materials/it/` e, quando disponibile, la sua versione inglese in
+`src/content/materials/en/`.
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+```md
+---
+title: 'Titolo della risorsa'
+description: 'Descrizione breve e utile per studenti e ricerca.'
+lang: 'it'
+category: 'Programmazione web'
+format: 'guide'
+level: 'Secondaria di secondo grado'
+topics: ['PHP', 'Web']
+href: '/percorso-risorsa/'
+downloadHref: '/percorso/file.pdf'
+updatedDate: '2026-09-28'
+featured: false
+order: 2
+---
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+I formati accettati sono `guide`, `notes`, `exercise`, `slides` e `video`. Le risorse
+vengono inserite automaticamente nella pagina Didattica e nell'indice della ricerca.
 
-## 🧞 Commands
+## Aggiungere un articolo
 
-All commands are run from the root of the project, from a terminal:
+Crea un file `.md` o `.mdx` in `src/content/blog/it/` oppure
+`src/content/blog/en/`. Il frontmatter richiede titolo, descrizione, data e lingua.
+Gli articoli vengono aggiunti automaticamente alla pagina Appunti e alla ricerca.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Aggiornare la guida PHP
 
-## 👀 Want to learn more?
+```sh
+npm run update:guide
+```
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Il comando rigenera il progetto Quarto e copia il risultato in `public/guida-php`.
+È possibile passare un percorso diverso al progetto sorgente:
 
-## Credit
+```sh
+npm run update:guide -- "/percorso/della/guida-quarto"
+```
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+La versione HTML è disponibile in `/guida-php/`; il PDF in
+`/guida-php/Guida-alla-programmazione-PHP.pdf`.
+
+## Struttura principale
+
+- `src/components/`: componenti riutilizzabili dell'interfaccia.
+- `src/content/blog/`: articoli bilingui.
+- `src/content/materials/`: catalogo dei materiali didattici.
+- `src/data/portfolio.ts`: profilo, progetti, competenze ed esperienza.
+- `src/i18n/`: testi dell'interfaccia e utilità per italiano e inglese.
+- `src/pages/[locale]/`: pagine e route localizzate.
+- `public/guida-php/`: output statico della guida Quarto.
+
+## Pubblicazione
+
+Il sito è statico. `npm run build` genera la cartella `dist`, pronta per un hosting
+statico. Prima di ogni pubblicazione eseguire `npm run check` e `npm run build`.

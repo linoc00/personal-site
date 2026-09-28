@@ -1,86 +1,67 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { ImageMetadata } from 'astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Layout from './Layout.astro';
+import { useTranslations, type Locale } from '../i18n/ui';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	updatedDate?: Date;
+	heroImage?: ImageMetadata;
+	locale: Locale;
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, locale } = Astro.props;
+const t = useTranslations(locale);
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
-
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+<Layout title={title} description={description} locale={locale} image={heroImage}>
+	<article class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+		<a
+			href={getRelativeLocaleUrl(locale, '/blog/')}
+			class="mb-8 inline-flex text-sm font-bold text-[var(--brand)] transition-colors hover:underline"
+		>
+			&larr; {t('blog.back')}
+		</a>
+		<header>
+			<p class="text-sm font-semibold text-[var(--muted)]">
+				<FormattedDate date={pubDate} locale={locale} />
+				{
+					updatedDate && (
+						<span class="mt-1 block italic">
+							{t('blog.updated')} <FormattedDate date={updatedDate} locale={locale} />
+						</span>
+					)
+				}
+			</p>
+			<h1
+				class="mt-4 max-w-2xl text-4xl font-bold leading-tight tracking-[-.045em] text-[var(--ink)] sm:text-6xl"
+			>
+				{title}
+			</h1>
+			<p class="mt-5 text-lg leading-8 text-[var(--muted)]">{description}</p>
+		</header>
+		{
+			heroImage && (
+				<div class="mt-8">
+					<Image
+						src={heroImage}
+						alt=""
+						width={1020}
+						height={510}
+						class="w-full rounded-2xl object-cover"
+					/>
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+			)
+		}
+		<div
+			class="prose prose-slate mt-12 max-w-none text-[var(--muted)] prose-a:text-[var(--brand)] prose-headings:tracking-tight prose-headings:text-[var(--ink)] prose-strong:text-[var(--ink)] dark:prose-invert"
+		>
+			<slot />
+		</div>
+	</article>
+</Layout>

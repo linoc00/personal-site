@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Le funzioni – Guida alla programmazione PHP</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../capitoli/04-interazione.html" rel="next">
+<link href="../capitoli/02-strutture.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-36f2db2e0c24a8dfe38894d2c7306603.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nessun risultato",
+    "search-matching-documents-text": "documenti trovati",
+    "search-copy-link-title": "Copiare il link nella ricerca",
+    "search-hide-matches-text": "Nascondere i risultati aggiuntivi",
+    "search-more-match-text": "ci sono altri risultati in questo documento",
+    "search-more-matches-text": "ulteriori risultati in questo documento",
+    "search-clear-button-title": "Pulire",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancellare",
+    "search-submit-button-title": "Inviare",
+    "search-label": "Ricerca"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitoli/03-funzioni.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Ricerca" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Guida alla programmazione PHP</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Ricerca"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefazione</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/01-introduzione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduzione a PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/02-strutture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strutture di controllo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/03-funzioni.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/04-interazione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/05-cookie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Indice</h2>
+   
+  <ul>
+  <li><a href="#cosè-una-funzione" id="toc-cosè-una-funzione" class="nav-link active" data-scroll-target="#cosè-una-funzione"><span class="header-section-number">3.1</span> Cos’è una funzione</a></li>
+  <li><a href="#le-funzioni-built-in" id="toc-le-funzioni-built-in" class="nav-link" data-scroll-target="#le-funzioni-built-in"><span class="header-section-number">3.2</span> Le funzioni built-in</a>
+  <ul class="collapse">
+  <li><a href="#funzioni-sulle-variabili" id="toc-funzioni-sulle-variabili" class="nav-link" data-scroll-target="#funzioni-sulle-variabili">Funzioni sulle variabili</a></li>
+  <li><a href="#funzioni-sulle-stringhe" id="toc-funzioni-sulle-stringhe" class="nav-link" data-scroll-target="#funzioni-sulle-stringhe">Funzioni sulle stringhe</a></li>
+  <li><a href="#funzioni-sugli-array" id="toc-funzioni-sugli-array" class="nav-link" data-scroll-target="#funzioni-sugli-array">Funzioni sugli array</a></li>
+  <li><a href="#funzioni-sulle-date" id="toc-funzioni-sulle-date" class="nav-link" data-scroll-target="#funzioni-sulle-date">Funzioni sulle date</a></li>
+  </ul></li>
+  <li><a href="#le-funzioni-definite-dallutente" id="toc-le-funzioni-definite-dallutente" class="nav-link" data-scroll-target="#le-funzioni-definite-dallutente"><span class="header-section-number">3.3</span> Le funzioni definite dall’utente</a>
+  <ul class="collapse">
+  <li><a href="#parametri-con-valore-di-default" id="toc-parametri-con-valore-di-default" class="nav-link" data-scroll-target="#parametri-con-valore-di-default">Parametri con valore di default</a></li>
+  <li><a href="#passaggio-dei-parametri-per-valore-e-per-riferimento" id="toc-passaggio-dei-parametri-per-valore-e-per-riferimento" class="nav-link" data-scroll-target="#passaggio-dei-parametri-per-valore-e-per-riferimento">Passaggio dei parametri: per valore e per riferimento</a></li>
+  <li><a href="#il-costrutto-return" id="toc-il-costrutto-return" class="nav-link" data-scroll-target="#il-costrutto-return">Il costrutto return</a></li>
+  <li><a href="#visibilità-scope-delle-variabili" id="toc-visibilità-scope-delle-variabili" class="nav-link" data-scroll-target="#visibilità-scope-delle-variabili">Visibilità (scope) delle variabili</a></li>
+  <li><a href="#riuso-delle-funzioni-include-e-require" id="toc-riuso-delle-funzioni-include-e-require" class="nav-link" data-scroll-target="#riuso-delle-funzioni-include-e-require">Riuso delle funzioni: include e require</a></li>
+  </ul></li>
+  <li><a href="#esercizi" id="toc-esercizi" class="nav-link" data-scroll-target="#esercizi"><span class="header-section-number">3.4</span> Esercizi</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="cosè-una-funzione" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="cosè-una-funzione"><span class="header-section-number">3.1</span> Cos’è una funzione</h2>
+<p>Una funzione è un insieme di istruzioni che esegue un’operazione specifica. Evita di riscrivere lo stesso codice più volte: è sufficiente <strong>richiamarla</strong>, fornendole gli eventuali <strong>parametri</strong> di cui ha bisogno. Ogni funzione è caratterizzata da:</p>
+<ul>
+<li><p>un nome;</p></li>
+<li><p>i parametri richiesti (quali e quanti);</p></li>
+<li><p>il fatto di restituire o meno un valore.</p></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nome_funzione()<span class="ot">;</span> <span class="co">// nessun parametro, nessun valore restituito</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>nome_funzione(<span class="va">$a</span><span class="ot">,</span> <span class="va">$b</span>)<span class="ot">;</span> <span class="co">// due parametri</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">$valore</span> <span class="op">=</span> nome_funzione(<span class="va">$a</span>)<span class="ot">;</span>  <span class="co">// il valore restituito viene salvato in una variabile</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le parentesi tonde sono <strong>obbligatorie</strong> anche quando la funzione non richiede parametri.</p>
+</div>
+</div>
+<p>Le funzioni possono essere <strong>built-in</strong> (incorporate nel linguaggio) oppure <strong>definite dall’utente</strong>.</p>
+</section>
+<section id="le-funzioni-built-in" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="le-funzioni-built-in"><span class="header-section-number">3.2</span> Le funzioni built-in</h2>
+<p>PHP dispone di moltissime funzioni incorporate. Non è necessario impararle a memoria, ma è importante saper consultare il manuale ufficiale <a href="https://www.php.net">php.net</a>: digitando <code>https://www.php.net/nome_funzione</code> si accede direttamente alla pagina della funzione.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Nota">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nel manuale ogni funzione è descritta nella forma <code>tipo_restituito nome(parametri)</code>. I parametri indicati tra parentesi quadre <code>[ ]</code> sono opzionali.</p>
+</div>
+</div>
+<section id="funzioni-sulle-variabili" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="funzioni-sulle-variabili">Funzioni sulle variabili</h3>
+<ul>
+<li><p><code>isset($var)</code>: TRUE se la variabile è definita e diversa da NULL;</p></li>
+<li><p><code>empty($var)</code>: TRUE se la variabile è vuota (stringa vuota, 0, NULL) oppure non definita;</p></li>
+<li><p><code>is_null($var)</code>: TRUE se il valore della variabile è NULL;</p></li>
+<li><p><code>is_int($var)</code>, <code>is_float($var)</code>, <code>is_string($var)</code>, <code>is_array($var)</code>: TRUE se la variabile è, rispettivamente, un intero, un decimale, una stringa, un array;</p></li>
+<li><p><code>is_numeric($var)</code>: TRUE se la variabile è un numero oppure una stringa che contiene un numero;</p></li>
+<li><p><code>unset($var)</code>: distrugge la variabile (è un costrutto del linguaggio, non una vera funzione). Dopo l’<code>unset</code>, <code>isset</code> restituisce FALSE ed <code>empty</code> restituisce TRUE;</p></li>
+<li><p><code>print_r($var)</code>: stampa il contenuto di una variabile o di un array (utile per il debug, vedi sezione precedente).</p></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="dv">5</span><span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="kw">isset</span>(<span class="va">$a</span>)<span class="ot">;</span>        <span class="co">// TRUE</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="fu">is_int</span>(<span class="va">$a</span>)<span class="ot">;</span>       <span class="co">// TRUE</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="fu">is_float</span>(<span class="va">$a</span>)<span class="ot">;</span>     <span class="co">// FALSE</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="st">'5'</span><span class="ot">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="fu">is_int</span>(<span class="va">$a</span>)<span class="ot">;</span>       <span class="co">// FALSE: ora $a contiene una stringa</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="fu">is_string</span>(<span class="va">$a</span>)<span class="ot">;</span>    <span class="co">// TRUE</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="fu">is_numeric</span>(<span class="va">$a</span>)<span class="ot">;</span>   <span class="co">// TRUE: la stringa contiene un numero</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">unset</span>(<span class="va">$a</span>)<span class="ot">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="kw">isset</span>(<span class="va">$a</span>)<span class="ot">;</span>        <span class="co">// FALSE: variabile distrutta</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">// utilizzo tipico: condizione di un if</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="kw">empty</span>(<span class="va">$a</span>)) {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Variabile vuota o non definita"</span><span class="ot">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"La variabile contiene un valore"</span><span class="ot">;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="funzioni-sulle-stringhe" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="funzioni-sulle-stringhe">Funzioni sulle stringhe</h3>
+<ul>
+<li><p><code>strlen($str)</code>: restituisce la lunghezza della stringa in byte. Con testo UTF-8 contenente caratteri accentati, per contare i caratteri si usa <code>mb_strlen()</code> se l’estensione <code>mbstring</code> è disponibile;</p></li>
+<li><p><code>trim($str)</code>, <code>ltrim($str)</code>, <code>rtrim($str)</code>: eliminano gli spazi rispettivamente all’inizio e alla fine, solo all’inizio, solo alla fine della stringa;</p></li>
+<li><p><code>ucfirst($str)</code>: porta in maiuscolo il primo carattere della stringa;</p></li>
+<li><p><code>ucwords($str)</code>: porta in maiuscolo il primo carattere di ogni parola;</p></li>
+<li><p><code>strtolower($str)</code>, <code>strtoupper($str)</code>: convertono tutta la stringa in minuscolo o in maiuscolo;</p></li>
+<li><p><code>str_replace($cerca, $sostituisci, $str)</code>: sostituisce nella stringa tutte le occorrenze di <code>$cerca</code> con <code>$sostituisci</code> (<code>str_ireplace</code> ignora la differenza tra maiuscole e minuscole);</p></li>
+<li><p><code>strpos($str, $cerca)</code>: restituisce la posizione (a partire da 0) della prima occorrenza di <code>$cerca</code>, oppure FALSE se non è presente (<code>stripos</code> ignora maiuscole e minuscole);</p></li>
+<li><p><code>strstr($str, $cerca)</code>: restituisce la parte di stringa che parte dalla prima occorrenza di <code>$cerca</code>, oppure FALSE (<code>stristr</code> ignora maiuscole e minuscole);</p></li>
+<li><p><code>substr($str, $inizio [, $lunghezza])</code>: restituisce una porzione della stringa.</p></li>
+</ul>
+<p>Il funzionamento di <code>substr</code> dipende dai valori dei parametri:</p>
+<ul>
+<li><p>i caratteri si contano <strong>a partire da 0</strong>;</p></li>
+<li><p>se <code>$inizio</code> è negativo si parte dalla fine (<code>-1</code> è l’ultimo carattere);</p></li>
+<li><p>se <code>$lunghezza</code> è omessa si arriva fino alla fine della stringa;</p></li>
+<li><p>se <code>$lunghezza</code> è negativa indica quanti caratteri escludere dalla fine.</p></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">$s</span> <span class="op">=</span> <span class="st">"  ciao mondo  "</span><span class="ot">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">strlen</span>(<span class="va">$s</span>)<span class="ot">;</span>                  <span class="co">// 14</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">$s</span> <span class="op">=</span> <span class="fu">trim</span>(<span class="va">$s</span>)<span class="ot">;</span>                    <span class="co">// "ciao mondo"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">ucfirst</span>(<span class="va">$s</span>)<span class="ot">;</span>                 <span class="co">// Ciao mondo</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">ucwords</span>(<span class="va">$s</span>)<span class="ot">;</span>                 <span class="co">// Ciao Mondo</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">strtoupper</span>(<span class="va">$s</span>)<span class="ot">;</span>              <span class="co">// CIAO MONDO</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">str_replace</span>(<span class="st">"o"</span><span class="ot">,</span> <span class="st">"0"</span><span class="ot">,</span> <span class="va">$s</span>)<span class="ot">;</span>   <span class="co">// cia0 m0nd0</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">strpos</span>(<span class="va">$s</span><span class="ot">,</span> <span class="st">"mondo"</span>)<span class="ot">;</span>         <span class="co">// 5</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">strstr</span>(<span class="st">"Lorenzo"</span><span class="ot">,</span> <span class="st">"re"</span>)<span class="ot">;</span>     <span class="co">// renzo</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">substr</span>(<span class="st">"Lorenzo"</span><span class="ot">,</span> <span class="dv">4</span>)<span class="ot">;</span>        <span class="co">// nzo</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">substr</span>(<span class="st">"Lorenzo"</span><span class="ot">,</span> <span class="op">-</span><span class="dv">3</span><span class="ot">,</span> <span class="dv">2</span>)<span class="ot">;</span>    <span class="co">// nz</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">substr</span>(<span class="st">"Lorenzo"</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">,</span> <span class="op">-</span><span class="dv">2</span>)<span class="ot">;</span>    <span class="co">// oren</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>strpos</code> restituisce <code>0</code> se la stringa cercata si trova all’inizio, ma <code>0</code> e <code>false</code> sono valori uguali per l’operatore <code>==</code>. Per verificare se la ricerca è riuscita si usa l’operatore <code>!==</code>:</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">strpos</span>(<span class="st">"Lorenzo"</span><span class="ot">,</span> <span class="st">"Lo"</span>) <span class="op">!==</span> <span class="kw">false</span>) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Trovato"</span><span class="ot">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="funzioni-sugli-array" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="funzioni-sugli-array">Funzioni sugli array</h3>
+<ul>
+<li><p><code>count($array)</code> (o <code>sizeof</code>): restituisce il numero di elementi dell’array;</p></li>
+<li><p><code>array_reverse($array [, $preserve_keys])</code>: restituisce l’array con gli elementi in ordine inverso. Con <code>TRUE</code> come secondo parametro le chiavi vengono mantenute;</p></li>
+<li><p><code>sort($array)</code>, <code>rsort($array)</code>: ordinano l’array in modo crescente o decrescente;</p></li>
+<li><p><code>in_array($valore, $array)</code>: TRUE se il valore è presente nell’array;</p></li>
+<li><p><code>array_key_exists($chiave, $array)</code>: TRUE se la chiave è presente nell’array;</p></li>
+<li><p><code>array_search($valore, $array)</code>: restituisce la chiave del valore trovato, oppure FALSE;</p></li>
+<li><p><code>array_merge($array1, $array2 [, ...])</code>: unisce due o più array. Le chiavi numeriche vengono rinumerate; per le chiavi associative uguali, l’ultimo valore sovrascrive i precedenti;</p></li>
+<li><p><code>array_push($array, $valore [, ...])</code>: aggiunge uno o più valori in fondo all’array;</p></li>
+<li><p><code>array_pop($array)</code>: rimuove e restituisce l’ultimo elemento;</p></li>
+<li><p><code>array_unshift($array, $valore [, ...])</code>: aggiunge uno o più valori all’inizio dell’array;</p></li>
+<li><p><code>array_shift($array)</code>: rimuove e restituisce il primo elemento (gli indici numerici vengono rinumerati);</p></li>
+<li><p><code>explode($separatore, $str)</code>: trasforma una stringa in un array, dividendola in base al separatore;</p></li>
+<li><p><code>implode($separatore, $array)</code>: trasforma un array in una stringa, inserendo il separatore tra gli elementi.</p></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le funzioni <code>sort</code>, <code>rsort</code>, <code>array_push</code>, <code>array_pop</code>, <code>array_shift</code> e <code>array_unshift</code> <strong>modificano direttamente l’array</strong> passato come parametro: l’ordine o il contenuto originale va perso. Dopo <code>sort</code> e <code>rsort</code> le chiavi originali vengono eliminate e sostituite da indici numerici a partire da 0.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$numeri</span> <span class="op">=</span> [<span class="dv">4</span><span class="ot">,</span> <span class="dv">9</span><span class="ot">,</span> <span class="dv">1</span>]<span class="ot">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">count</span>(<span class="va">$numeri</span>)<span class="ot">;</span>             <span class="co">// 3</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="va">$numeri</span>)<span class="ot">;</span>                   <span class="co">// 1, 4, 9</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">array_push</span>(<span class="va">$numeri</span><span class="ot">,</span> <span class="dv">7</span>)<span class="ot">;</span>          <span class="co">// 1, 4, 9, 7</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="va">$ultimo</span> <span class="op">=</span> <span class="fu">array_pop</span>(<span class="va">$numeri</span>)<span class="ot">;</span>    <span class="co">// $ultimo = 7      -&gt; 1, 4, 9</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="va">$primo</span> <span class="op">=</span> <span class="fu">array_shift</span>(<span class="va">$numeri</span>)<span class="ot">;</span>   <span class="co">// $primo = 1       -&gt; 4, 9</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">array_unshift</span>(<span class="va">$numeri</span><span class="ot">,</span> <span class="dv">0</span>)<span class="ot">;</span>       <span class="co">// 0, 4, 9</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">var_dump</span>(<span class="fu">in_array</span>(<span class="dv">4</span><span class="ot">,</span> <span class="va">$numeri</span>))<span class="ot">;</span>  <span class="co">// bool(true)</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">array_search</span>(<span class="dv">9</span><span class="ot">,</span> <span class="va">$numeri</span>)<span class="ot">;</span>   <span class="co">// 2</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="va">$c</span> <span class="op">=</span> <span class="fu">array_merge</span>([<span class="dv">1</span><span class="ot">,</span> <span class="dv">2</span>]<span class="ot">,</span> [<span class="dv">3</span><span class="ot">,</span> <span class="dv">4</span>])<span class="ot">;</span>        <span class="co">// 1, 2, 3, 4</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="va">$parole</span> <span class="op">=</span> <span class="fu">explode</span>(<span class="st">" "</span><span class="ot">,</span> <span class="st">"ciao Mario"</span>)<span class="ot">;</span>    <span class="co">// ["ciao", "Mario"]</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="va">$testo</span> <span class="op">=</span> <span class="fu">implode</span>(<span class="st">"-"</span><span class="ot">,</span> <span class="va">$parole</span>)<span class="ot">;</span>          <span class="co">// "ciao-Mario"</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Come per <code>strpos()</code>, il risultato di <code>array_search()</code> deve essere confrontato con <code>false</code> usando <code>!==</code> quando si vuole sapere se il valore è stato trovato.</p>
+</section>
+<section id="funzioni-sulle-date" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="funzioni-sulle-date">Funzioni sulle date</h3>
+<p>Le funzioni sulle date si basano sul <strong>timestamp</strong>: un numero intero che rappresenta i secondi trascorsi dal 1° gennaio 1970.</p>
+<ul>
+<li><p><code>time()</code>: restituisce il timestamp del momento in cui viene eseguita;</p></li>
+<li><p><code>date($formato [, $timestamp])</code>: restituisce una stringa con la data formattata secondo il formato indicato. Se il timestamp è omesso, usa quello attuale;</p></li>
+<li><p><code>mktime($ora, $minuti, $secondi, $mese, $giorno, $anno)</code>: calcola il timestamp di una data. Se un valore supera il proprio limite, PHP lo riporta nell’intervallo corretto, ad esempio il mese 14 diventa febbraio dell’anno successivo. Questo permette di eseguire calcoli sulle date;</p></li>
+<li><p><code>checkdate($mese, $giorno, $anno)</code>: TRUE se i valori formano una data valida.</p></li>
+</ul>
+<p>I principali codici per il formato di <code>date</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 18%">
+<col style="width: 31%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Codice</th>
+<th>Significato</th>
+<th style="text-align: center;">Codice</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>Y</code></td>
+<td>anno (4 cifre)</td>
+<td style="text-align: center;"><code>d</code></td>
+<td>giorno del mese (01–31)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>y</code></td>
+<td>anno (2 cifre)</td>
+<td style="text-align: center;"><code>j</code></td>
+<td>giorno del mese (1–31)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>m</code></td>
+<td>mese (01–12)</td>
+<td style="text-align: center;"><code>w</code></td>
+<td>giorno della settimana (0 = dom, 6 = sab)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>n</code></td>
+<td>mese (1–12)</td>
+<td style="text-align: center;"><code>l</code></td>
+<td>giorno della settimana testuale</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>F</code></td>
+<td>mese testuale (<code>January</code>)</td>
+<td style="text-align: center;"><code>D</code></td>
+<td>giorno della settimana su 3 lettere</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>M</code></td>
+<td>mese su 3 lettere (<code>Jan</code>)</td>
+<td style="text-align: center;"><code>H</code></td>
+<td>ora (00–23)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>i</code></td>
+<td>minuti (00–59)</td>
+<td style="text-align: center;"><code>G</code></td>
+<td>ora (0–23)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>s</code></td>
+<td>secondi (00–59)</td>
+<td style="text-align: center;"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">time</span>()<span class="ot">;</span>                          <span class="co">// timestamp attuale</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">date</span>(<span class="st">"d/m/Y"</span>)<span class="ot">;</span>                   <span class="co">// data attuale, es. 24/09/2026</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">date</span>(<span class="st">"H:i:s"</span>)<span class="ot">;</span>                   <span class="co">// ora attuale, es. 10:30:15</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">date</span>(<span class="st">"d/m/Y"</span><span class="ot">,</span> <span class="fu">mktime</span>(<span class="dv">0</span><span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">0</span><span class="ot">,</span> <span class="dv">14</span><span class="ot">,</span> <span class="dv">1</span><span class="ot">,</span> <span class="dv">2026</span>))<span class="ot">;</span>   <span class="co">// 01/02/2027</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">var_dump</span>(<span class="fu">checkdate</span>(<span class="dv">2</span><span class="ot">,</span> <span class="dv">30</span><span class="ot">,</span> <span class="dv">2026</span>))<span class="ot">;</span>     <span class="co">// bool(false)</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I parametri di <code>mktime</code> hanno un ordine particolare (ora, minuti, secondi, mese, giorno, anno) che porta facilmente a errori.</p>
+</div>
+</div>
+<p>I timestamp non contengono informazioni sul fuso orario. Per applicazioni reali è preferibile utilizzare <code>DateTimeImmutable</code> e impostare esplicitamente il fuso:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">$oraRoma</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">DateTimeImmutable</span>(<span class="st">"now"</span><span class="ot">,</span> <span class="kw">new</span> <span class="bu">DateTimeZone</span>(<span class="st">"Europe/Rome"</span>))<span class="ot">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$oraRoma</span>-&gt;format(<span class="st">"d/m/Y H:i:s"</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Date moderne">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Consiglio</span>Date moderne
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>DateTimeImmutable</code> restituisce nuovi oggetti quando si modifica una data, evitando cambiamenti accidentali dell’oggetto originale. È generalmente preferibile per elaborazioni non banali.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="le-funzioni-definite-dallutente" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="le-funzioni-definite-dallutente"><span class="header-section-number">3.3</span> Le funzioni definite dall’utente</h2>
+<p>Quando una stessa sequenza di istruzioni deve essere ripetuta più volte, è consigliabile definire una funzione propria. I vantaggi sono un codice più leggibile, più compatto e più facile da mantenere. La sintassi è la seguente:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> nomeFunzione(<span class="va">$parametro1</span><span class="ot">,</span> <span class="va">$parametro2</span> <span class="op">=</span> valoreDefault) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&lt;</span>blocco di istruzioni<span class="op">&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">&lt;</span>espressione<span class="op">&gt;</span><span class="ot">;</span>   <span class="co">// opzionale</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le parentesi graffe sono obbligatorie. Le dichiarazioni di tipo dei parametri e del valore restituito sono facoltative, ma rendono il contratto della funzione più chiaro e permettono a PHP di rilevare utilizzi errati.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> saluta(<span class="va">$nome</span>) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Ciao "</span> <span class="op">.</span> <span class="va">$nome</span><span class="ot">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> saluta(<span class="st">"Mario"</span>)<span class="ot">;</span>   <span class="co">// Ciao Mario</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La stessa funzione può essere dichiarata specificando i tipi:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> saluta(<span class="dt">string</span> <span class="va">$nome</span>)<span class="ot">:</span> <span class="dt">string</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Ciao "</span> <span class="op">.</span> <span class="va">$nome</span><span class="ot">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="parametri-con-valore-di-default" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="parametri-con-valore-di-default">Parametri con valore di default</h3>
+<p>Se a un parametro viene assegnato un valore di default nella definizione, il parametro diventa <strong>facoltativo</strong>: se nella chiamata manca, la funzione usa il valore di default. I parametri facoltativi vanno indicati dopo quelli obbligatori.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> anagrafe(<span class="va">$nome</span><span class="ot">,</span> <span class="va">$indirizzo</span><span class="ot">,</span> <span class="va">$cf</span> <span class="op">=</span> <span class="st">"non disponibile"</span>) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Nome: "</span> <span class="op">.</span> <span class="va">$nome</span> <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Indirizzo: "</span> <span class="op">.</span> <span class="va">$indirizzo</span> <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Codice fiscale: "</span> <span class="op">.</span> <span class="va">$cf</span> <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>anagrafe(<span class="st">"Mario Rossi"</span><span class="ot">,</span> <span class="st">"via Roma 2"</span><span class="ot">,</span> <span class="st">"RSSMRA69S12A944X"</span>)<span class="ot">;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>anagrafe(<span class="st">"Paolo Verdi"</span><span class="ot">,</span> <span class="st">"via Parigi 9"</span>)<span class="ot">;</span>   <span class="co">// codice fiscale: non disponibile</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="passaggio-dei-parametri-per-valore-e-per-riferimento" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="passaggio-dei-parametri-per-valore-e-per-riferimento">Passaggio dei parametri: per valore e per riferimento</h3>
+<ul>
+<li><p><strong>Per valore</strong> (default): la funzione lavora su una <strong>copia</strong> della variabile, quindi la variabile originale non viene modificata;</p></li>
+<li><p><strong>Per riferimento</strong>: la funzione lavora sulla variabile originale, che può quindi essere modificata. Si ottiene anteponendo il simbolo <code>&amp;</code> al parametro nella <strong>definizione</strong> della funzione.</p></li>
+</ul>
+<p>Nella chiamata il simbolo <code>&amp;</code> non va indicato.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> quadrato(<span class="va">$a</span>) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$a</span> <span class="op">=</span> <span class="va">$a</span> <span class="op">*</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> quadratoRif(<span class="op">&amp;</span><span class="va">$a</span>) {</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">$a</span> <span class="op">=</span> <span class="va">$a</span> <span class="op">*</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="dv">2</span><span class="ot">;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>quadrato(<span class="va">$b</span>)<span class="ot">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$b</span><span class="ot">;</span>          <span class="co">// 2: passaggio per valore, $b non cambia</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>quadratoRif(<span class="va">$b</span>)<span class="ot">;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$b</span><span class="ot">;</span>          <span class="co">// 4: passaggio per riferimento, $b viene modificata</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="il-costrutto-return" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="il-costrutto-return">Il costrutto return</h3>
+<p>L’istruzione <code>return</code> (opzionale) restituisce <strong>un solo valore</strong> al chiamante e <strong>termina l’esecuzione</strong> della funzione.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> divisione(<span class="va">$num1</span><span class="ot">,</span> <span class="va">$num2</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$num2</span> <span class="op">==</span> <span class="dv">0</span>) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">FALSE</span><span class="ot">;</span>   <span class="co">// la funzione termina qui</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">$num1</span> <span class="op">/</span> <span class="va">$num2</span><span class="ot">;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="va">$m</span> <span class="op">=</span> divisione(<span class="dv">4</span><span class="ot">,</span> <span class="dv">2</span>)<span class="ot">;</span>   <span class="co">// 2</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="va">$m</span> <span class="op">=</span> divisione(<span class="dv">5</span><span class="ot">,</span> <span class="dv">0</span>)<span class="ot">;</span>   <span class="co">// FALSE</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Poiché <code>0</code> e <code>false</code> sono uguali per l’operatore <code>==</code>, per controllare l’esito della funzione precedente si usa <code>$m === false</code>.</p>
+</div>
+</div>
+<p>Per restituire più valori si può restituire un <strong>array</strong>, che il chiamante può scomporre con <code>list()</code> o con la sintassi abbreviata <code>[]</code>. Nella forma posizionale gli elementi vengono associati a partire dall’indice <code>0</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> calcola(<span class="va">$a</span><span class="ot">,</span> <span class="va">$b</span>) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dt">array</span>(<span class="va">$a</span> <span class="op">*</span> <span class="dv">10</span><span class="ot">,</span> <span class="va">$b</span> <span class="op">*</span> <span class="dv">100</span>)<span class="ot">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">list</span>(<span class="va">$x</span><span class="ot">,</span> <span class="va">$y</span>) <span class="op">=</span> calcola(<span class="dv">2</span><span class="ot">,</span> <span class="dv">3</span>)<span class="ot">;</span>   <span class="co">// $x = 20, $y = 300</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>[<span class="va">$x</span><span class="ot">,</span> <span class="va">$y</span>] <span class="op">=</span> calcola(<span class="dv">2</span><span class="ot">,</span> <span class="dv">3</span>)<span class="ot">;</span>       <span class="co">// sintassi abbreviata equivalente</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="visibilità-scope-delle-variabili" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="visibilità-scope-delle-variabili">Visibilità (scope) delle variabili</h3>
+<p>Le variabili usate all’interno di una funzione sono <strong>locali</strong>: esistono solo nella funzione e sono diverse da quelle definite all’esterno, anche se hanno lo stesso nome.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> raddoppia(<span class="va">$num</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$temp</span> <span class="op">=</span> <span class="va">$num</span> <span class="op">*</span> <span class="dv">2</span><span class="ot">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>raddoppia(<span class="dv">5</span>)<span class="ot">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="va">$temp</span><span class="ot">;</span>   <span class="co">// ERRORE: $temp esiste solo dentro la funzione</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Per utilizzare all’esterno un valore calcolato in una funzione, bisogna <strong>restituirlo con return</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> raddoppia(<span class="va">$num</span>) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">$num</span> <span class="op">*</span> <span class="dv">2</span><span class="ot">;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="va">$temp</span> <span class="op">=</span> raddoppia(<span class="dv">5</span>)<span class="ot">;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="st">"Risultato: "</span> <span class="op">.</span> <span class="va">$temp</span><span class="ot">;</span>   <span class="co">// Risultato: 10</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Nota">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fanno eccezione le variabili <strong>superglobali</strong> (come <code>$_GET</code> e <code>$_POST</code>), che sono accessibili in qualsiasi punto dello script, anche all’interno delle funzioni.</p>
+</div>
+</div>
+</section>
+<section id="riuso-delle-funzioni-include-e-require" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="riuso-delle-funzioni-include-e-require">Riuso delle funzioni: include e require</h3>
+<p>Le funzioni utili in più pagine si scrivono in un file separato, che viene poi importato con le istruzioni <code>include</code> e <code>require</code>.</p>
+<p>File <code>funzioni.php</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> grassetto(<span class="dt">string</span> <span class="va">$stringa</span>)<span class="ot">:</span> <span class="dt">string</span> {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"&lt;strong&gt;"</span> <span class="op">.</span> <span class="va">$stringa</span> <span class="op">.</span> <span class="st">"&lt;/strong&gt;"</span><span class="ot">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>File <code>main.php</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">require_once</span> <span class="st">"funzioni.php"</span><span class="ot">;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> grassetto(<span class="st">"testo in grassetto"</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La differenza tra le due istruzioni riguarda il comportamento in caso di errore (file non trovato):</p>
+<ul>
+<li><p><code>include</code>: genera un <strong>warning</strong> e lo script continua;</p></li>
+<li><p><code>require</code>: genera un <strong>errore fatale</strong> e lo script si interrompe.</p></li>
+</ul>
+<p>Le varianti <code>include_once</code> e <code>require_once</code> importano il file una sola volta, evitando l’errore causato dalla ridefinizione delle stesse funzioni.</p>
+</section>
+</section>
+<section id="esercizi" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="esercizi"><span class="header-section-number">3.4</span> Esercizi</h2>
+<ol type="1">
+<li>Scrivere una funzione <code>isPari(int $numero): bool</code> che stabilisca se un numero è pari.</li>
+<li>Scrivere una funzione che riceva nome e cognome e restituisca una stringa formattata con le iniziali maiuscole.</li>
+<li>Scrivere una funzione che riceva un array di numeri e ne restituisca minimo, massimo e media.</li>
+<li>Scrivere una funzione con un parametro facoltativo per generare un messaggio di saluto formale oppure informale.</li>
+<li>Dimostrare con un esempio la differenza tra passaggio per valore e passaggio per riferimento.</li>
+<li>Separare alcune funzioni in <code>funzioni.php</code> e importarle in una seconda pagina usando <code>require_once</code>.</li>
+<li>Creare un oggetto <code>DateTimeImmutable</code> relativo al fuso <code>Europe/Rome</code> e stampare data e ora nei formati italiano e ISO 8601.</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled" title="Istruzioni di consegna">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Istruzioni di consegna
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata <code>cognome_nome</code> e consegnarla in formato compresso.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiato!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiato!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../capitoli/02-strutture.html" class="pagination-link" aria-label="Strutture di controllo">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strutture di controllo</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../capitoli/04-interazione.html" class="pagination-link" aria-label="Form HTML e interazione con PHP">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

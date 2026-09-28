@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import MaterialCard from '../../../components/MaterialCard.astro';
+import { SITE_DESCRIPTION } from '../../../consts';
+import { localeParams } from '../../../i18n/utils';
+import { useTranslations } from '../../../i18n/ui';
+import Layout from '../../../layouts/Layout.astro';
+
+export function getStaticPaths() { return localeParams(); }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const materials = (await getCollection('materials', ({ data }) => data.lang === locale)).sort((a, b) => a.data.order - b.data.order);
+const topics = [...new Set(materials.flatMap(({ data }) => data.topics))];
+---
+<Layout title={`${t('nav.materials')} — Pasquale Cerullo`} description={SITE_DESCRIPTION[locale]} locale={locale}>
+	<section class="section-shell">
+		<div class="site-container">
+			<div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+				<div><p class="eyebrow">{t('materials.eyebrow')}</p><h1 class="section-title !max-w-3xl">{t('materials.title')}</h1><p class="section-copy">{t('materials.subtitle')}</p></div>
+				<div class="panel rounded-2xl px-5 py-4"><span class="block text-3xl font-bold text-[var(--ink)]">{String(materials.length).padStart(2, '0')}</span><span class="text-sm text-[var(--muted)]">{materials.length === 1 ? t('materials.available') : t('materials.available_plural')}</span></div>
+			</div>
+			{topics.length > 1 && <div class="mt-10 flex flex-wrap gap-2" role="group" aria-label={t('materials.filter')}><button data-topic="all" aria-pressed="true" class="rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--surface)]">{t('materials.all_topics')}</button>{topics.map((topic) => <button data-topic={topic} aria-pressed="false" class="rounded-full border border-[var(--line)] bg-[var(--surface-strong)] px-4 py-2 text-sm font-bold text-[var(--muted)] transition hover:border-[var(--brand)]">{topic}</button>)}</div>}
+			<div class="mt-10 grid gap-6 lg:grid-cols-2" data-material-grid>{materials.map((material) => <MaterialCard material={material} locale={locale} />)}</div>
+			<p data-material-empty hidden class="mt-10 rounded-2xl border border-dashed border-[var(--line)] p-10 text-center text-[var(--muted)]">{t('materials.empty')}</p>
+		</div>
+	</section>
+</Layout>
+<script>
+	const topicButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-topic]'));
+	const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-material-card]'));
+	const empty = document.querySelector<HTMLElement>('[data-material-empty]');
+	for (const button of topicButtons) button.addEventListener('click', () => {
+		const topic = button.dataset.topic || 'all';
+		let visible = 0;
+		for (const item of topicButtons) {
+			const active = item === button;
+			item.setAttribute('aria-pressed', String(active));
+			item.classList.toggle('bg-[var(--ink)]', active);
+			item.classList.toggle('text-[var(--surface)]', active);
+			item.classList.toggle('border', !active);
+			item.classList.toggle('border-[var(--line)]', !active);
+			item.classList.toggle('text-[var(--muted)]', !active);
+		}
+		for (const card of cards) { const show = topic === 'all' || (card.dataset.topics || '').split('|').includes(topic); card.toggleAttribute('hidden', !show); if (show) visible += 1; }
+		empty?.toggleAttribute('hidden', visible > 0);
+	});
+</script>

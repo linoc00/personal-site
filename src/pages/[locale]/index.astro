@@ -1,0 +1,26 @@
+---
+import Contact from '../../components/Contact.astro';
+import Experience from '../../components/Experience.astro';
+import Hero from '../../components/Hero.astro';
+import Projects from '../../components/Projects.astro';
+import Skills from '../../components/Skills.astro';
+import TeachingPreview from '../../components/TeachingPreview.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { localeParams } from '../../i18n/utils';
+import Layout from '../../layouts/Layout.astro';
+
+export function getStaticPaths() {
+	return localeParams();
+}
+
+const { locale } = Astro.props;
+---
+
+<Layout title={SITE_TITLE[locale]} description={SITE_DESCRIPTION[locale]} locale={locale}>
+	<Hero locale={locale} />
+	<TeachingPreview locale={locale} />
+	<Projects locale={locale} />
+	<Skills locale={locale} />
+	<Experience locale={locale} />
+	<Contact locale={locale} />
+</Layout>

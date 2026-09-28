@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Locale } from '../i18n/ui';
+import MaterialCard from './MaterialCard.astro';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const materials = (await getCollection('materials', ({ data }) => data.lang === locale && data.featured)).sort((a, b) => a.data.order - b.data.order);
+---
+<section id="didattica" class="section-shell border-y border-[var(--line)] bg-[color:color-mix(in_srgb,var(--brand-soft)_42%,transparent)]">
+	<div class="site-container">
+		<div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+			<div><p class="eyebrow">{t('materials.eyebrow')}</p><h2 class="section-title">{t('materials.title')}</h2><p class="section-copy">{t('materials.subtitle')}</p></div>
+			<a href={getRelativeLocaleUrl(locale, '/didattica/')} class="inline-flex shrink-0 items-center gap-2 self-start rounded-xl border border-[var(--line)] bg-[var(--surface-strong)] px-4 py-2.5 text-sm font-bold text-[var(--ink)] transition hover:border-[var(--brand)]">{t('materials.all')} <span aria-hidden="true">→</span></a>
+		</div>
+		<div class="mt-10 grid gap-5">{materials.map((material) => <MaterialCard material={material} locale={locale} featured />)}</div>
+	</div>
+</section>

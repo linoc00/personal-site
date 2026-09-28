@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import SearchPalette from '../components/SearchPalette.astro';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+	title: string;
+	description: string;
+	locale: Locale;
+	image?: ImageMetadata;
+}
+
+const { title, description, locale, image } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<BaseHead title={title} description={description} locale={locale} image={image} />
+		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+		<script is:inline>
+			(function () {
+				var stored = localStorage.getItem('theme');
+				var dark =
+					stored === 'dark' ||
+					(stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+				if (dark) document.documentElement.classList.add('dark');
+			})();
+		</script>
+	</head>
+	<body
+		class="min-h-screen font-sans text-[var(--ink)] antialiased transition-colors"
+	>
+		<a href="#main-content" class="fixed left-4 top-3 z-[100] -translate-y-20 rounded-lg bg-[var(--ink)] px-4 py-2 text-sm font-semibold text-[var(--surface)] transition-transform focus:translate-y-0">Skip to content</a>
+		<Header locale={locale} />
+		<main id="main-content">
+			<slot />
+		</main>
+		<Footer locale={locale} />
+		<SearchPalette locale={locale} />
+	</body>
+</html>

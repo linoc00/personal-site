@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Form HTML e interazione con PHP – Guida alla programmazione PHP</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../capitoli/05-cookie.html" rel="next">
+<link href="../capitoli/03-funzioni.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-36f2db2e0c24a8dfe38894d2c7306603.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nessun risultato",
+    "search-matching-documents-text": "documenti trovati",
+    "search-copy-link-title": "Copiare il link nella ricerca",
+    "search-hide-matches-text": "Nascondere i risultati aggiuntivi",
+    "search-more-match-text": "ci sono altri risultati in questo documento",
+    "search-more-matches-text": "ulteriori risultati in questo documento",
+    "search-clear-button-title": "Pulire",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancellare",
+    "search-submit-button-title": "Inviare",
+    "search-label": "Ricerca"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitoli/04-interazione.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Ricerca" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Guida alla programmazione PHP</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Ricerca"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefazione</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/01-introduzione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduzione a PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/02-strutture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strutture di controllo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/03-funzioni.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/04-interazione.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/05-cookie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Indice</h2>
+   
+  <ul>
+  <li><a href="#il-ruolo-dei-form" id="toc-il-ruolo-dei-form" class="nav-link active" data-scroll-target="#il-ruolo-dei-form"><span class="header-section-number">4.1</span> Il ruolo dei form</a></li>
+  <li><a href="#il-tag-form" id="toc-il-tag-form" class="nav-link" data-scroll-target="#il-tag-form"><span class="header-section-number">4.2</span> Il tag FORM</a>
+  <ul class="collapse">
+  <li><a href="#fieldset-e-legend" id="toc-fieldset-e-legend" class="nav-link" data-scroll-target="#fieldset-e-legend">FIELDSET e LEGEND</a></li>
+  </ul></li>
+  <li><a href="#get-e-post" id="toc-get-e-post" class="nav-link" data-scroll-target="#get-e-post"><span class="header-section-number">4.3</span> GET e POST</a></li>
+  <li><a href="#il-tag-label" id="toc-il-tag-label" class="nav-link" data-scroll-target="#il-tag-label"><span class="header-section-number">4.4</span> Il tag LABEL</a></li>
+  <li><a href="#il-tag-input" id="toc-il-tag-input" class="nav-link" data-scroll-target="#il-tag-input"><span class="header-section-number">4.5</span> Il tag INPUT</a>
+  <ul class="collapse">
+  <li><a href="#testo-e-password" id="toc-testo-e-password" class="nav-link" data-scroll-target="#testo-e-password">Testo e password</a></li>
+  <li><a href="#checkbox-e-radio" id="toc-checkbox-e-radio" class="nav-link" data-scroll-target="#checkbox-e-radio">Checkbox e radio</a></li>
+  <li><a href="#campo-nascosto-e-file" id="toc-campo-nascosto-e-file" class="nav-link" data-scroll-target="#campo-nascosto-e-file">Campo nascosto e file</a></li>
+  <li><a href="#pulsanti" id="toc-pulsanti" class="nav-link" data-scroll-target="#pulsanti">Pulsanti</a></li>
+  </ul></li>
+  <li><a href="#textarea-e-select" id="toc-textarea-e-select" class="nav-link" data-scroll-target="#textarea-e-select"><span class="header-section-number">4.6</span> TEXTAREA e SELECT</a></li>
+  <li><a href="#ricevere-i-dati-in-php" id="toc-ricevere-i-dati-in-php" class="nav-link" data-scroll-target="#ricevere-i-dati-in-php"><span class="header-section-number">4.7</span> Ricevere i dati in PHP</a>
+  <ul class="collapse">
+  <li><a href="#validare-i-dati" id="toc-validare-i-dati" class="nav-link" data-scroll-target="#validare-i-dati"><span class="header-section-number">4.7.1</span> Validare i dati</a></li>
+  </ul></li>
+  <li><a href="#esempi-completi" id="toc-esempi-completi" class="nav-link" data-scroll-target="#esempi-completi"><span class="header-section-number">4.8</span> Esempi completi</a>
+  <ul class="collapse">
+  <li><a href="#massimo-e-minimo-tra-tre-numeri" id="toc-massimo-e-minimo-tra-tre-numeri" class="nav-link" data-scroll-target="#massimo-e-minimo-tra-tre-numeri"><span class="header-section-number">4.8.1</span> Massimo e minimo tra tre numeri</a></li>
+  <li><a href="#calcolatrice-con-checkbox" id="toc-calcolatrice-con-checkbox" class="nav-link" data-scroll-target="#calcolatrice-con-checkbox"><span class="header-section-number">4.8.2</span> Calcolatrice con checkbox</a></li>
+  <li><a href="#calcolatrice-con-radio-button" id="toc-calcolatrice-con-radio-button" class="nav-link" data-scroll-target="#calcolatrice-con-radio-button"><span class="header-section-number">4.8.3</span> Calcolatrice con radio button</a></li>
+  </ul></li>
+  <li><a href="#esercizi" id="toc-esercizi" class="nav-link" data-scroll-target="#esercizi"><span class="header-section-number">4.9</span> Esercizi</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="il-ruolo-dei-form" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="il-ruolo-dei-form"><span class="header-section-number">4.1</span> Il ruolo dei form</h2>
+<p>I <strong>form</strong> permettono a una pagina web di raccogliere dati dall’utente — testo, scelte e file — e inviarli a una risorsa sul server. L’elaborazione può avvenire in un’altra pagina PHP oppure nella stessa pagina che contiene il form.</p>
+</section>
+<section id="il-tag-form" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="il-tag-form"><span class="header-section-number">4.2</span> Il tag FORM</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> name</span><span class="op">=</span><span class="st">"..."</span><span class="ot"> action</span><span class="op">=</span><span class="st">"..."</span><span class="ot"> method</span><span class="op">=</span><span class="st">"..."</span><span class="ot"> target</span><span class="op">=</span><span class="st">"..."</span><span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- campi del form --&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Attributi principali:</p>
+<ul>
+<li><p><strong>action</strong>: URL della pagina PHP che riceve i dati;</p></li>
+<li><p><strong>method</strong>: <code>GET</code> o <code>POST</code>;</p></li>
+<li><p><strong>target</strong>: indica dove visualizzare la risposta; normalmente può essere omesso;</p></li>
+<li><p><strong>enctype</strong>: formato dei dati, obbligatorio con i file (<code>multipart/form-data</code>).</p></li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fare attenzione ai percorsi <strong>relativi</strong> e <strong>assoluti</strong> del valore assegnato all’attributo <code>action</code>.</p>
+</div>
+</div>
+<section id="fieldset-e-legend" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="fieldset-e-legend">FIELDSET e LEGEND</h3>
+<p>Servono a raggruppare i campi in macro-aree, con un titolo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">legend</span><span class="dt">&gt;</span>Dati anagrafici<span class="dt">&lt;/</span><span class="kw">legend</span><span class="dt">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- campi appartenenti al gruppo --&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Ogni <code>fieldset</code> dovrebbe avere al massimo un elemento <code>legend</code>, collocato come primo elemento del gruppo.</p>
+</section>
+</section>
+<section id="get-e-post" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="get-e-post"><span class="header-section-number">4.3</span> GET e POST</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Caratteristica</th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Posizione dei dati</td>
+<td>Query string dell’URL</td>
+<td>Corpo della richiesta</td>
+</tr>
+<tr class="even">
+<td>Array PHP</td>
+<td><code>$_GET</code></td>
+<td><code>$_POST</code></td>
+</tr>
+<tr class="odd">
+<td>Condivisione</td>
+<td>URL salvabile e condivisibile</td>
+<td>Dati non inclusi nell’URL</td>
+</tr>
+<tr class="even">
+<td>Uso tipico</td>
+<td>Ricerche, filtri, paginazione</td>
+<td>Creazione o modifica di dati, login</td>
+</tr>
+<tr class="odd">
+<td>Dimensione</td>
+<td>Limitata anche da browser e server</td>
+<td>Limitata dalla configurazione del server</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled" title="GET, POST e sicurezza">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>GET, POST e sicurezza
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>POST non cifra i dati: evita solamente di mostrarli nell’URL. Per proteggere le informazioni durante il trasferimento è necessario usare HTTPS. Le password e gli altri dati sensibili non devono essere inseriti in una richiesta GET.</p>
+</div>
+</div>
+</section>
+<section id="il-tag-label" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="il-tag-label"><span class="header-section-number">4.4</span> Il tag LABEL</h2>
+<p>Associa un’etichetta descrittiva a un campo. L’attributo <code>for</code> deve corrispondere all’<code>id</code> del campo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"nome"</span><span class="dt">&gt;</span>Nome:<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"nome"</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="il-tag-input" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="il-tag-input"><span class="header-section-number">4.5</span> Il tag INPUT</h2>
+<p>Con l’attributo <code>type</code> si ottengono quasi tutti i campi di un form. <code>input</code> è un elemento vuoto e non ha tag di chiusura. Gli attributi più comuni sono <code>name</code>, che identifica il dato inviato a PHP, <code>type</code>, <code>value</code> e <code>id</code>.</p>
+<section id="testo-e-password" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="testo-e-password">Testo e password</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"nome"</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pwd"</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="checkbox-e-radio" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="checkbox-e-radio">Checkbox e radio</h3>
+<ul>
+<li><p><strong>checkbox</strong>: selezione indipendente, anche multipla;</p></li>
+<li><p><strong>radio</strong>: una sola scelta possibile; tutti i pulsanti dello stesso gruppo devono avere lo stesso <code>name</code>.</p></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"checkbox"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"sport"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"calcio"</span><span class="ot"> checked</span><span class="dt">&gt;</span> Calcio</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"corso"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"inf"</span><span class="ot"> checked</span><span class="dt">&gt;</span> Informatica</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"corso"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"ele"</span><span class="dt">&gt;</span> Elettronica</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="campo-nascosto-e-file" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="campo-nascosto-e-file">Campo nascosto e file</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"id"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"42"</span><span class="dt">&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"file"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"documento"</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Nota">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il campo <code>file</code> richiede <code>method="POST"</code> ed <code>enctype="multipart/form-data"</code>. I dati del file arrivano in <code>$_FILES</code>, non in <code>$_POST</code>, e devono essere verificati prima di essere salvati.</p>
+</div>
+</div>
+</section>
+<section id="pulsanti" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="pulsanti">Pulsanti</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Invia"</span><span class="dt">&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"reset"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Ripristina"</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>submit</code> invia i dati, <code>reset</code> svuota il form.</p>
+</section>
+</section>
+<section id="textarea-e-select" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="textarea-e-select"><span class="header-section-number">4.6</span> TEXTAREA e SELECT</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">textarea</span><span class="ot"> name</span><span class="op">=</span><span class="st">"messaggio"</span><span class="ot"> rows</span><span class="op">=</span><span class="st">"5"</span><span class="ot"> cols</span><span class="op">=</span><span class="st">"40"</span><span class="dt">&gt;&lt;/</span><span class="kw">textarea</span><span class="dt">&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">select</span><span class="ot"> name</span><span class="op">=</span><span class="st">"corso"</span><span class="dt">&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">"inf"</span><span class="ot"> selected</span><span class="dt">&gt;</span>Informatica<span class="dt">&lt;/</span><span class="kw">option</span><span class="dt">&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">option</span><span class="ot"> value</span><span class="op">=</span><span class="st">"ele"</span><span class="dt">&gt;</span>Elettronica<span class="dt">&lt;/</span><span class="kw">option</span><span class="dt">&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">select</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="ricevere-i-dati-in-php" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="ricevere-i-dati-in-php"><span class="header-section-number">4.7</span> Ricevere i dati in PHP</h2>
+<p>I dati del form arrivano allo script PHP tramite gli array superglobali <code>$_GET</code> e <code>$_POST</code>, con una chiave uguale all’attributo <code>name</code>. I valori semplici ricevuti sono stringhe, anche quando provengono da <code>input type="number"</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="va">$nome</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"nome"</span>] <span class="op">??</span> <span class="st">""</span><span class="ot">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$nome</span> <span class="op">!==</span> <span class="st">""</span>) {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Ciao "</span> <span class="op">.</span> <span class="fu">htmlspecialchars</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">$nome</span><span class="ot">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="cn">ENT_QUOTES</span> <span class="op">|</span> <span class="cn">ENT_SUBSTITUTE</span><span class="ot">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"UTF-8"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>L’operatore <code>??</code> fornisce un valore predefinito quando la chiave non esiste. <code>htmlspecialchars()</code> codifica il testo per inserirlo in modo sicuro nell’HTML; non sostituisce però la validazione del dato.</p>
+<p>Un checkbox non selezionato non invia alcun dato: per verificarlo si usa <code>isset()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_POST</span>[<span class="st">"sport"</span>])) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Hai selezionato Calcio"</span><span class="ot">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La chiave <code>$_POST["..."]</code> deve corrispondere esattamente (anche nelle maiuscole) all’attributo <code>name</code> del campo HTML.</p>
+</div>
+</div>
+<section id="validare-i-dati" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="validare-i-dati"><span class="header-section-number">4.7.1</span> Validare i dati</h3>
+<p>La <strong>validazione</strong> controlla che un valore rispetti i requisiti previsti; la <strong>sanificazione</strong> può invece modificarlo. Per esempio, <code>filter_var()</code> può verificare un indirizzo email:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">$email</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"email"</span>] <span class="op">??</span> <span class="st">""</span><span class="ot">;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">filter_var</span>(<span class="va">$email</span><span class="ot">,</span> <span class="cn">FILTER_VALIDATE_EMAIL</span>) <span class="op">===</span> <span class="kw">false</span>) {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Indirizzo email non valido"</span><span class="ot">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Indirizzo email valido"</span><span class="ot">;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Non fidarsi dell'input">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Non fidarsi dell’input
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Attributi HTML come <code>required</code>, <code>min</code>, <code>max</code> e <code>type="number"</code> migliorano l’esperienza dell’utente, ma possono essere aggirati. Il server deve sempre controllare nuovamente tutti i dati ricevuti.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="esempi-completi" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="esempi-completi"><span class="header-section-number">4.8</span> Esempi completi</h2>
+<section id="massimo-e-minimo-tra-tre-numeri" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="massimo-e-minimo-tra-tre-numeri"><span class="header-section-number">4.8.1</span> Massimo e minimo tra tre numeri</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> action</span><span class="op">=</span><span class="st">"esempio1.php"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="dt">&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">legend</span><span class="dt">&gt;</span>Max e min tra 3 numeri<span class="dt">&lt;/</span><span class="kw">legend</span><span class="dt">&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Primo numero: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"a1"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Secondo numero: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"b1"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Terzo numero: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"c1"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;/</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Invia i dati"</span><span class="dt">&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"reset"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Cancella i dati"</span><span class="dt">&gt;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"a1"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"b1"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="va">$c</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"c1"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_numeric</span>(<span class="va">$a</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_numeric</span>(<span class="va">$b</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_numeric</span>(<span class="va">$c</span>)) {</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$a</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$b</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">$c</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$c</span><span class="ot">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="va">$max</span> <span class="op">=</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="va">$min</span> <span class="op">=</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$b</span> <span class="op">&gt;</span> <span class="va">$max</span>) { <span class="va">$max</span> <span class="op">=</span> <span class="va">$b</span><span class="ot">;</span> }</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$b</span> <span class="op">&lt;</span> <span class="va">$min</span>) { <span class="va">$min</span> <span class="op">=</span> <span class="va">$b</span><span class="ot">;</span> }</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$c</span> <span class="op">&gt;</span> <span class="va">$max</span>) { <span class="va">$max</span> <span class="op">=</span> <span class="va">$c</span><span class="ot">;</span> }</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$c</span> <span class="op">&lt;</span> <span class="va">$min</span>) { <span class="va">$min</span> <span class="op">=</span> <span class="va">$c</span><span class="ot">;</span> }</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"minimo = "</span> <span class="op">.</span> <span class="va">$min</span> <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"massimo = "</span> <span class="op">.</span> <span class="va">$max</span> <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Inserire tre numeri validi"</span><span class="ot">;</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="calcolatrice-con-checkbox" class="level3" data-number="4.8.2">
+<h3 data-number="4.8.2" class="anchored" data-anchor-id="calcolatrice-con-checkbox"><span class="header-section-number">4.8.2</span> Calcolatrice con checkbox</h3>
+<p>L’utente può selezionare più operazioni contemporaneamente:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> action</span><span class="op">=</span><span class="st">"esempio2.php"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="dt">&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">legend</span><span class="dt">&gt;</span>Operazione<span class="dt">&lt;/</span><span class="kw">legend</span><span class="dt">&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"checkbox"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"somma"</span><span class="ot"> checked</span><span class="dt">&gt;</span> Somma<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"checkbox"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"differenza"</span><span class="dt">&gt;</span> Differenza<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"checkbox"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"prodotto"</span><span class="dt">&gt;</span> Prodotto<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"checkbox"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"quoziente"</span><span class="dt">&gt;</span> Quoziente<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Primo operando: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"a"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Secondo operando: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"b"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Invia"</span><span class="dt">&gt;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"a"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"b"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_numeric</span>(<span class="va">$a</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_numeric</span>(<span class="va">$b</span>)) {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">$a</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$b</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_POST</span>[<span class="st">"somma"</span>])) <span class="kw">echo</span> (<span class="va">$a</span> <span class="op">+</span> <span class="va">$b</span>) <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_POST</span>[<span class="st">"differenza"</span>])) <span class="kw">echo</span> (<span class="va">$a</span> <span class="op">-</span> <span class="va">$b</span>) <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_POST</span>[<span class="st">"prodotto"</span>])) <span class="kw">echo</span> (<span class="va">$a</span> <span class="op">*</span> <span class="va">$b</span>) <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">isset</span>(<span class="va">$_POST</span>[<span class="st">"quoziente"</span>])) {</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="va">$b</span> <span class="op">!=</span> <span class="dv">0</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>            <span class="ot">?</span> (<span class="va">$a</span> <span class="op">/</span> <span class="va">$b</span>) <span class="op">.</span> <span class="st">"&lt;br&gt;"</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>            <span class="ot">:</span> <span class="st">"Errore: divisione per zero&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Errore: inserire due numeri validi"</span><span class="ot">;</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Nota">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>is_numeric()</code> verifica che un valore sia numerico: controllare sempre i dati ricevuti da un form.</p>
+</div>
+</div>
+</section>
+<section id="calcolatrice-con-radio-button" class="level3" data-number="4.8.3">
+<h3 data-number="4.8.3" class="anchored" data-anchor-id="calcolatrice-con-radio-button"><span class="header-section-number">4.8.3</span> Calcolatrice con radio button</h3>
+<p>Qui è possibile scegliere una sola operazione, quindi si usa uno <code>switch</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> action</span><span class="op">=</span><span class="st">"esempio3.php"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"post"</span><span class="dt">&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">legend</span><span class="dt">&gt;</span>Operazione<span class="dt">&lt;/</span><span class="kw">legend</span><span class="dt">&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"op"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"somma"</span><span class="ot"> checked</span><span class="dt">&gt;</span> Somma</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"op"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"differenza"</span><span class="dt">&gt;</span> Differenza</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"op"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"prodotto"</span><span class="dt">&gt;</span> Prodotto</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"radio"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"op"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"quoziente"</span><span class="dt">&gt;</span> Quoziente</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;/</span><span class="kw">fieldset</span><span class="dt">&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Primo operando: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"a"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">label</span><span class="dt">&gt;</span>Secondo operando: <span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"b"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"0"</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Invia"</span><span class="dt">&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"a"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"b"</span>] <span class="op">??</span> <span class="kw">null</span><span class="ot">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="va">$operazione</span> <span class="op">=</span> <span class="va">$_POST</span>[<span class="st">"op"</span>] <span class="op">??</span> <span class="st">""</span><span class="ot">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is_numeric</span>(<span class="va">$a</span>) <span class="op">&amp;&amp;</span> <span class="fu">is_numeric</span>(<span class="va">$b</span>)) {</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$a</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$a</span><span class="ot">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$b</span> <span class="op">=</span> <span class="dt">(float)</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> (<span class="va">$operazione</span>) {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"somma"</span><span class="ot">:</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> <span class="va">$a</span> <span class="op">+</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"differenza"</span><span class="ot">:</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> <span class="va">$a</span> <span class="op">-</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"prodotto"</span><span class="ot">:</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> <span class="va">$a</span> <span class="op">*</span> <span class="va">$b</span><span class="ot">;</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="st">"quoziente"</span><span class="ot">:</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> (<span class="va">$b</span> <span class="op">!=</span> <span class="dv">0</span>) <span class="ot">?</span> <span class="va">$a</span> <span class="op">/</span> <span class="va">$b</span> <span class="ot">:</span> <span class="st">"ERRORE: divisore nullo!"</span><span class="ot">;</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="ot">;</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="ot">:</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>            <span class="kw">echo</span> <span class="st">"Operazione non valida"</span><span class="ot">;</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Errore: inserire due numeri validi"</span><span class="ot">;</span></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="esercizi" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="esercizi"><span class="header-section-number">4.9</span> Esercizi</h2>
+<ol type="1">
+<li>Creare un form con nome e cognome che mostri un messaggio di benvenuto, codificando correttamente l’output HTML.</li>
+<li>Creare un form con checkbox per scegliere più colori e mostrare quelli selezionati.</li>
+<li>Creare un form con radio button per scegliere una taglia (<code>S</code>, <code>M</code>, <code>L</code>) e confermarla.</li>
+<li>Creare una calcolatrice completa utilizzando un menu <code>select</code> per scegliere l’operazione.</li>
+<li>Creare un form che riceva un indirizzo email e lo validi con <code>FILTER_VALIDATE_EMAIL</code>.</li>
+<li>Creare un form di registrazione con campi obbligatori e mostrare un messaggio specifico per ogni dato mancante o non valido.</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled" title="Istruzioni di consegna">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Istruzioni di consegna
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata <code>cognome_nome</code> e consegnarla in formato compresso.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiato!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiato!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../capitoli/03-funzioni.html" class="pagination-link" aria-label="Le funzioni">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../capitoli/05-cookie.html" class="pagination-link" aria-label="Cookie e sessioni">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

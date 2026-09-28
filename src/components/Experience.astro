@@ -1,0 +1,36 @@
+---
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/ui';
+import { experience } from '../data/portfolio';
+
+interface Props {
+	locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<section id="esperienza" class="section-shell scroll-mt-20">
+	<div class="site-container grid gap-10 lg:grid-cols-[.75fr_1.25fr] lg:gap-20">
+	<div><p class="eyebrow">{t('experience.eyebrow')}</p><h2 class="section-title">{t('experience.title')}</h2><p class="section-copy">{t('experience.subtitle')}</p></div>
+	<ol class="space-y-5">
+		{
+			experience.map((job) => (
+				<li class="panel relative rounded-3xl p-6 sm:p-8">
+					<span class="mb-5 inline-flex rounded-full bg-[var(--brand-soft)] px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand)]">{job.period[locale]}</span>
+					<h3 class="text-2xl font-bold tracking-tight text-[var(--ink)]">
+						{job.role[locale]}
+					</h3>
+					<p class="mt-1 text-sm font-bold text-[var(--brand)]">
+						{job.company}
+					</p>
+					<p class="mt-4 leading-7 text-[var(--muted)]">
+						{job.description[locale]}
+					</p>
+				</li>
+			))
+		}
+	</ol>
+	</div>
+</section>

@@ -1,0 +1,372 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Guida alla programmazione PHP",
+    "section": "",
+    "text": "Prefazione\nQuesta guida introduce la programmazione web lato server con PHP.\nIl testo è rivolto agli studenti del corso di Informatica e affianca alle spiegazioni teoriche esempi di codice ed esercizi.",
+    "crumbs": [
+      "Prefazione"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html",
+    "href": "capitoli/01-introduzione.html",
+    "title": "1  Introduzione a PHP",
+    "section": "",
+    "text": "1.1 Cos’è PHP e come funziona",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html#cosè-php-e-come-funziona",
+    "href": "capitoli/01-introduzione.html#cosè-php-e-come-funziona",
+    "title": "1  Introduzione a PHP",
+    "section": "",
+    "text": "1.1.1 Definizione e architettura client-server\nPHP (PHP: Hypertext Preprocessor) è un linguaggio di scripting server-side progettato per lo sviluppo di applicazioni web dinamiche.\n\nNon richiede una compilazione manuale prima dell’esecuzione: il motore PHP traduce internamente il sorgente in istruzioni intermedie (opcode) e le esegue sul server.\nClient (browser): richiede una risorsa al server tramite una richiesta HTTP.\nServer web (Apache/Nginx): elabora il file .php mediante l’interprete PHP.\nOutput: il server restituisce al client una risposta, spesso HTML, ma anche JSON, immagini, file o altri tipi di contenuto.\n\nIl codice PHP viene utilizzato per generare dinamicamente i documenti HTML che il client riceve e visualizza nel browser.\n\n\n\n\n\n\nNotaDa ricordare\n\n\n\nIl browser del client riceve unicamente l’output generato dall’elaborazione; il codice sorgente PHP non viene mai mostrato direttamente all’utente.\n\n\n\n\n1.1.2 Ciclo di vita di una richiesta HTTP\nIl protocollo HTTP (HyperText Transfer Protocol) regola la comunicazione tra client e server web. Il funzionamento si basa sul modello richiesta/risposta: il client invia una richiesta e il server restituisce una risposta. Il server non contatta mai il client di propria iniziativa.\nBrowser (client)                        Server web (Apache) + PHP\n     |                                            |\n     |  ---- 1. Richiesta HTTP (GET/POST) ----&gt;   |\n     |                                            |  2. Esecuzione dello script PHP\n     |  &lt;---- 3. Risposta HTTP (HTML) --------    |\n     |                                            |\n     4. Il browser visualizza la pagina\n\nLe fasi del ciclo di vita\n\nRichiesta dell’utente: l’utente digita un indirizzo (URL) nel browser, clicca su un link oppure invia un form.\nRisoluzione dell’indirizzo: il browser individua il server. In un sito reale il nome di dominio viene tradotto in un indirizzo IP dal servizio DNS; in locale si usa localhost (o 127.0.0.1), che indica il computer stesso.\nConnessione: il browser si collega al server sulla porta 80 (HTTP) oppure 443 (HTTPS, la versione cifrata del protocollo).\nInvio della richiesta HTTP: il browser invia al server il metodo (GET o POST), la risorsa richiesta, alcune informazioni aggiuntive (header) e, nel caso del metodo POST, i dati del form (body).\nElaborazione lato server: il server web cerca la risorsa richiesta.\n\nSe il file è statico (.html, .css, immagini), lo restituisce così com’è.\nSe il file è .php, lo passa all’interprete PHP, che esegue il codice — eventualmente leggendo dati da un database o da altri file — e produce come risultato un documento HTML.\n\nInvio della risposta HTTP: il server restituisce al browser uno status code (l’esito della richiesta), gli header e il contenuto (body), generalmente HTML.\nVisualizzazione: il browser interpreta l’HTML e mostra la pagina. Se nella pagina sono presenti altre risorse (fogli di stile, immagini, script JavaScript), il browser effettua una nuova richiesta per ciascuna di esse.\n\n\n\nEsempio di richiesta e risposta\nRichiesta inviata dal browser (le righe successive alla prima sono gli header):\nGET /sitoweb/index.php?nome=Mario HTTP/1.1\nHost: localhost\nUser-Agent: Mozilla/5.0\nAccept: text/html\nRisposta restituita dal server:\nHTTP/1.1 200 OK\nContent-Type: text/html; charset=UTF-8\n\n&lt;html&gt;\n    &lt;body&gt;\n        &lt;p&gt;Ciao Mario&lt;/p&gt;\n    &lt;/body&gt;\n&lt;/html&gt;\nLa prima riga della richiesta indica il metodo (GET), la risorsa richiesta (/sitoweb/index.php?nome=Mario) e la versione del protocollo. La prima riga della risposta contiene lo status code. Una riga vuota separa gli header dal body.\n\n\nGli status code principali\nLo status code è un numero di tre cifre; la prima cifra indica la categoria dell’esito:\n\n2xx (successo): 200 OK, la richiesta è stata eseguita correttamente;\n3xx (reindirizzamento): 301 e 302, la risorsa si trova a un altro indirizzo;\n4xx (errore del client): 403 Forbidden, accesso negato; 404 Not Found, risorsa inesistente;\n5xx (errore del server): 500 Internal Server Error, errore durante l’elaborazione, ad esempio nello script PHP.\n\n\n\nPHP e pagine dinamiche\nPoiché lo script PHP viene eseguito a ogni richiesta, la risposta può cambiare da una richiesta all’altra:\n&lt;?php\n// orario.php\necho \"&lt;p&gt;Sono le \" . date(\"H:i:s\") . \"&lt;/p&gt;\";\n?&gt;\nIl browser non riceve mai il codice PHP, ma solo il risultato, ad esempio &lt;p&gt;Sono le 10:30:15&lt;/p&gt;. Ricaricando la pagina viene effettuata una nuova richiesta e l’orario mostrato sarà diverso.\n\n\n\n\n\n\nNotaHTTP è stateless\n\n\n\nHTTP è un protocollo stateless (senza memoria): ogni richiesta è indipendente dalle precedenti e il server non conserva alcuna informazione sul client. Questo spiega perché le variabili PHP vengono distrutte al termine dello script: per mantenere dati tra una richiesta e l’altra occorrono meccanismi specifici come cookie, sessioni e database.\n\n\n\n\n\n\n\n\nConsiglioOsservare le richieste\n\n\n\nPer osservare le richieste e le risposte reali basta aprire gli strumenti per sviluppatori del browser (tasto F12) e selezionare la scheda Rete (Network): per ogni risorsa sono visibili metodo, status code, header e contenuto.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html#stack-tecnologico",
+    "href": "capitoli/01-introduzione.html#stack-tecnologico",
+    "title": "1  Introduzione a PHP",
+    "section": "1.2 Stack tecnologico",
+    "text": "1.2 Stack tecnologico\n\nEditor di codice: Visual Studio Code, Notepad++ o equivalenti.\nXAMPP: ambiente di sviluppo che comprende Apache, MariaDB, PHP e altri strumenti.\n\nGuida all’installazione e all’utilizzo di XAMPP",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html#sintassi-base-e-output",
+    "href": "capitoli/01-introduzione.html#sintassi-base-e-output",
+    "title": "1  Introduzione a PHP",
+    "section": "1.3 Sintassi base e output",
+    "text": "1.3 Sintassi base e output\n\n1.3.1 Tag di apertura e istruzioni di output\nI file da interpretare devono avere l’estensione .php, come ad esempio index.php. Ogni blocco di codice PHP deve essere delimitato dai tag &lt;?php ... ?&gt;. L’istruzione echo è utilizzata per inviare testo o markup HTML in output.\n&lt;?php\n\n// Esempio 1: output di testo semplice e markup HTML\necho \"&lt;h1&gt;Benvenuti al corso di PHP&lt;/h1&gt;\";\necho \"&lt;p&gt;Primo script eseguito correttamente.&lt;/p&gt;\";\n\n// Esempio 2: echo con argomenti multipli separati da virgola\necho \"Docente: \", \"Prof. Cerullo Pasquale\", \"&lt;br&gt;\";\n\n// Esempio 3: echo con variabili\n$nome = \"Pasquale\";\necho \"Ciao: \" . $nome;\n?&gt;\n\n\n\n\n\n\nConsiglioFile contenenti solo PHP\n\n\n\nQuando un file contiene esclusivamente codice PHP, è buona pratica omettere il tag finale ?&gt;: si evitano così spazi o righe vuote inviati accidentalmente al browser.\n\n\n\n\n1.3.2 Per iniziare\n\nAvviare Apache dal pannello di controllo di XAMPP.\nSalvare il file .php nella cartella C:\\xampp\\htdocs.\nAprire nel browser http://localhost/&lt;nome_file&gt;.php oppure http://127.0.0.1/&lt;nome_file&gt;.php.\n\n\n\n\n\n\n\nNotaProgetti in sottocartelle\n\n\n\nSe il progetto è suddiviso in sottocartelle, l’indirizzo segue il percorso del file. Per esempio, al file C:\\xampp\\htdocs\\sitoweb\\index.php corrisponde l’indirizzo http://127.0.0.1/sitoweb/index.php.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html#variabili-tipi-di-dati-e-costanti",
+    "href": "capitoli/01-introduzione.html#variabili-tipi-di-dati-e-costanti",
+    "title": "1  Introduzione a PHP",
+    "section": "1.4 Variabili, tipi di dati e costanti",
+    "text": "1.4 Variabili, tipi di dati e costanti\n\n1.4.1 Gestione delle variabili e tipi primari\nLe variabili in PHP sono precedute dal simbolo $. Il linguaggio supporta la tipizzazione dinamica: una variabile può contenere valori di tipi differenti durante l’esecuzione. Le variabili dichiarate fuori dalle funzioni appartengono all’ambito globale dello script; quelle dichiarate dentro una funzione sono normalmente locali. Tutte vengono eliminate al termine della richiesta.\n&lt;?php\n\n// Variabili di tipi differenti\n$nomeStudente = \"Marco\";  // string\n$eta          = 20;       // int\n$mediaVoti    = 28.5;     // float\n$isIscritto   = true;     // bool: può contenere anche false\n\n// Definizione di costanti\ndefine(\"ANNO_ACCADEMICO\", 2026);\nconst NOME_CORSO = \"Programmazione Web Server-Side\";\n\n// Interpolazione di variabili, valida nelle stringhe con doppi apici\necho \"Lo studente $nomeStudente (età: $eta) ha una media del $mediaVoti.&lt;br&gt;\";\n\n// Concatenazione tramite l'operatore punto (.)\necho \"Corso: \" . NOME_CORSO . \" - Anno: \" . ANNO_ACCADEMICO;\n?&gt;\n\n\n1.4.2 Le stringhe\nUna stringa è un insieme di caratteri. Le stringhe possono essere delimitate in due modi:\n\ncon apici singoli;\ncon virgolette doppie.\n\n&lt;?php\n$frase = 'Anna disse: \"Ciao!\" ma nessuno rispose';\necho $frase;\n\n$frase2 = \"Anna disse: 'Ciao!' ma nessuno rispose\";\necho $frase2;\n\necho 'Torniamo un\\'altra volta'; // Torniamo un'altra volta\necho \"Torniamo un'altra volta\";  // Torniamo un'altra volta\n\n// La riga seguente causerebbe un errore, perché l'apostrofo\n// sarebbe interpretato come apice di chiusura:\n// echo 'Torniamo un'altra volta';\n?&gt;\n\n\n\n\n\n\nAvvisoNomenclatura e distinzione tra maiuscole e minuscole\n\n\n\nI nomi delle variabili sono case-sensitive: $nome e $NOME indicano due variabili differenti.\n\n\n\n\n1.4.3 Array\nUn array (vettore) è una variabile complessa che contiene una serie di valori, ciascuno caratterizzato da una chiave o indice. Il seguente array contiene cinque valori:\n$colori = array('bianco', 'nero', 'giallo', 'verde', 'rosso');\necho $colori[1]; // stampa 'nero'\necho $colori[4]; // stampa 'rosso'\nOgni colore è caratterizzato da un indice numerico, che PHP assegna automaticamente a partire da 0. È possibile accedere agli elementi dell’array tramite tale indice.\nEsistono più modi per definire un array:\n$colori = array('bianco', 'nero', 'giallo', 'verde', 'rosso');\n$colori = ['bianco', 'nero', 'giallo', 'verde', 'rosso'];\n\n$colori = array(1 =&gt; 'bianco', 'nero', 'giallo', 'verde', 'rosso');\n// L'indice iniziale è 1.\n\n$colori = array('primo' =&gt; 'bianco', 'secondo' =&gt; 'nero');\n// Le chiavi sono stringhe associate ai valori.\nIn PHP la chiave di un array può essere un numero intero oppure una stringa. Gli array PHP possono quindi comportarsi sia come liste sia come mappe associative.\n\n\n1.4.4 Array bidimensionali\nUn array bidimensionale è un array che contiene altri array. Osserviamo un esempio:\n$persone = array(\n    array('nome' =&gt; 'Mario', 'cognome' =&gt; 'Rossi'),\n    array('nome' =&gt; 'Paolo', 'cognome' =&gt; 'Bianchi'),\n    array('nome' =&gt; 'Luca', 'cognome' =&gt; 'Verdi')\n);\n\necho $persone[0]['cognome']; // stampa 'Rossi'\necho $persone[2]['nome'];    // stampa 'Luca'\n\n$persone = [\n    ['nome' =&gt; 'Mario', 'cognome' =&gt; 'Rossi'],\n    ['nome' =&gt; 'Paolo', 'cognome' =&gt; 'Bianchi'],\n    ['nome' =&gt; 'Luca', 'cognome' =&gt; 'Verdi']\n]; // Sintassi equivalente all'esempio precedente.\n\n\n1.4.5 Gli operatori\n// Assegnazione\n$nome = 'Giorgio';\n$nome_app = $nome;\n\n// Operatori aritmetici\n$a = 3 + 7; // addizione\n$b = 5 - 2; // sottrazione\n$c = 9 * 6; // moltiplicazione\n$d = 8 / 2; // divisione\n$e = 7 % 4; // modulo\n\n// Concatenazione delle stringhe\n$nome = 'Pippo';\n$stringa1 = 'Ciao ' . $nome;\n\n// Operatori di assegnazione combinati\n$x += 4; // equivale a $x = $x + 4\n$x -= 3; // equivale a $x = $x - 3\n$x .= $a; // equivale a $x = $x . $a\n$x /= 5; // equivale a $x = $x / 5\n$x *= 4; // equivale a $x = $x * 4\n$x %= 2; // equivale a $x = $x % 2\n\n// Incremento e decremento\n$a++; // usa $a, poi lo incrementa di 1\n$a--; // usa $a, poi lo decrementa di 1\n++$a; // incrementa $a, poi lo usa\n--$a; // decrementa $a, poi lo usa\nGli operatori di confronto producono sempre un valore booleano: true oppure false.\n==  // valore uguale, anche se il tipo è diverso\n!=  // valore diverso\n&gt;   // maggiore\n&gt;=  // maggiore o uguale\n&lt;   // minore\n&lt;=  // minore o uguale\n=== // valore uguale e stesso tipo\n!== // valore diverso oppure tipo diverso\nNegli esempi moderni sono generalmente preferibili === e !==, perché confrontano sia il valore sia il tipo ed evitano conversioni implicite inattese.\nGli operatori logici consentono di combinare più espressioni:\n\nOR è falso solamente se entrambi gli operandi sono falsi; si indica con or oppure ||.\nAND è vero solamente se entrambi gli operandi sono veri; si indica con and oppure &&.\nNOT è la negazione logica; si indica con !.\nXOR, detto anche or esclusivo, è vero se uno solo dei due operandi è vero; si indica con xor.\n\n\n\n\n\n\n\nAvvisoPrecedenza degli operatori logici\n\n\n\nand e or non hanno la stessa precedenza di && e ||. Per rendere evidente l’ordine di valutazione, negli esempi e nelle condizioni è preferibile usare && e || e aggiungere parentesi quando si combinano più espressioni.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/01-introduzione.html#esercizi",
+    "href": "capitoli/01-introduzione.html#esercizi",
+    "title": "1  Introduzione a PHP",
+    "section": "1.5 Esercizi",
+    "text": "1.5 Esercizi\n\nDato un numero, per esempio $numero = 35, stamparne il quadrato.\nDate base e altezza di un rettangolo, calcolare e stampare area e perimetro.\nDati due numeri, stampare il resto della divisione e la media aritmetica.\nConvertire un numero di secondi in ore, minuti e secondi usando gli operatori / e %.\nCreare alcune variabili con tipi differenti e osservarne tipo e valore con var_dump().\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduzione a PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html",
+    "href": "capitoli/02-strutture.html",
+    "title": "2  Strutture di controllo",
+    "section": "",
+    "text": "2.1 echo e print\necho e print sono costrutti del linguaggio usati per produrre output. I valori non testuali vengono convertiti in stringhe quando possibile.\nNelle stringhe delimitate da virgolette doppie PHP sostituisce il nome di una variabile con il suo valore. Le parentesi graffe delimitano il nome quando subito dopo sono presenti altri caratteri.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#echo-e-print",
+    "href": "capitoli/02-strutture.html#echo-e-print",
+    "title": "2  Strutture di controllo",
+    "section": "",
+    "text": "echo accetta uno o più argomenti e non restituisce alcun valore;\nprint accetta un solo argomento e restituisce sempre 1.\n\n&lt;?php\necho \"Ciao mondo!\";\nprint \"Ciao mondo!\";\n\necho 123;\n\n$messaggio = \"Ciao mondo!\";\necho $messaggio;\n\n// echo può ricevere più argomenti separati da virgole.\necho \"Nome: \", \"Mario\", \"&lt;br&gt;\";\n?&gt;\n\n&lt;?php\n$numero = 45;\n$veicolo = \"autobus\";\necho \"Questo $veicolo ha una capacità di $numero passeggeri\";\n\n$memoria = 256;\necho \"Il mio computer ha {$memoria} MByte di RAM\";\n?&gt;\n\n\n\n\n\n\nAvvisoInterpolazione delle variabili\n\n\n\nL’interpolazione funziona nelle stringhe delimitate da virgolette doppie, non in quelle delimitate da apici singoli.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#var_dump-e-print_r",
+    "href": "capitoli/02-strutture.html#var_dump-e-print_r",
+    "title": "2  Strutture di controllo",
+    "section": "2.2 var_dump() e print_r()",
+    "text": "2.2 var_dump() e print_r()\nLe funzioni var_dump() e print_r() sono utili durante il debug:\n\nvar_dump() mostra tipo e valore;\nprint_r() mostra il contenuto in forma leggibile, soprattutto per gli array.\n\n&lt;?php\n$numero = 39;\nvar_dump($numero); // int(39)\n\n$colori = [\"blu\", \"rosso\"];\nprint_r($colori);\n/*\nArray\n(\n    [0] =&gt; blu\n    [1] =&gt; rosso\n)\n*/\n?&gt;\n\n\n\n\n\n\nNotaStrumenti di sviluppo\n\n\n\nQueste funzioni sono adatte al debug durante lo sviluppo. In un’applicazione pubblicata non dovrebbero mostrare agli utenti informazioni interne o dati sensibili.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#la-selezione-con-if",
+    "href": "capitoli/02-strutture.html#la-selezione-con-if",
+    "title": "2  Strutture di controllo",
+    "section": "2.3 La selezione con if",
+    "text": "2.3 La selezione con if\nL’istruzione if valuta un’espressione booleana. Se la condizione è true, esegue il primo blocco; altrimenti può eseguire il blocco else.\n&lt;?php\nif (&lt;condizione booleana&gt;) {\n    &lt;istruzioni eseguite se la condizione è true&gt;\n} else {\n    &lt;istruzioni eseguite se la condizione è false&gt;\n}\n?&gt;\nUn esempio completo:\n&lt;?php\n$eta = 17;\n\nif ($eta &gt;= 18) {\n    echo \"Maggiorenne\";\n} else {\n    echo \"Minorenne\";\n}\n?&gt;\nPer verificare più casi si utilizza elseif:\n&lt;?php\n$voto = 8;\n\nif ($voto &lt; 6) {\n    echo \"Insufficiente\";\n} elseif ($voto &lt; 8) {\n    echo \"Buono\";\n} else {\n    echo \"Ottimo\";\n}\n?&gt;\n\n\n\n\n\n\nAvvisoBlocchi e annidamento\n\n\n\nLe istruzioni if, elseif ed else possono essere annidate. Le parentesi graffe rendono espliciti i blocchi e vanno usate anche quando contengono una sola istruzione.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#la-selezione-multipla-con-switch",
+    "href": "capitoli/02-strutture.html#la-selezione-multipla-con-switch",
+    "title": "2  Strutture di controllo",
+    "section": "2.4 La selezione multipla con switch",
+    "text": "2.4 La selezione multipla con switch\nswitch confronta il valore di un’espressione con diversi casi. break impedisce che l’esecuzione prosegua nei casi successivi.\n&lt;?php\n$giorno = 2;\n\nswitch ($giorno) {\n    case 1:\n        echo \"Lunedì\";\n        break;\n    case 2:\n        echo \"Martedì\";\n        break;\n    default:\n        echo \"Valore non valido\";\n}\n?&gt;\n\n\n\n\n\n\nNotaConfronto usato da switch\n\n\n\nswitch effettua confronti non stretti, simili a ==. Quando è importante distinguere anche i tipi, può essere preferibile usare match, disponibile da PHP 8, oppure una sequenza di confronti con ===.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#il-ciclo-while",
+    "href": "capitoli/02-strutture.html#il-ciclo-while",
+    "title": "2  Strutture di controllo",
+    "section": "2.5 Il ciclo while",
+    "text": "2.5 Il ciclo while\nwhile ripete un blocco finché la condizione rimane vera. Se la condizione è falsa fin dall’inizio, il blocco non viene mai eseguito.\n&lt;?php\n$numero = 10;\n\nwhile ($numero &gt; 5) {\n    echo $numero . \" \";\n    $numero--; // Evita un ciclo infinito.\n}\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#il-ciclo-do...while",
+    "href": "capitoli/02-strutture.html#il-ciclo-do...while",
+    "title": "2  Strutture di controllo",
+    "section": "2.6 Il ciclo do...while",
+    "text": "2.6 Il ciclo do...while\ndo...while controlla la condizione dopo il blocco: le istruzioni vengono quindi eseguite almeno una volta.\n&lt;?php\n$numero = 1;\n\ndo {\n    echo $numero . \" \";\n    $numero++;\n} while ($numero &lt;= 5);\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#il-ciclo-for",
+    "href": "capitoli/02-strutture.html#il-ciclo-for",
+    "title": "2  Strutture di controllo",
+    "section": "2.7 Il ciclo for",
+    "text": "2.7 Il ciclo for\nfor raccoglie nella sua intestazione l’inizializzazione, la condizione e l’aggiornamento della variabile di controllo.\n&lt;?php\nfor ($i = 1; $i &lt;= 10; $i++) {\n    $risultato = 5 * $i;\n    echo $risultato . \" \";\n}\n?&gt;\nI tre elementi vengono valutati in questo ordine:\n\ninizializzazione, una sola volta all’inizio;\ncondizione, prima di ogni iterazione;\naggiornamento, alla fine di ogni iterazione.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#il-ciclo-foreach",
+    "href": "capitoli/02-strutture.html#il-ciclo-foreach",
+    "title": "2  Strutture di controllo",
+    "section": "2.8 Il ciclo foreach",
+    "text": "2.8 Il ciclo foreach\nforeach è progettato per elaborare gli array. La forma completa rende disponibili la chiave e il valore dell’elemento corrente:\n&lt;?php\n$voti = [\"Mario\" =&gt; 8, \"Anna\" =&gt; 9, \"Luca\" =&gt; 7];\n\nforeach ($voti as $nome =&gt; $voto) {\n    echo \"$nome: $voto&lt;br&gt;\";\n}\n?&gt;\nSe interessa solamente il valore si usa la forma abbreviata:\n&lt;?php\n$numeri = [10, 20, 30];\n\nforeach ($numeri as $numero) {\n    echo $numero . \" \";\n}\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/02-strutture.html#esercizi",
+    "href": "capitoli/02-strutture.html#esercizi",
+    "title": "2  Strutture di controllo",
+    "section": "2.9 Esercizi",
+    "text": "2.9 Esercizi\n\nData una variabile numerica, stabilire se contiene un numero positivo, negativo oppure zero.\nDato un voto da 1 a 10, stampare insufficiente, sufficiente, buono oppure ottimo usando if, elseif ed else.\nUsare switch per stampare il nome del giorno corrispondente a un numero da 1 a 7.\nStampare i numeri da 1 a 20 prima con while, poi con do...while e infine con for.\nStampare la tabellina di un numero da 1 a 10 usando un ciclo for.\nDato un array di numeri, calcolare il minimo, il massimo e la media usando foreach, senza ricorrere direttamente alle funzioni min(), max() e array_sum().\nDato un array associativo contenente nomi e voti, stampare solamente gli studenti con voto sufficiente.\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/03-funzioni.html",
+    "href": "capitoli/03-funzioni.html",
+    "title": "3  Le funzioni",
+    "section": "",
+    "text": "3.1 Cos’è una funzione\nUna funzione è un insieme di istruzioni che esegue un’operazione specifica. Evita di riscrivere lo stesso codice più volte: è sufficiente richiamarla, fornendole gli eventuali parametri di cui ha bisogno. Ogni funzione è caratterizzata da:\nLe funzioni possono essere built-in (incorporate nel linguaggio) oppure definite dall’utente.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Le funzioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/03-funzioni.html#cosè-una-funzione",
+    "href": "capitoli/03-funzioni.html#cosè-una-funzione",
+    "title": "3  Le funzioni",
+    "section": "",
+    "text": "un nome;\ni parametri richiesti (quali e quanti);\nil fatto di restituire o meno un valore.\n\nnome_funzione(); // nessun parametro, nessun valore restituito\nnome_funzione($a, $b); // due parametri\n$valore = nome_funzione($a);  // il valore restituito viene salvato in una variabile\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nLe parentesi tonde sono obbligatorie anche quando la funzione non richiede parametri.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Le funzioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/03-funzioni.html#le-funzioni-built-in",
+    "href": "capitoli/03-funzioni.html#le-funzioni-built-in",
+    "title": "3  Le funzioni",
+    "section": "3.2 Le funzioni built-in",
+    "text": "3.2 Le funzioni built-in\nPHP dispone di moltissime funzioni incorporate. Non è necessario impararle a memoria, ma è importante saper consultare il manuale ufficiale php.net: digitando https://www.php.net/nome_funzione si accede direttamente alla pagina della funzione.\n\n\n\n\n\n\nNotaNota\n\n\n\nNel manuale ogni funzione è descritta nella forma tipo_restituito nome(parametri). I parametri indicati tra parentesi quadre [ ] sono opzionali.\n\n\n\nFunzioni sulle variabili\n\nisset($var): TRUE se la variabile è definita e diversa da NULL;\nempty($var): TRUE se la variabile è vuota (stringa vuota, 0, NULL) oppure non definita;\nis_null($var): TRUE se il valore della variabile è NULL;\nis_int($var), is_float($var), is_string($var), is_array($var): TRUE se la variabile è, rispettivamente, un intero, un decimale, una stringa, un array;\nis_numeric($var): TRUE se la variabile è un numero oppure una stringa che contiene un numero;\nunset($var): distrugge la variabile (è un costrutto del linguaggio, non una vera funzione). Dopo l’unset, isset restituisce FALSE ed empty restituisce TRUE;\nprint_r($var): stampa il contenuto di una variabile o di un array (utile per il debug, vedi sezione precedente).\n\n$a = 5;\n$b = isset($a);        // TRUE\n$b = is_int($a);       // TRUE\n$b = is_float($a);     // FALSE\n    \n$a = '5';\n$b = is_int($a);       // FALSE: ora $a contiene una stringa\n$b = is_string($a);    // TRUE\n$b = is_numeric($a);   // TRUE: la stringa contiene un numero\n    \nunset($a);\n$b = isset($a);        // FALSE: variabile distrutta\n    \n// utilizzo tipico: condizione di un if\nif (empty($a)) {\n    echo \"Variabile vuota o non definita\";\n} else {\n    echo \"La variabile contiene un valore\";\n    }\n\n\nFunzioni sulle stringhe\n\nstrlen($str): restituisce la lunghezza della stringa in byte. Con testo UTF-8 contenente caratteri accentati, per contare i caratteri si usa mb_strlen() se l’estensione mbstring è disponibile;\ntrim($str), ltrim($str), rtrim($str): eliminano gli spazi rispettivamente all’inizio e alla fine, solo all’inizio, solo alla fine della stringa;\nucfirst($str): porta in maiuscolo il primo carattere della stringa;\nucwords($str): porta in maiuscolo il primo carattere di ogni parola;\nstrtolower($str), strtoupper($str): convertono tutta la stringa in minuscolo o in maiuscolo;\nstr_replace($cerca, $sostituisci, $str): sostituisce nella stringa tutte le occorrenze di $cerca con $sostituisci (str_ireplace ignora la differenza tra maiuscole e minuscole);\nstrpos($str, $cerca): restituisce la posizione (a partire da 0) della prima occorrenza di $cerca, oppure FALSE se non è presente (stripos ignora maiuscole e minuscole);\nstrstr($str, $cerca): restituisce la parte di stringa che parte dalla prima occorrenza di $cerca, oppure FALSE (stristr ignora maiuscole e minuscole);\nsubstr($str, $inizio [, $lunghezza]): restituisce una porzione della stringa.\n\nIl funzionamento di substr dipende dai valori dei parametri:\n\ni caratteri si contano a partire da 0;\nse $inizio è negativo si parte dalla fine (-1 è l’ultimo carattere);\nse $lunghezza è omessa si arriva fino alla fine della stringa;\nse $lunghezza è negativa indica quanti caratteri escludere dalla fine.\n\n$s = \"  ciao mondo  \";\necho strlen($s);                  // 14\n$s = trim($s);                    // \"ciao mondo\"\necho ucfirst($s);                 // Ciao mondo\necho ucwords($s);                 // Ciao Mondo\necho strtoupper($s);              // CIAO MONDO\necho str_replace(\"o\", \"0\", $s);   // cia0 m0nd0\necho strpos($s, \"mondo\");         // 5\necho strstr(\"Lorenzo\", \"re\");     // renzo\n    \necho substr(\"Lorenzo\", 4);        // nzo\necho substr(\"Lorenzo\", -3, 2);    // nz\necho substr(\"Lorenzo\", 1, -2);    // oren\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nstrpos restituisce 0 se la stringa cercata si trova all’inizio, ma 0 e false sono valori uguali per l’operatore ==. Per verificare se la ricerca è riuscita si usa l’operatore !==:\n\n\nif (strpos(\"Lorenzo\", \"Lo\") !== false) {\n    echo \"Trovato\";\n}\n\n\nFunzioni sugli array\n\ncount($array) (o sizeof): restituisce il numero di elementi dell’array;\narray_reverse($array [, $preserve_keys]): restituisce l’array con gli elementi in ordine inverso. Con TRUE come secondo parametro le chiavi vengono mantenute;\nsort($array), rsort($array): ordinano l’array in modo crescente o decrescente;\nin_array($valore, $array): TRUE se il valore è presente nell’array;\narray_key_exists($chiave, $array): TRUE se la chiave è presente nell’array;\narray_search($valore, $array): restituisce la chiave del valore trovato, oppure FALSE;\narray_merge($array1, $array2 [, ...]): unisce due o più array. Le chiavi numeriche vengono rinumerate; per le chiavi associative uguali, l’ultimo valore sovrascrive i precedenti;\narray_push($array, $valore [, ...]): aggiunge uno o più valori in fondo all’array;\narray_pop($array): rimuove e restituisce l’ultimo elemento;\narray_unshift($array, $valore [, ...]): aggiunge uno o più valori all’inizio dell’array;\narray_shift($array): rimuove e restituisce il primo elemento (gli indici numerici vengono rinumerati);\nexplode($separatore, $str): trasforma una stringa in un array, dividendola in base al separatore;\nimplode($separatore, $array): trasforma un array in una stringa, inserendo il separatore tra gli elementi.\n\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nLe funzioni sort, rsort, array_push, array_pop, array_shift e array_unshift modificano direttamente l’array passato come parametro: l’ordine o il contenuto originale va perso. Dopo sort e rsort le chiavi originali vengono eliminate e sostituite da indici numerici a partire da 0.\n\n\n$numeri = [4, 9, 1];\necho count($numeri);             // 3\nsort($numeri);                   // 1, 4, 9\narray_push($numeri, 7);          // 1, 4, 9, 7\n$ultimo = array_pop($numeri);    // $ultimo = 7      -&gt; 1, 4, 9\n$primo = array_shift($numeri);   // $primo = 1       -&gt; 4, 9\narray_unshift($numeri, 0);       // 0, 4, 9\n    \nvar_dump(in_array(4, $numeri));  // bool(true)\necho array_search(9, $numeri);   // 2\n    \n$c = array_merge([1, 2], [3, 4]);        // 1, 2, 3, 4\n$parole = explode(\" \", \"ciao Mario\");    // [\"ciao\", \"Mario\"]\n$testo = implode(\"-\", $parole);          // \"ciao-Mario\"\nCome per strpos(), il risultato di array_search() deve essere confrontato con false usando !== quando si vuole sapere se il valore è stato trovato.\n\n\nFunzioni sulle date\nLe funzioni sulle date si basano sul timestamp: un numero intero che rappresenta i secondi trascorsi dal 1° gennaio 1970.\n\ntime(): restituisce il timestamp del momento in cui viene eseguita;\ndate($formato [, $timestamp]): restituisce una stringa con la data formattata secondo il formato indicato. Se il timestamp è omesso, usa quello attuale;\nmktime($ora, $minuti, $secondi, $mese, $giorno, $anno): calcola il timestamp di una data. Se un valore supera il proprio limite, PHP lo riporta nell’intervallo corretto, ad esempio il mese 14 diventa febbraio dell’anno successivo. Questo permette di eseguire calcoli sulle date;\ncheckdate($mese, $giorno, $anno): TRUE se i valori formano una data valida.\n\nI principali codici per il formato di date:\n\n\n\n\n\n\n\n\n\nCodice\nSignificato\nCodice\nSignificato\n\n\n\n\nY\nanno (4 cifre)\nd\ngiorno del mese (01–31)\n\n\ny\nanno (2 cifre)\nj\ngiorno del mese (1–31)\n\n\nm\nmese (01–12)\nw\ngiorno della settimana (0 = dom, 6 = sab)\n\n\nn\nmese (1–12)\nl\ngiorno della settimana testuale\n\n\nF\nmese testuale (January)\nD\ngiorno della settimana su 3 lettere\n\n\nM\nmese su 3 lettere (Jan)\nH\nora (00–23)\n\n\ni\nminuti (00–59)\nG\nora (0–23)\n\n\ns\nsecondi (00–59)\n\n\n\n\n\necho time();                          // timestamp attuale\necho date(\"d/m/Y\");                   // data attuale, es. 24/09/2026\necho date(\"H:i:s\");                   // ora attuale, es. 10:30:15\necho date(\"d/m/Y\", mktime(0, 0, 0, 14, 1, 2026));   // 01/02/2027\nvar_dump(checkdate(2, 30, 2026));     // bool(false)\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nI parametri di mktime hanno un ordine particolare (ora, minuti, secondi, mese, giorno, anno) che porta facilmente a errori.\n\n\nI timestamp non contengono informazioni sul fuso orario. Per applicazioni reali è preferibile utilizzare DateTimeImmutable e impostare esplicitamente il fuso:\n$oraRoma = new DateTimeImmutable(\"now\", new DateTimeZone(\"Europe/Rome\"));\necho $oraRoma-&gt;format(\"d/m/Y H:i:s\");\n\n\n\n\n\n\nConsiglioDate moderne\n\n\n\nDateTimeImmutable restituisce nuovi oggetti quando si modifica una data, evitando cambiamenti accidentali dell’oggetto originale. È generalmente preferibile per elaborazioni non banali.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Le funzioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/03-funzioni.html#le-funzioni-definite-dallutente",
+    "href": "capitoli/03-funzioni.html#le-funzioni-definite-dallutente",
+    "title": "3  Le funzioni",
+    "section": "3.3 Le funzioni definite dall’utente",
+    "text": "3.3 Le funzioni definite dall’utente\nQuando una stessa sequenza di istruzioni deve essere ripetuta più volte, è consigliabile definire una funzione propria. I vantaggi sono un codice più leggibile, più compatto e più facile da mantenere. La sintassi è la seguente:\nfunction nomeFunzione($parametro1, $parametro2 = valoreDefault) {\n    &lt;blocco di istruzioni&gt;\n    return &lt;espressione&gt;;   // opzionale\n}\nLe parentesi graffe sono obbligatorie. Le dichiarazioni di tipo dei parametri e del valore restituito sono facoltative, ma rendono il contratto della funzione più chiaro e permettono a PHP di rilevare utilizzi errati.\nfunction saluta($nome) {\n    return \"Ciao \" . $nome;\n}\n    \necho saluta(\"Mario\");   // Ciao Mario\nLa stessa funzione può essere dichiarata specificando i tipi:\nfunction saluta(string $nome): string {\n    return \"Ciao \" . $nome;\n}\n\nParametri con valore di default\nSe a un parametro viene assegnato un valore di default nella definizione, il parametro diventa facoltativo: se nella chiamata manca, la funzione usa il valore di default. I parametri facoltativi vanno indicati dopo quelli obbligatori.\nfunction anagrafe($nome, $indirizzo, $cf = \"non disponibile\") {\n    echo \"Nome: \" . $nome . \"&lt;br&gt;\";\n    echo \"Indirizzo: \" . $indirizzo . \"&lt;br&gt;\";\n    echo \"Codice fiscale: \" . $cf . \"&lt;br&gt;\";\n}\n    \nanagrafe(\"Mario Rossi\", \"via Roma 2\", \"RSSMRA69S12A944X\");\nanagrafe(\"Paolo Verdi\", \"via Parigi 9\");   // codice fiscale: non disponibile\n\n\nPassaggio dei parametri: per valore e per riferimento\n\nPer valore (default): la funzione lavora su una copia della variabile, quindi la variabile originale non viene modificata;\nPer riferimento: la funzione lavora sulla variabile originale, che può quindi essere modificata. Si ottiene anteponendo il simbolo & al parametro nella definizione della funzione.\n\nNella chiamata il simbolo & non va indicato.\nfunction quadrato($a) {\n    $a = $a * $a;\n}\n    \nfunction quadratoRif(&$a) {\n    $a = $a * $a;\n}\n    \n$b = 2;\nquadrato($b);\necho $b;          // 2: passaggio per valore, $b non cambia\nquadratoRif($b);\necho $b;          // 4: passaggio per riferimento, $b viene modificata\n\n\nIl costrutto return\nL’istruzione return (opzionale) restituisce un solo valore al chiamante e termina l’esecuzione della funzione.\nfunction divisione($num1, $num2) {\n    if ($num2 == 0) {\n            return FALSE;   // la funzione termina qui\n    }\n    return $num1 / $num2;\n}\n    \n$m = divisione(4, 2);   // 2\n$m = divisione(5, 0);   // FALSE\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nPoiché 0 e false sono uguali per l’operatore ==, per controllare l’esito della funzione precedente si usa $m === false.\n\n\nPer restituire più valori si può restituire un array, che il chiamante può scomporre con list() o con la sintassi abbreviata []. Nella forma posizionale gli elementi vengono associati a partire dall’indice 0.\nfunction calcola($a, $b) {\n    return array($a * 10, $b * 100);\n}\n    \nlist($x, $y) = calcola(2, 3);   // $x = 20, $y = 300\n[$x, $y] = calcola(2, 3);       // sintassi abbreviata equivalente\n\n\nVisibilità (scope) delle variabili\nLe variabili usate all’interno di una funzione sono locali: esistono solo nella funzione e sono diverse da quelle definite all’esterno, anche se hanno lo stesso nome.\nfunction raddoppia($num) {\n    $temp = $num * 2;\n}\n    \nraddoppia(5);\necho $temp;   // ERRORE: $temp esiste solo dentro la funzione\nPer utilizzare all’esterno un valore calcolato in una funzione, bisogna restituirlo con return:\nfunction raddoppia($num) {\n    return $num * 2;\n}\n    \n$temp = raddoppia(5);\necho \"Risultato: \" . $temp;   // Risultato: 10\n\n\n\n\n\n\nNotaNota\n\n\n\nFanno eccezione le variabili superglobali (come $_GET e $_POST), che sono accessibili in qualsiasi punto dello script, anche all’interno delle funzioni.\n\n\n\n\nRiuso delle funzioni: include e require\nLe funzioni utili in più pagine si scrivono in un file separato, che viene poi importato con le istruzioni include e require.\nFile funzioni.php:\n&lt;?php\nfunction grassetto(string $stringa): string {\n    return \"&lt;strong&gt;\" . $stringa . \"&lt;/strong&gt;\";\n}\nFile main.php:\n&lt;?php\nrequire_once \"funzioni.php\";\necho grassetto(\"testo in grassetto\");\nLa differenza tra le due istruzioni riguarda il comportamento in caso di errore (file non trovato):\n\ninclude: genera un warning e lo script continua;\nrequire: genera un errore fatale e lo script si interrompe.\n\nLe varianti include_once e require_once importano il file una sola volta, evitando l’errore causato dalla ridefinizione delle stesse funzioni.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Le funzioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/03-funzioni.html#esercizi",
+    "href": "capitoli/03-funzioni.html#esercizi",
+    "title": "3  Le funzioni",
+    "section": "3.4 Esercizi",
+    "text": "3.4 Esercizi\n\nScrivere una funzione isPari(int $numero): bool che stabilisca se un numero è pari.\nScrivere una funzione che riceva nome e cognome e restituisca una stringa formattata con le iniziali maiuscole.\nScrivere una funzione che riceva un array di numeri e ne restituisca minimo, massimo e media.\nScrivere una funzione con un parametro facoltativo per generare un messaggio di saluto formale oppure informale.\nDimostrare con un esempio la differenza tra passaggio per valore e passaggio per riferimento.\nSeparare alcune funzioni in funzioni.php e importarle in una seconda pagina usando require_once.\nCreare un oggetto DateTimeImmutable relativo al fuso Europe/Rome e stampare data e ora nei formati italiano e ISO 8601.\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Le funzioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html",
+    "href": "capitoli/04-interazione.html",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "",
+    "text": "4.1 Il ruolo dei form\nI form permettono a una pagina web di raccogliere dati dall’utente — testo, scelte e file — e inviarli a una risorsa sul server. L’elaborazione può avvenire in un’altra pagina PHP oppure nella stessa pagina che contiene il form.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#il-tag-form",
+    "href": "capitoli/04-interazione.html#il-tag-form",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.2 Il tag FORM",
+    "text": "4.2 Il tag FORM\n&lt;form name=\"...\" action=\"...\" method=\"...\" target=\"...\"&gt;\n    &lt;!-- campi del form --&gt;\n&lt;/form&gt;\nAttributi principali:\n\naction: URL della pagina PHP che riceve i dati;\nmethod: GET o POST;\ntarget: indica dove visualizzare la risposta; normalmente può essere omesso;\nenctype: formato dei dati, obbligatorio con i file (multipart/form-data).\n\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nFare attenzione ai percorsi relativi e assoluti del valore assegnato all’attributo action.\n\n\n\nFIELDSET e LEGEND\nServono a raggruppare i campi in macro-aree, con un titolo:\n&lt;fieldset&gt;\n    &lt;legend&gt;Dati anagrafici&lt;/legend&gt;\n    &lt;!-- campi appartenenti al gruppo --&gt;\n&lt;/fieldset&gt;\nOgni fieldset dovrebbe avere al massimo un elemento legend, collocato come primo elemento del gruppo.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#get-e-post",
+    "href": "capitoli/04-interazione.html#get-e-post",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.3 GET e POST",
+    "text": "4.3 GET e POST\n\n\n\n\n\n\n\n\nCaratteristica\nGET\nPOST\n\n\n\n\nPosizione dei dati\nQuery string dell’URL\nCorpo della richiesta\n\n\nArray PHP\n$_GET\n$_POST\n\n\nCondivisione\nURL salvabile e condivisibile\nDati non inclusi nell’URL\n\n\nUso tipico\nRicerche, filtri, paginazione\nCreazione o modifica di dati, login\n\n\nDimensione\nLimitata anche da browser e server\nLimitata dalla configurazione del server\n\n\n\n\n\n\n\n\n\nImportanteGET, POST e sicurezza\n\n\n\nPOST non cifra i dati: evita solamente di mostrarli nell’URL. Per proteggere le informazioni durante il trasferimento è necessario usare HTTPS. Le password e gli altri dati sensibili non devono essere inseriti in una richiesta GET.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#il-tag-label",
+    "href": "capitoli/04-interazione.html#il-tag-label",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.4 Il tag LABEL",
+    "text": "4.4 Il tag LABEL\nAssocia un’etichetta descrittiva a un campo. L’attributo for deve corrispondere all’id del campo:\n&lt;label for=\"nome\"&gt;Nome:&lt;/label&gt;\n&lt;input type=\"text\" id=\"nome\" name=\"nome\"&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#il-tag-input",
+    "href": "capitoli/04-interazione.html#il-tag-input",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.5 Il tag INPUT",
+    "text": "4.5 Il tag INPUT\nCon l’attributo type si ottengono quasi tutti i campi di un form. input è un elemento vuoto e non ha tag di chiusura. Gli attributi più comuni sono name, che identifica il dato inviato a PHP, type, value e id.\n\nTesto e password\n&lt;input type=\"text\" name=\"nome\"&gt;\n&lt;input type=\"password\" name=\"pwd\"&gt;\n\n\nCheckbox e radio\n\ncheckbox: selezione indipendente, anche multipla;\nradio: una sola scelta possibile; tutti i pulsanti dello stesso gruppo devono avere lo stesso name.\n\n&lt;input type=\"checkbox\" name=\"sport\" value=\"calcio\" checked&gt; Calcio\n&lt;input type=\"radio\" name=\"corso\" value=\"inf\" checked&gt; Informatica\n&lt;input type=\"radio\" name=\"corso\" value=\"ele\"&gt; Elettronica\n\n\nCampo nascosto e file\n&lt;input type=\"hidden\" name=\"id\" value=\"42\"&gt;\n&lt;input type=\"file\" name=\"documento\"&gt;\n\n\n\n\n\n\nNotaNota\n\n\n\nIl campo file richiede method=\"POST\" ed enctype=\"multipart/form-data\". I dati del file arrivano in $_FILES, non in $_POST, e devono essere verificati prima di essere salvati.\n\n\n\n\nPulsanti\n&lt;input type=\"submit\" value=\"Invia\"&gt;\n&lt;input type=\"reset\" value=\"Ripristina\"&gt;\nsubmit invia i dati, reset svuota il form.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#textarea-e-select",
+    "href": "capitoli/04-interazione.html#textarea-e-select",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.6 TEXTAREA e SELECT",
+    "text": "4.6 TEXTAREA e SELECT\n&lt;textarea name=\"messaggio\" rows=\"5\" cols=\"40\"&gt;&lt;/textarea&gt;\n\n&lt;select name=\"corso\"&gt;\n    &lt;option value=\"inf\" selected&gt;Informatica&lt;/option&gt;\n    &lt;option value=\"ele\"&gt;Elettronica&lt;/option&gt;\n&lt;/select&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#ricevere-i-dati-in-php",
+    "href": "capitoli/04-interazione.html#ricevere-i-dati-in-php",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.7 Ricevere i dati in PHP",
+    "text": "4.7 Ricevere i dati in PHP\nI dati del form arrivano allo script PHP tramite gli array superglobali $_GET e $_POST, con una chiave uguale all’attributo name. I valori semplici ricevuti sono stringhe, anche quando provengono da input type=\"number\".\n&lt;?php\n$nome = $_POST[\"nome\"] ?? \"\";\n\nif ($nome !== \"\") {\n    echo \"Ciao \" . htmlspecialchars(\n        $nome,\n        ENT_QUOTES | ENT_SUBSTITUTE,\n        \"UTF-8\"\n    );\n}\n?&gt;\nL’operatore ?? fornisce un valore predefinito quando la chiave non esiste. htmlspecialchars() codifica il testo per inserirlo in modo sicuro nell’HTML; non sostituisce però la validazione del dato.\nUn checkbox non selezionato non invia alcun dato: per verificarlo si usa isset():\n&lt;?php\nif (isset($_POST[\"sport\"])) {\n    echo \"Hai selezionato Calcio\";\n}\n?&gt;\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nLa chiave $_POST[\"...\"] deve corrispondere esattamente (anche nelle maiuscole) all’attributo name del campo HTML.\n\n\n\n4.7.1 Validare i dati\nLa validazione controlla che un valore rispetti i requisiti previsti; la sanificazione può invece modificarlo. Per esempio, filter_var() può verificare un indirizzo email:\n$email = $_POST[\"email\"] ?? \"\";\n\nif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {\n    echo \"Indirizzo email non valido\";\n} else {\n    echo \"Indirizzo email valido\";\n}\n\n\n\n\n\n\nAvvisoNon fidarsi dell’input\n\n\n\nAttributi HTML come required, min, max e type=\"number\" migliorano l’esperienza dell’utente, ma possono essere aggirati. Il server deve sempre controllare nuovamente tutti i dati ricevuti.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#esempi-completi",
+    "href": "capitoli/04-interazione.html#esempi-completi",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.8 Esempi completi",
+    "text": "4.8 Esempi completi\n\n4.8.1 Massimo e minimo tra tre numeri\n&lt;form action=\"esempio1.php\" method=\"post\"&gt;\n        &lt;fieldset&gt;\n            &lt;legend&gt;Max e min tra 3 numeri&lt;/legend&gt;\n            &lt;label&gt;Primo numero: &lt;/label&gt;\n            &lt;input type=\"text\" name=\"a1\" value=\"0\"&gt;&lt;br&gt;\n            &lt;label&gt;Secondo numero: &lt;/label&gt;\n            &lt;input type=\"text\" name=\"b1\" value=\"0\"&gt;&lt;br&gt;\n            &lt;label&gt;Terzo numero: &lt;/label&gt;\n            &lt;input type=\"text\" name=\"c1\" value=\"0\"&gt;&lt;br&gt;\n        &lt;/fieldset&gt;\n        &lt;input type=\"submit\" value=\"Invia i dati\"&gt;\n        &lt;input type=\"reset\" value=\"Cancella i dati\"&gt;\n    &lt;/form&gt;\n&lt;?php\n$a = $_POST[\"a1\"] ?? null;\n$b = $_POST[\"b1\"] ?? null;\n$c = $_POST[\"c1\"] ?? null;\n\nif (is_numeric($a) && is_numeric($b) && is_numeric($c)) {\n    $a = (float) $a;\n    $b = (float) $b;\n    $c = (float) $c;\n\n    $max = $a;\n    $min = $a;\n\n    if ($b &gt; $max) { $max = $b; }\n    if ($b &lt; $min) { $min = $b; }\n    if ($c &gt; $max) { $max = $c; }\n    if ($c &lt; $min) { $min = $c; }\n\n    echo \"minimo = \" . $min . \"&lt;br&gt;\";\n    echo \"massimo = \" . $max . \"&lt;br&gt;\";\n} else {\n    echo \"Inserire tre numeri validi\";\n}\n?&gt;\n\n\n4.8.2 Calcolatrice con checkbox\nL’utente può selezionare più operazioni contemporaneamente:\n&lt;form action=\"esempio2.php\" method=\"post\"&gt;\n    &lt;fieldset&gt;\n    &lt;legend&gt;Operazione&lt;/legend&gt;\n        &lt;input type=\"checkbox\" name=\"somma\" checked&gt; Somma&lt;br&gt;\n        &lt;input type=\"checkbox\" name=\"differenza\"&gt; Differenza&lt;br&gt;\n        &lt;input type=\"checkbox\" name=\"prodotto\"&gt; Prodotto&lt;br&gt;\n        &lt;input type=\"checkbox\" name=\"quoziente\"&gt; Quoziente&lt;br&gt;\n    &lt;/fieldset&gt;\n    &lt;label&gt;Primo operando: &lt;/label&gt;\n    &lt;input type=\"text\" name=\"a\" value=\"0\"&gt;&lt;br&gt;\n    &lt;label&gt;Secondo operando: &lt;/label&gt;\n    &lt;input type=\"text\" name=\"b\" value=\"0\"&gt;&lt;br&gt;\n    &lt;input type=\"submit\" value=\"Invia\"&gt;\n    &lt;/form&gt;\n&lt;?php\n$a = $_POST[\"a\"] ?? null;\n$b = $_POST[\"b\"] ?? null;\n\nif (is_numeric($a) && is_numeric($b)) {\n    $a = (float) $a;\n    $b = (float) $b;\n\n    if (isset($_POST[\"somma\"])) echo ($a + $b) . \"&lt;br&gt;\";\n    if (isset($_POST[\"differenza\"])) echo ($a - $b) . \"&lt;br&gt;\";\n    if (isset($_POST[\"prodotto\"])) echo ($a * $b) . \"&lt;br&gt;\";\n    if (isset($_POST[\"quoziente\"])) {\n        echo $b != 0\n            ? ($a / $b) . \"&lt;br&gt;\"\n            : \"Errore: divisione per zero&lt;br&gt;\";\n    }\n} else {\n    echo \"Errore: inserire due numeri validi\";\n}\n?&gt;\n\n\n\n\n\n\nNotaNota\n\n\n\nis_numeric() verifica che un valore sia numerico: controllare sempre i dati ricevuti da un form.\n\n\n\n\n4.8.3 Calcolatrice con radio button\nQui è possibile scegliere una sola operazione, quindi si usa uno switch:\n&lt;form action=\"esempio3.php\" method=\"post\"&gt;\n        &lt;fieldset&gt;\n            &lt;legend&gt;Operazione&lt;/legend&gt;\n            &lt;input type=\"radio\" name=\"op\" value=\"somma\" checked&gt; Somma\n            &lt;input type=\"radio\" name=\"op\" value=\"differenza\"&gt; Differenza\n            &lt;input type=\"radio\" name=\"op\" value=\"prodotto\"&gt; Prodotto\n            &lt;input type=\"radio\" name=\"op\" value=\"quoziente\"&gt; Quoziente\n        &lt;/fieldset&gt;\n    &lt;label&gt;Primo operando: &lt;/label&gt;\n    &lt;input type=\"text\" name=\"a\" value=\"0\"&gt;&lt;br&gt;\n    &lt;label&gt;Secondo operando: &lt;/label&gt;\n    &lt;input type=\"text\" name=\"b\" value=\"0\"&gt;&lt;br&gt;\n    &lt;input type=\"submit\" value=\"Invia\"&gt;\n    &lt;/form&gt;\n&lt;?php\n$a = $_POST[\"a\"] ?? null;\n$b = $_POST[\"b\"] ?? null;\n$operazione = $_POST[\"op\"] ?? \"\";\n\nif (is_numeric($a) && is_numeric($b)) {\n    $a = (float) $a;\n    $b = (float) $b;\n\n    switch ($operazione) {\n        case \"somma\":\n            echo $a + $b;\n            break;\n        case \"differenza\":\n            echo $a - $b;\n            break;\n        case \"prodotto\":\n            echo $a * $b;\n            break;\n        case \"quoziente\":\n            echo ($b != 0) ? $a / $b : \"ERRORE: divisore nullo!\";\n            break;\n        default:\n            echo \"Operazione non valida\";\n    }\n} else {\n    echo \"Errore: inserire due numeri validi\";\n}\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/04-interazione.html#esercizi",
+    "href": "capitoli/04-interazione.html#esercizi",
+    "title": "4  Form HTML e interazione con PHP",
+    "section": "4.9 Esercizi",
+    "text": "4.9 Esercizi\n\nCreare un form con nome e cognome che mostri un messaggio di benvenuto, codificando correttamente l’output HTML.\nCreare un form con checkbox per scegliere più colori e mostrare quelli selezionati.\nCreare un form con radio button per scegliere una taglia (S, M, L) e confermarla.\nCreare una calcolatrice completa utilizzando un menu select per scegliere l’operazione.\nCreare un form che riceva un indirizzo email e lo validi con FILTER_VALIDATE_EMAIL.\nCreare un form di registrazione con campi obbligatori e mostrare un messaggio specifico per ogni dato mancante o non valido.\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Form HTML e interazione con PHP</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html",
+    "href": "capitoli/05-cookie.html",
+    "title": "5  Cookie e sessioni",
+    "section": "",
+    "text": "5.1 Perché servono cookie e sessioni\nIl protocollo HTTP è stateless, cioè non conserva memoria delle richieste precedenti. Ogni volta che un utente visita una pagina, la richiesta viene elaborata dal server come indipendente dalle precedenti.\nPer questo motivo, quando è necessario conservare alcune informazioni durante la navigazione, si utilizzano principalmente i cookie e le sessioni.\nAlcuni esempi di utilizzo sono:",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html#perché-servono-cookie-e-sessioni",
+    "href": "capitoli/05-cookie.html#perché-servono-cookie-e-sessioni",
+    "title": "5  Cookie e sessioni",
+    "section": "",
+    "text": "mantenere un utente autenticato dopo aver effettuato correttamente il login;\nricordare la lingua scelta dall’utente;\nconservare i prodotti inseriti nel carrello di un sito di e-commerce.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html#i-cookie",
+    "href": "capitoli/05-cookie.html#i-cookie",
+    "title": "5  Cookie e sessioni",
+    "section": "5.2 I cookie",
+    "text": "5.2 I cookie\nUn cookie è un piccolo insieme di informazioni che viene memorizzato sul computer dell’utente dal browser.\nI cookie sono particolarmente utili per conservare informazioni semplici e non sensibili, ad esempio:\n\nun nome utente;\nuna preferenza dell’utente;\nla lingua scelta;\nun valore vero/falso.\n\nI dati contenuti nei cookie vengono salvati come stringhe e possono essere letti, modificati oppure eliminati dall’utente attraverso le impostazioni del proprio browser.\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nI cookie vengono memorizzati sul computer dell’utente e possono essere modificati o eliminati dall’utente stesso. Per questo motivo non devono essere utilizzati per conservare password o altri dati sensibili.\n\n\n\nCreazione di un Cookie\nIn PHP per creare un cookie si utilizza la funzione setcookie().\nLa funzione deve essere utilizzata prima di qualsiasi output, cioè prima di inviare al browser codice HTML o utilizzare funzioni come echo() e print().\nNelle versioni moderne di PHP è consigliabile usare la forma con l’array delle opzioni. Le opzioni principali sono:\n\nil nome del cookie;\nil valore del cookie;\nla data di scadenza;\nil percorso per il quale il cookie è valido;\nsecure, che limita l’invio alle connessioni HTTPS;\nhttponly, che impedisce l’accesso al cookie da JavaScript;\nsamesite, che limita l’invio del cookie nelle richieste provenienti da altri siti.\n\nUn esempio di creazione di un cookie è il seguente:\n&lt;?php\n    \n$nomeCookie = \"preferenza\";\n$valoreCookie = \"tema_scuro\";\n$connessioneSicura = isset($_SERVER[\"HTTPS\"])\n    && $_SERVER[\"HTTPS\"] !== \"off\";\n\nsetcookie($nomeCookie, $valoreCookie, [\n    \"expires\" =&gt; time() + 86400, // un giorno\n    \"path\" =&gt; \"/\",\n    \"secure\" =&gt; $connessioneSicura,\n    \"httponly\" =&gt; true,\n    \"samesite\" =&gt; \"Lax\"\n]);\n    \n    ?&gt;\nIn questo esempio:\n\n$nomeCookie contiene il nome del cookie;\n$valoreCookie contiene il valore da memorizzare;\ntime() + 86400 stabilisce una durata di un giorno, cioè 24 ore;\npath impostato a / rende il cookie valido in tutto il sito;\nsecure, httponly e samesite migliorano la protezione del cookie.\n\nÈ possibile anche creare un cookie utilizzando solamente i due parametri obbligatori:\n&lt;?php\n    \n    setcookie(\"test_cookie\", \"Sono un cookie!\");\n    \n    ?&gt;\nIn questo caso il cookie è un cookie di sessione e scade normalmente alla chiusura del browser. Il nuovo valore sarà disponibile in $_COOKIE a partire dalla richiesta successiva, non immediatamente nella stessa esecuzione di setcookie().\n\n\nLettura di un Cookie\nUna volta creato un cookie, il suo valore può essere letto attraverso l’array superglobale $_COOKIE.\nPer verificare se un determinato cookie esiste si può utilizzare la funzione isset().\n&lt;?php\n    \n$nomeCookie = \"preferenza\";\n\nif (isset($_COOKIE[$nomeCookie])) {\n    $valore = htmlspecialchars(\n        $_COOKIE[$nomeCookie],\n        ENT_QUOTES | ENT_SUBSTITUTE,\n        \"UTF-8\"\n    );\n    echo \"Il cookie vale: \" . $valore;\n} else {\n    echo \"Il cookie non è stato impostato\";\n}\n    \n    ?&gt;\n\n\nModifica di un Cookie\nPer modificare un cookie è sufficiente utilizzare nuovamente la funzione setcookie() con lo stesso nome e assegnare un nuovo valore.\n&lt;?php\n    \n$nomeCookie = \"preferenza\";\n\nsetcookie($nomeCookie, \"tema_chiaro\", [\n    \"expires\" =&gt; time() + 86400,\n    \"path\" =&gt; \"/\",\n    \"httponly\" =&gt; true,\n    \"samesite\" =&gt; \"Lax\"\n]);\n    \n    ?&gt;\n\n\nEliminazione di un Cookie\nPer eliminare un cookie è possibile impostare una data di scadenza nel passato.\n&lt;?php\n    \n$nomeCookie = \"preferenza\";\n\nsetcookie($nomeCookie, \"\", [\n    \"expires\" =&gt; time() - 3600,\n    \"path\" =&gt; \"/\",\n    \"httponly\" =&gt; true,\n    \"samesite\" =&gt; \"Lax\"\n]);\n    \n    ?&gt;\nPer eliminare correttamente un cookie bisogna usare lo stesso nome, percorso e dominio usati durante la creazione.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html#le-sessioni",
+    "href": "capitoli/05-cookie.html#le-sessioni",
+    "title": "5  Cookie e sessioni",
+    "section": "5.3 Le sessioni",
+    "text": "5.3 Le sessioni\nLe sessioni permettono di conservare informazioni durante la navigazione dell’utente, ma a differenza dei cookie i dati vengono memorizzati sul server.\nQuando viene avviata una sessione, il server associa alla navigazione un identificatore chiamato session ID.\nIl session ID viene normalmente memorizzato sul computer dell’utente tramite un cookie chiamato PHPSESSID.\nI dati della sessione vengono invece memorizzati sul server e possono essere utilizzati nelle diverse pagine del sito attraverso l’array superglobale $_SESSION.\n\n\n\n\n\n\nNotaNota\n\n\n\nNei cookie vengono memorizzati direttamente i dati sul computer dell’utente. Nelle sessioni i dati vengono invece mantenuti sul server; il browser conserva normalmente solamente il session ID che permette di identificare la sessione.\n\n\n\nAvvio di una sessione\nPer utilizzare le sessioni all’interno di una pagina PHP è necessario utilizzare la funzione session_start().\nLa funzione non richiede parametri e deve essere chiamata prima di qualsiasi output.\n&lt;?php\n    \n    session_start();\n    \n    ?&gt;\n\n\n\n\n\n\nAvvisoAttenzione\n\n\n\nLa funzione session_start() deve essere eseguita prima di inviare al browser qualsiasi codice HTML o altro output tramite funzioni come echo() e print().\n\n\n\n\nSalvataggio dei dati nella sessione\nUna volta avviata la sessione, è possibile salvare le informazioni all’interno dell’array superglobale $_SESSION.\nAd esempio:\n&lt;?php\n    \n    // Apro la sessione\n    session_start();\n    \n// Recupero i dati inviati dal form.\n$username = trim($_POST[\"user\"] ?? \"\");\n\nif ($username !== \"\") {\n    // Dopo la verifica delle credenziali, rinnovo l'ID\n    // per contrastare gli attacchi di session fixation.\n    session_regenerate_id(true);\n\n    $_SESSION['username'] = $username;\n    $_SESSION['autenticato'] = true;\n}\n    \n    ?&gt;\nIn questo modo nella sessione vengono memorizzati il nome utente e lo stato di autenticazione. La password non deve essere conservata nella sessione.\n\n\nUtilizzo dei dati della sessione\nI dati salvati nella sessione possono essere recuperati anche da una pagina diversa.\nÈ sufficiente richiamare nuovamente session_start() e accedere agli elementi dell’array $_SESSION.\n&lt;?php\n    \n    // Apro la sessione\n    session_start();\n    \n$username = $_SESSION[\"username\"] ?? null;\n\nif ($username !== null) {\n    echo \"Ciao \" . htmlspecialchars(\n        $username,\n        ENT_QUOTES | ENT_SUBSTITUTE,\n        \"UTF-8\"\n    );\n} else {\n    echo \"Utente non autenticato\";\n}\n    \n    ?&gt;\nIn questo modo le informazioni precedentemente salvate possono essere utilizzate nelle successive pagine del sito.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html#eliminazione-dei-dati-di-sessione",
+    "href": "capitoli/05-cookie.html#eliminazione-dei-dati-di-sessione",
+    "title": "5  Cookie e sessioni",
+    "section": "5.4 Eliminazione dei dati di sessione",
+    "text": "5.4 Eliminazione dei dati di sessione\nPHP mette a disposizione diverse funzioni per eliminare le informazioni memorizzate in una sessione.\n\nEliminazione di una singola variabile\nPer eliminare una specifica variabile di sessione si utilizza la funzione unset().\n&lt;?php\n    \n    unset($_SESSION['username']);\n    \n    ?&gt;\nIn questo modo viene eliminata solamente la variabile username.\n\n\nEliminazione di tutte le variabili\nPer eliminare tutte le variabili contenute nell’array $_SESSION si può utilizzare:\n&lt;?php\n    \n    session_unset();\n    \n    ?&gt;\nÈ inoltre possibile inizializzare nuovamente l’array della sessione:\n&lt;?php\n    \n    $_SESSION = array();\n    \n    ?&gt;\n\n\nDistruzione della sessione\nsession_destroy() elimina i dati associati alla sessione sul server, ma non svuota automaticamente $_SESSION e non elimina il cookie con il session ID. Per un logout completo si eseguono tutti i passaggi:\n&lt;?php\nsession_start();\n\n$_SESSION = [];\n\nif (ini_get(\"session.use_cookies\")) {\n    $parametri = session_get_cookie_params();\n\n    setcookie(session_name(), \"\", [\n        \"expires\" =&gt; time() - 42000,\n        \"path\" =&gt; $parametri[\"path\"],\n        \"domain\" =&gt; $parametri[\"domain\"],\n        \"secure\" =&gt; $parametri[\"secure\"],\n        \"httponly\" =&gt; $parametri[\"httponly\"],\n        \"samesite\" =&gt; $parametri[\"samesite\"] ?? \"Lax\"\n    ]);\n}\n\nsession_destroy();\n?&gt;\nLa differenza tra le operazioni è importante:\n\nsession_unset() azzera immediatamente il contenuto dell’array $_SESSION;\nsession_destroy() elimina i dati associati alla sessione sul server, ma da solo non modifica le variabili già caricate nello script e non elimina il cookie di sessione.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/05-cookie.html#esercizi",
+    "href": "capitoli/05-cookie.html#esercizi",
+    "title": "5  Cookie e sessioni",
+    "section": "5.5 Esercizi",
+    "text": "5.5 Esercizi\n\nCreare un cookie contenente il proprio nome e visualizzarlo in una pagina PHP successiva.\nCreare un cookie contenente la lingua preferita dell’utente e visualizzare un messaggio diverso in base alla lingua scelta.\nCreare una pagina che permetta di modificare ed eliminare un cookie mantenendo coerenti le opzioni path, httponly e samesite.\nCreare una sessione nella quale salvare il nome e la classe dello studente, quindi visualizzare tali informazioni in una seconda pagina.\nCreare un semplice sistema di autenticazione simulato che memorizzi nella sessione il nome dell’utente e un valore booleano, senza salvare la password.\nCreare una pagina di logout che svuoti $_SESSION, elimini il cookie di sessione e chiami session_destroy().\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  }
+]
