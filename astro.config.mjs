@@ -7,7 +7,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://pasquale-cerullo.briny-trail-7284.chatgpt.site',
+	site: 'https://personal-site-2j5.pages.dev',
 	integrations: [sitemap(), mdx()],
 	i18n: {
 		defaultLocale: 'en',
