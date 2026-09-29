@@ -40,6 +40,6 @@ For the English version, create a file with the **same name** in `src/content/bl
 - `src/content/blog/it/my-first-post.md`
 - `src/content/blog/en/my-first-post.md`
 
-Both will be reachable at `/blog/my-first-post/` in each language. The site only shows posts for the selected language.
+They will be available at `/it/blog/my-first-post/` and `/en/blog/my-first-post/`. When a translation is missing, the site shows the text in the other language while keeping navigation in the selected language.
 
 Happy writing!

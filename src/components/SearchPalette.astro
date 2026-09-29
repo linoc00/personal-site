@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { localizedMaterials, localizedContent, contentKey } from '../i18n/content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { projects } from '../data/portfolio';
 import { useTranslations, type Locale } from '../i18n/ui';
@@ -7,19 +8,19 @@ import { useTranslations, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const materials = await getCollection('materials', ({ data }) => data.lang === locale);
-const posts = await getCollection('blog', ({ data }) => data.lang === locale);
+const materials = localizedMaterials(await getCollection('materials'), locale);
+const posts = localizedContent(await getCollection('blog'), locale);
 const home = getRelativeLocaleUrl(locale, '/');
 
 const entries = [
 	{ title: t('nav.materials'), description: t('materials.subtitle'), category: t('nav.materials'), href: getRelativeLocaleUrl(locale, '/didattica/') },
-	{ title: t('nav.projects'), description: t('projects.subtitle'), category: t('nav.home'), href: `${home}#progetti` },
+	{ title: t('nav.projects'), description: t('projects.subtitle'), category: t('nav.home'), href: getRelativeLocaleUrl(locale, '/progetti/') },
 	{ title: t('nav.skills'), description: t('skills.subtitle'), category: t('nav.home'), href: `${home}#competenze` },
 	{ title: t('nav.experience'), description: t('experience.subtitle'), category: t('nav.home'), href: `${home}#esperienza` },
 	{ title: t('nav.blog'), description: t('blog.subtitle'), category: t('nav.blog'), href: getRelativeLocaleUrl(locale, '/blog/') },
 	...materials.map(({ data }) => ({ title: data.title, description: `${data.description} ${data.topics.join(' ')}`, category: data.category, href: data.href })),
-	...posts.map((post) => ({ title: post.data.title, description: post.data.description, category: t('nav.blog'), href: `/${locale}/blog/${post.id.split('/').pop()}/` })),
-	...projects.map((project) => ({ title: project.title[locale], description: `${project.description[locale]} ${project.tech.join(' ')}`, category: t('nav.projects'), href: `${home}#progetti` })),
+	...posts.map((post) => ({ title: post.data.title, description: post.data.description, category: t('nav.blog'), href: `/${locale}/blog/${contentKey(post)}/` })),
+	...projects.map((project) => ({ title: project.title[locale], description: `${project.description[locale]} ${project.tech.join(' ')}`, category: t('nav.projects'), href: `${getRelativeLocaleUrl(locale, '/progetti/')}#${project.slug}` })),
 ];
 ---
 
@@ -75,6 +76,9 @@ const entries = [
 
 	function openSearch() { if (dialog && !dialog.open) { activeIndex = 0; dialog.showModal(); render(); requestAnimationFrame(() => input?.focus()); } }
 	function closeSearch() { dialog?.close(); }
+	results?.addEventListener('click', (event) => {
+		if ((event.target as Element).closest('[data-search-result]')) closeSearch();
+	});
 
 	document.querySelectorAll('[data-search-open]').forEach((button) => button.addEventListener('click', openSearch));
 	dialog?.querySelector('[data-search-close]')?.addEventListener('click', closeSearch);

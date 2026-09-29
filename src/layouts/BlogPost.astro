@@ -13,9 +13,10 @@ interface Props {
 	updatedDate?: Date;
 	heroImage?: ImageMetadata;
 	locale: Locale;
+	lang?: Locale;
 }
 
-const { title, description, pubDate, updatedDate, heroImage, locale } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, locale, lang = locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
@@ -27,6 +28,7 @@ const t = useTranslations(locale);
 		>
 			&larr; {t('blog.back')}
 		</a>
+		{lang !== locale && <p class="mb-5 text-sm text-[var(--brand)]">{t(lang === 'it' ? 'content.in_italian' : 'content.in_english')}</p>}
 		<header>
 			<p class="text-sm font-semibold text-[var(--muted)]">
 				<FormattedDate date={pubDate} locale={locale} />
@@ -38,12 +40,12 @@ const t = useTranslations(locale);
 					)
 				}
 			</p>
-			<h1
+			<h1 lang={lang}
 				class="mt-4 max-w-2xl text-4xl font-bold leading-tight tracking-[-.045em] text-[var(--ink)] sm:text-6xl"
 			>
 				{title}
 			</h1>
-			<p class="mt-5 text-lg leading-8 text-[var(--muted)]">{description}</p>
+			<p lang={lang} class="mt-5 text-lg leading-8 text-[var(--muted)]">{description}</p>
 		</header>
 		{
 			heroImage && (
@@ -58,7 +60,7 @@ const t = useTranslations(locale);
 				</div>
 			)
 		}
-		<div
+		<div lang={lang}
 			class="prose prose-slate mt-12 max-w-none text-[var(--muted)] prose-a:text-[var(--brand)] prose-headings:tracking-tight prose-headings:text-[var(--ink)] prose-strong:text-[var(--ink)] dark:prose-invert"
 		>
 			<slot />

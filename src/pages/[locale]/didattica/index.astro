@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { localizedMaterials } from '../../../i18n/content';
 import MaterialCard from '../../../components/MaterialCard.astro';
 import { SITE_DESCRIPTION } from '../../../consts';
 import { localeParams } from '../../../i18n/utils';
@@ -9,7 +10,7 @@ import Layout from '../../../layouts/Layout.astro';
 export function getStaticPaths() { return localeParams(); }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const materials = (await getCollection('materials', ({ data }) => data.lang === locale)).sort((a, b) => a.data.order - b.data.order);
+const materials = localizedMaterials(await getCollection('materials'), locale);
 const topics = [...new Set(materials.flatMap(({ data }) => data.topics))];
 ---
 <Layout title={`${t('nav.materials')} — Pasquale Cerullo`} description={SITE_DESCRIPTION[locale]} locale={locale}>

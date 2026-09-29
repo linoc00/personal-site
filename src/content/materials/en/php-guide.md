@@ -1,7 +1,9 @@
 ---
+translationKey: "php-guide"
 title: "PHP Programming Guide"
 description: "A complete learning path with theory, examples and exercises, from language basics to forms, cookies and browser interaction."
 lang: "en"
+resourceLang: "it"
 category: "Web programming"
 format: "guide"
 level: "Upper secondary school"

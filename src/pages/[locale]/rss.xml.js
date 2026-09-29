@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { localizedContent, contentKey } from '../../i18n/content';
 import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
@@ -7,8 +8,8 @@ export function getStaticPaths() {
 }
 
 export async function GET(context) {
-	const locale = context.params.locale ?? 'it';
-	const posts = (await getCollection('blog', ({ data }) => data.lang === locale)).sort(
+	const locale = context.params.locale === 'it' ? 'it' : 'en';
+	const posts = localizedContent(await getCollection('blog'), locale).sort(
 		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 	);
 	return rss({
@@ -19,7 +20,7 @@ export async function GET(context) {
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.pubDate,
-			link: `/${locale}/blog/${post.id.split('/').pop()}/`,
+			link: `/${locale}/blog/${contentKey(post)}/`,
 		})),
 	});
 }

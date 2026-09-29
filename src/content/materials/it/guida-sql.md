@@ -1,4 +1,5 @@
 ---
+translationKey: "sql-guide"
 title: "Guida SQL"
 description: "provamelaaaa."
 lang: "it"

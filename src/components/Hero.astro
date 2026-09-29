@@ -4,23 +4,25 @@ import { useTranslations, type Locale } from '../i18n/ui';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const home = getRelativeLocaleUrl(locale, '/');
 ---
-<section id="home" class="relative overflow-hidden">
-	<div class="pointer-events-none absolute inset-0 opacity-[.055] dark:opacity-[.09]" style="background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 88%)"></div>
-	<div class="site-container relative grid min-h-[calc(100svh-4.5rem)] items-center gap-12 py-20 lg:grid-cols-[1fr_22rem] lg:py-28">
-		<div class="max-w-4xl">
+<section id="home" class="hero-section">
+	<div class="site-container hero-layout">
+		<div>
 			<p class="eyebrow">{t('hero.eyebrow')}</p>
-			<h1 class="mt-6 text-[clamp(3rem,8vw,6.6rem)] font-bold leading-[.94] tracking-[-.065em] text-[var(--ink)]">{t('hero.title')}</h1>
-			<p class="mt-7 max-w-2xl text-lg leading-8 text-[var(--muted)] sm:text-xl">{t('hero.body')}</p>
-			<div class="mt-9 flex flex-wrap gap-3">
-				<a href={getRelativeLocaleUrl(locale, '/didattica/')} class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/15 transition hover:-translate-y-0.5 hover:bg-brand-700">{t('hero.cta_materials')} <span aria-hidden="true">→</span></a>
-				<a href={`${home}#progetti`} class="inline-flex items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--surface-strong)] px-5 py-3 text-sm font-bold text-[var(--ink)] transition hover:border-[var(--brand)]">{t('hero.cta_projects')}</a>
+			<p class="hero-name">{t('hero.name')}</p>
+			<h1 class="hero-title">{t('hero.title')}</h1>
+			<p class="hero-copy">{t('hero.body')}</p>
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a href={getRelativeLocaleUrl(locale, '/progetti/')} class="button-primary">{t('hero.cta_projects')} <span aria-hidden="true">↗</span></a>
+				<a href={getRelativeLocaleUrl(locale, '/didattica/')} class="button-secondary">{t('hero.cta_materials')} <span aria-hidden="true">→</span></a>
 			</div>
 		</div>
-		<div class="grid gap-4 self-end lg:pb-7">
-			<a href={getRelativeLocaleUrl(locale, '/didattica/')} class="panel group rounded-3xl p-6 transition hover:-translate-y-1 hover:border-[var(--brand)]"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-[var(--brand-soft)] text-[var(--brand)]"><svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" /></svg></span><span class="mt-5 block text-lg font-bold text-[var(--ink)]">{t('hero.students')}</span><span class="mt-1 block leading-6 text-[var(--muted)]">{t('hero.students_text')}</span><span class="mt-5 inline-block text-[var(--brand)] transition-transform group-hover:translate-x-1">→</span></a>
-			<a href={`${home}#progetti`} class="panel group rounded-3xl p-6 transition hover:-translate-y-1 hover:border-[var(--brand)]"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-[color:color-mix(in_srgb,var(--accent)_14%,transparent)] font-mono text-sm font-bold text-[var(--accent)]">&lt;/&gt;</span><span class="mt-5 block text-lg font-bold text-[var(--ink)]">{t('hero.professional')}</span><span class="mt-1 block leading-6 text-[var(--muted)]">{t('hero.professional_text')}</span><span class="mt-5 inline-block text-[var(--brand)] transition-transform group-hover:translate-x-1">→</span></a>
-		</div>
+		<aside class="approach-card">
+			<div class="flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-[.16em]">{t('hero.note')}</span><span class="font-mono text-sm opacity-60" aria-hidden="true">PC / 01</span></div>
+			<div class="approach-symbol" aria-hidden="true"><span>{'{'}</span><span class="symbol-dot"></span><span>{'}'}</span></div>
+			<h2>{t('hero.note_title')}</h2>
+			<p>{t('hero.note_body')}</p>
+			<div class="approach-footer"><span>Teaching</span><span aria-hidden="true">↔</span><span>Development</span></div>
+		</aside>
 	</div>
 </section>

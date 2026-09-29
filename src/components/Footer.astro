@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
 const home = getRelativeLocaleUrl(locale, '/');
 const links = [
 	{ label: t('nav.materials'), href: getRelativeLocaleUrl(locale, '/didattica/') },
-	{ label: t('nav.projects'), href: `${home}#progetti` },
+	{ label: t('nav.projects'), href: getRelativeLocaleUrl(locale, '/progetti/') },
 	{ label: t('nav.blog'), href: getRelativeLocaleUrl(locale, '/blog/') },
 	{ label: t('nav.contact'), href: `${home}#contatti` },
 ];

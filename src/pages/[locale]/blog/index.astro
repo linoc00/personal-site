@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { localizedContent, contentKey } from '../../../i18n/content';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import { SITE_DESCRIPTION } from '../../../consts';
 import { localeParams } from '../../../i18n/utils';
@@ -13,7 +14,7 @@ export function getStaticPaths() {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const posts = (await getCollection('blog', ({ data }) => data.lang === locale)).sort(
+const posts = localizedContent(await getCollection('blog'), locale).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
@@ -38,7 +39,7 @@ const posts = (await getCollection('blog', ({ data }) => data.lang === locale)).
 						posts.map((post) => (
 							<li>
 								<a
-									href={`/${locale}/blog/${post.id.split('/').pop()}/`}
+									href={`/${locale}/blog/${contentKey(post)}/`}
 									class="panel group flex h-full flex-col overflow-hidden rounded-3xl transition duration-300 hover:-translate-y-1 hover:border-[var(--brand)] hover:shadow-xl"
 								>
 									{
@@ -58,16 +59,16 @@ const posts = (await getCollection('blog', ({ data }) => data.lang === locale)).
 											<p class="text-xs font-bold uppercase tracking-wider text-[var(--brand)]">
 											<FormattedDate date={post.data.pubDate} locale={locale} />
 										</p>
-										<h2
+										<h2 lang={post.data.lang}
 												class="text-xl font-bold tracking-tight text-[var(--ink)] transition-colors group-hover:text-[var(--brand)]"
 										>
 											{post.data.title}
 										</h2>
-											<p class="leading-7 text-[var(--muted)]">
+											<p lang={post.data.lang} class="leading-7 text-[var(--muted)]">
 											{post.data.description}
 										</p>
 											<span class="mt-auto pt-3 text-sm font-bold text-[var(--brand)]">
-											{t('blog.readMore')} &rarr;
+											{post.data.lang !== locale && <span class="mb-2 block text-xs text-[var(--muted)]">{t(post.data.lang === 'it' ? 'content.in_italian' : 'content.in_english')}</span>}{t('blog.readMore')} &rarr;
 										</span>
 									</div>
 								</a>

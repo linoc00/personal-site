@@ -14,6 +14,7 @@ const blog = defineCollection({
       updatedDate: z.coerce.date().optional(),
       heroImage: z.optional(image()),
       lang: z.enum(["it", "en"]),
+      translationKey: z.string().regex(/^[a-z0-9]+(?:[-/][a-z0-9]+)*$/).optional(),
     }),
 });
 
@@ -23,10 +24,13 @@ const materials = defineCollection({
     title: z.string(),
     description: z.string(),
     lang: z.enum(["it", "en"]),
+    translationKey: z.string().regex(/^[a-z0-9]+(?:[-/][a-z0-9]+)*$/).optional(),
     category: z.string(),
     format: z.enum(["guide", "notes", "exercise", "slides", "video"]),
     level: z.string(),
     topics: z.array(z.string()),
+    resourceLang: z.enum(["it", "en"]).optional(),
+    downloadLang: z.enum(["it", "en"]).optional(),
     href: z.string(),
     downloadHref: z.string().optional(),
     updatedDate: z.coerce.date(),

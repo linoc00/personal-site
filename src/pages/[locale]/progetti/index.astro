@@ -1,0 +1,21 @@
+---
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { sortedProjects } from '../../../data/portfolio';
+import { localeParams } from '../../../i18n/utils';
+import { useTranslations } from '../../../i18n/ui';
+import Layout from '../../../layouts/Layout.astro';
+export function getStaticPaths() { return localeParams(); }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+<Layout title={`${t('projects.all')} — Pasquale Cerullo`} description={t('projects.archive_description')} locale={locale}>
+	<section class="section-shell">
+		<div class="site-container">
+			<div class="section-heading border-b border-[var(--line)] pb-10">
+				<div><p class="eyebrow">{t('projects.eyebrow')}</p><h1 class="section-title">{t('projects.all')}</h1><p class="section-copy">{t('projects.archive_description')}</p></div>
+				<p class="shrink-0 text-sm text-[var(--muted)]"><span class="mr-2 text-3xl font-bold text-[var(--ink)]">{String(sortedProjects.length).padStart(2, '0')}</span>{t('projects.count')}</p>
+			</div>
+			<div class="project-grid mt-10">{sortedProjects.map((project) => <ProjectCard project={project} locale={locale} headingLevel="h2" />)}</div>
+		</div>
+	</section>
+</Layout>

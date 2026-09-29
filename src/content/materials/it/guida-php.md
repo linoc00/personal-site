@@ -1,4 +1,5 @@
 ---
+translationKey: "php-guide"
 title: "Guida alla programmazione PHP"
 description: "Un percorso completo con teoria, esempi ed esercizi: dalle basi del linguaggio fino a form, cookie e interazione con il browser."
 lang: "it"

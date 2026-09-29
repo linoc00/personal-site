@@ -6,6 +6,8 @@ export interface Localized {
 }
 
 export interface Project {
+  slug: string;
+  publishedAt: string;
   title: Localized;
   description: Localized;
   tech: string[];
@@ -59,6 +61,8 @@ import cover4 from "../assets/blog-placeholder-4.jpg";
 
 export const projects: Project[] = [
   {
+    slug: "2048",
+    publishedAt: "2026-09-29",
     title: {
       it: "2048",
       en: "2048",
@@ -71,6 +75,8 @@ export const projects: Project[] = [
     liveUrl: "/2048/",
   },
   {
+    slug: "e-commerce",
+    publishedAt: "2026-09-28",
     title: {
       it: "Piattaforma E-Commerce",
       en: "E-Commerce Platform",
@@ -83,6 +89,8 @@ export const projects: Project[] = [
     image: cover1,
   },
   {
+    slug: "analytics",
+    publishedAt: "2026-09-28",
     title: {
       it: "Dashboard Analytics",
       en: "Analytics Dashboard",
@@ -95,6 +103,8 @@ export const projects: Project[] = [
     image: cover2,
   },
   {
+    slug: "task-manager",
+    publishedAt: "2026-09-28",
     title: {
       it: "App Gestione Task",
       en: "Task Manager App",
@@ -107,6 +117,8 @@ export const projects: Project[] = [
     image: cover3,
   },
   {
+    slug: "blog",
+    publishedAt: "2026-09-28",
     title: {
       it: "Blog Personale",
       en: "Personal Blog",
@@ -119,6 +131,12 @@ export const projects: Project[] = [
     image: cover4,
   },
 ];
+
+// Dates refer to publication in this portfolio, not project completion.
+export const sortedProjects = [...projects].sort((a, b) =>
+  b.publishedAt.localeCompare(a.publishedAt),
+);
+export const recentProjects = sortedProjects.slice(0, 3);
 
 export const skills: SkillCategory[] = [
   {

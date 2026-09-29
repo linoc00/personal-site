@@ -1,15 +1,15 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { locales, type Locale } from '../../../i18n/ui';
+import { localizedContent, contentKey } from '../../../i18n/content';
 import BlogPost from '../../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return (Object.keys(locales) as Locale[]).flatMap((locale) =>
-		posts
-			.filter((post) => post.data.lang === locale)
+		localizedContent(posts, locale)
 			.map((post) => ({
-				params: { locale, slug: post.id.split('/').pop() },
+				params: { locale, slug: contentKey(post) },
 				props: { locale, post },
 			})),
 	);

@@ -23,7 +23,8 @@ const { title, description, locale, image } = Astro.props;
 		<BaseHead title={title} description={description} locale={locale} image={image} />
 		<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-		<script is:inline>
+		<script is:inline define:vars={{ locale }}>
+            try { localStorage.setItem('site-locale', locale); } catch {}
 			(function () {
 				var stored = localStorage.getItem('theme');
 				var dark =

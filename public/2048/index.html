@@ -1,73 +1,112 @@
 <!doctype html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#faf8ef">
-  <title>2048</title>
+  <meta name="theme-color" content="#172f27">
+  <meta name="description" content="2048, an interactive experiment by Pasquale Cerullo. Merge tiles and reach your next high score.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>2048 — Pasquale Cerullo</title>
   <style>
-    :root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; background: #faf8ef; color: #776e65; }
+    :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #172f27; color: #f3f3e7; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
-    main { width: min(100%, 500px); }
-    header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    h1 { font-size: clamp(64px, 18vw, 82px); line-height: 1; margin: 0; letter-spacing: -5px; }
-    .scores { display: flex; gap: 8px; }
-    .score { min-width: 92px; padding: 8px 12px; border-radius: 5px; background: #bbada0; color: white; text-align: center; font-size: 24px; font-weight: 700; line-height: 1.15; }
-    .score span { display: block; color: #eee4da; text-transform: uppercase; font-size: 12px; letter-spacing: .8px; }
-    .intro { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 18px 0 22px; }
-    .intro p { line-height: 1.4; margin: 0; }
-    button { border: 0; border-radius: 5px; background: #8f7a66; color: #fff; padding: 12px 15px; font: 700 15px Arial, sans-serif; cursor: pointer; white-space: nowrap; }
-    button:hover { background: #786451; }
-    button:focus-visible { outline: 3px solid #edc22e; outline-offset: 3px; }
-    .board { --gap: 12px; --pad: 12px; --cell: calc((100% - 2 * var(--pad) - 3 * var(--gap)) / 4); position: relative; width: 100%; aspect-ratio: 1; background: #bbada0; border-radius: 7px; touch-action: none; user-select: none; }
+    body { margin: 0; min-height: 100dvh; padding: 28px 24px; }
+    a { color: inherit; text-decoration: none; }
+    .site-nav { max-width: 1080px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid #ffffff24; font-size: 13px; }
+    .signature { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+    .monogram { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #c2d2ba; border-radius: 8px; font-size: 12px; }
+    .back { color: #c2d2ba; }
+    .back:hover { color: white; text-decoration: underline; }
+    main { width: min(100%, 1080px); margin: 48px auto; display: grid; grid-template-columns: 1fr 480px; gap: clamp(40px, 7vw, 100px); align-items: center; }
+    .eyebrow { color: #c3d4b5; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+    h1 { font-size: clamp(90px, 13vw, 152px); line-height: 1; margin: 22px 0; font-weight: 600; letter-spacing: -.085em; }
+    .tagline { white-space: pre-line; max-width: 340px; font-size: clamp(24px, 3vw, 34px); line-height: 1.2; letter-spacing: -.035em; margin: 0; font-weight: 500; }
+    .intro-copy { max-width: 340px; color: #becdc0; font-size: 15px; line-height: 1.8; margin: 20px 0 30px; }
+    .edition { display: flex; gap: 6px; align-items: center; margin-top: 48px; color: #c3d4b5; font: 11px ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .edition::before { content: ''; width: 24px; height: 1px; background: currentColor; margin-right: 6px; }
+    .game { min-width: 0; }
+    .game-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .scores { display: flex; gap: 18px; }
+    .score { min-width: 64px; font: 600 24px ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+    .score span { display: block; color: #becdc0; text-transform: uppercase; font: 10px ui-sans-serif, system-ui, sans-serif; letter-spacing: .12em; margin-bottom: 6px; }
+    button { border: 1px solid #ffffff30; border-radius: 8px; background: #dbe5ca; color: #244233; padding: 12px 16px; font: 600 13px ui-sans-serif, system-ui, sans-serif; cursor: pointer; white-space: nowrap; }
+    button:hover { background: #edf2e4; }
+    :focus-visible { outline: 3px solid #e7c87a; outline-offset: 4px; }
+    .board { --gap: 10px; --pad: 12px; --cell: calc((100% - 2 * var(--pad) - 3 * var(--gap)) / 4); position: relative; width: 100%; aspect-ratio: 1; background: #25473a; border-radius: 16px; touch-action: none; user-select: none; box-shadow: 0 24px 60px #061b2330; }
     .background { position: absolute; inset: var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gap); }
-    .cell { border-radius: 4px; background: rgba(238,228,218,.35); }
+    .cell { border-radius: 9px; background: #ffffff0c; border: 1px solid #ffffff08; }
     .tiles { position: absolute; inset: 0; pointer-events: none; }
-    .tile { position: absolute; left: calc(var(--pad) + var(--col) * (var(--cell) + var(--gap))); top: calc(var(--pad) + var(--row) * (var(--cell) + var(--gap))); width: var(--cell); height: var(--cell); display: grid; place-items: center; border-radius: 4px; font-size: 48px; font-weight: 700; letter-spacing: -2px; background: #eee4da; backface-visibility: hidden; }
-    .tile.sliding { will-change: transform; }
-    .tile.spawn { animation: appear 140ms ease-out both; }
-    .tile.merge { animation: pop 150ms ease-out both; }
+    .tile { position: absolute; left: calc(var(--pad) + var(--col) * (var(--cell) + var(--gap))); top: calc(var(--pad) + var(--row) * (var(--cell) + var(--gap))); width: var(--cell); height: var(--cell); display: grid; place-items: center; border-radius: 9px; font-size: 44px; font-weight: 600; letter-spacing: -2px; background: #dbe5ca; color: #244233; }
+    .tile.spawn { animation: appear 150ms ease-out both; }
+    .tile.merge { animation: pop 170ms ease-out both; }
     @keyframes appear { from { transform: scale(.25); opacity: .3; } to { transform: scale(1); opacity: 1; } }
     @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.13); } 100% { transform: scale(1); } }
-    .tile[data-value="2"] { background: #eee4da; }
-    .tile[data-value="4"] { background: #ede0c8; }
-    .tile[data-value="8"] { background: #f2b179; color: #f9f6f2; }
-    .tile[data-value="16"] { background: #f59563; color: #f9f6f2; }
-    .tile[data-value="32"] { background: #f67c5f; color: #f9f6f2; }
-    .tile[data-value="64"] { background: #f65e3b; color: #f9f6f2; }
-    .tile[data-value="128"] { background: #edcf72; color: #f9f6f2; font-size: 39px; }
-    .tile[data-value="256"] { background: #edcc61; color: #f9f6f2; font-size: 39px; }
-    .tile[data-value="512"] { background: #edc850; color: #f9f6f2; font-size: 39px; }
-    .tile[data-value="1024"] { background: #edc53f; color: #f9f6f2; font-size: 31px; }
-    .tile[data-value="2048"] { background: #edc22e; color: #f9f6f2; font-size: 31px; }
-    .tile[data-value="super"] { background: #3c3a32; color: #f9f6f2; font-size: 27px; }
-    .overlay { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 20px; border-radius: 7px; background: rgba(238,228,218,.76); text-align: center; }
+    .tile[data-value="2"] { background: #dbe5ca; }
+    .tile[data-value="4"] { background: #b8d4bd; }
+    .tile[data-value="8"] { background: #7dad91; color: #122b20; }
+    .tile[data-value="16"] { background: #508466; color: white; }
+    .tile[data-value="32"] { background: #396b55; color: white; }
+    .tile[data-value="64"] { background: #234f40; color: white; box-shadow: inset 0 0 0 1px #ffffff30; }
+    .tile[data-value="128"] { background: #d4d9a0; color: #394324; font-size: 35px; }
+    .tile[data-value="256"] { background: #d9cc8c; color: #463e20; font-size: 35px; }
+    .tile[data-value="512"] { background: #e7c87a; color: #43391f; font-size: 35px; }
+    .tile[data-value="1024"] { background: #cfaa56; color: #302612; font-size: 29px; }
+    .tile[data-value="2048"] { background: #f3e6b6; color: #43391f; font-size: 29px; box-shadow: inset 0 0 0 3px #c5a45e; }
+    .tile[data-value="super"] { background: #172f27; color: #f3e6b6; font-size: 25px; box-shadow: inset 0 0 0 1px #d9cc8c; }
+    .overlay { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 24px; border-radius: 16px; background: #172f27ed; text-align: center; }
     .overlay[hidden] { display: none; }
-    .overlay strong { font-size: clamp(38px, 10vw, 58px); }
+    .overlay strong { font-size: clamp(32px, 8vw, 48px); letter-spacing: -.04em; }
     .overlay .actions { display: flex; gap: 8px; }
-    .help { margin: 22px 0 0; line-height: 1.5; }
-    .help strong { color: #776e65; }
+    .help { max-width: 480px; margin: 20px 0 0; color: #becdc0; font-size: 12px; line-height: 1.8; }
+    .help strong { color: #f3f3e7; font-weight: 500; }
     @media (prefers-reduced-motion: reduce) { .tile.spawn, .tile.merge { animation: none; } }
-    @media (max-width: 420px) { .board { --gap: 9px; --pad: 9px; } .tile { font-size: 34px; } .tile[data-value="128"], .tile[data-value="256"], .tile[data-value="512"] { font-size: 29px; } .tile[data-value="1024"], .tile[data-value="2048"] { font-size: 23px; } .tile[data-value="super"] { font-size: 20px; } .score { min-width: 72px; font-size: 20px; padding: 7px; } .intro { align-items: flex-start; } .intro p { font-size: 14px; } button { padding: 10px; font-size: 14px; } }
+    @media (max-width: 800px) { main { grid-template-columns: 1fr; width: min(100%, 480px); gap: 28px; margin: 30px auto; } .intro { display: grid; grid-template-columns: auto 1fr; column-gap: 24px; align-items: center; } .eyebrow { grid-column: 1 / -1; } h1 { font-size: 80px; margin: 16px 0 0; } .tagline { white-space: pre-line; font-size: 23px; margin-top: 16px; } .intro-copy, .edition { display: none; } }
+    @media (max-width: 420px) { body { padding: 20px 16px; } .signature { font-size: 11px; gap: 8px; } .back { font-size: 11px; } .board { --gap: 8px; --pad: 10px; } .tile { font-size: 32px; } .tile[data-value="128"], .tile[data-value="256"], .tile[data-value="512"] { font-size: 27px; } .tile[data-value="1024"], .tile[data-value="2048"] { font-size: 22px; } .tile[data-value="super"] { font-size: 19px; } .scores { gap: 12px; } .score { font-size: 20px; min-width: 50px; } button { padding: 11px; font-size: 12px; } h1 { font-size: 68px; } .tagline { white-space: pre-line; font-size: 20px; } }
   </style>
 </head>
 <body>
+  <nav class="site-nav" aria-label="Navigation"><a href="/en/" class="signature"><span class="monogram">PC</span> Pasquale Cerullo</a><a href="/en/progetti/" class="back">← All projects</a></nav>
   <main>
-    <header>
-      <h1>2048</h1>
-      <div class="scores"><div class="score"><span>Punti</span><output id="score">0</output></div><div class="score"><span>Record</span><output id="best">0</output></div></div>
-    </header>
-    <div class="intro"><p>Unisci i numeri e raggiungi la tessera <strong>2048!</strong></p><button id="restart" type="button">Nuova partita</button></div>
-    <div class="board" id="board" role="grid" aria-label="Griglia 2048">
+    <section class="intro" aria-labelledby="game-title">
+      <p class="eyebrow">The lab · Experiment 01</p>
+      <h1 id="game-title">2048</h1>
+      <p class="tagline">Small moves.<br>New possibilities.</p>
+      <p class="intro-copy">Merge matching tiles and build your next high score. One grid, four directions, one goal.</p>
+      <p class="edition">Pasquale Cerullo · Web lab</p>
+    </section>
+    <section class="game" aria-label="2048 game">
+    <div class="game-bar"><div class="scores"><div class="score"><span>Score</span><output id="score">0</output></div><div class="score"><span>Best</span><output id="best">0</output></div></div><button id="restart" type="button">New game ↗</button></div>
+    <div class="board" id="board" role="grid" aria-label="2048 grid">
       <div class="background" aria-hidden="true"></div>
       <div class="tiles" id="tiles"></div>
-      <div class="overlay" id="overlay" hidden><strong id="message"></strong><div class="actions"><button id="continue" type="button" hidden>Continua</button><button id="retry" type="button">Riprova</button></div></div>
+      <div class="overlay" id="overlay" hidden><strong id="message"></strong><div class="actions"><button id="continue" type="button" hidden>Continue</button><button id="retry" type="button">Try again</button></div></div>
     </div>
-    <p class="help"><strong>Come si gioca:</strong> usa le frecce della tastiera, WASD o scorri sulla griglia. Due tessere uguali si uniscono quando si toccano.</p>
+    <p class="help"><strong>How to play:</strong> use the arrow keys, WASD or swipe on the grid. Matching tiles merge when they touch.</p>
+    </section>
   </main>
-  <script>
+  <script type="module">
+    import { resolveGameLocale, messages } from './i18n.js';
     (() => {
+      let stored = '';
+      try { stored = localStorage.getItem('site-locale') || ''; } catch {}
+      const locale = resolveGameLocale({ search: location.search, referrer: document.referrer, origin: location.origin, stored });
+      const text = messages[locale];
+      document.documentElement.lang = locale;
+      try { localStorage.setItem('site-locale', locale); } catch {}
+      document.querySelector('.signature').href = `/${locale}/`;
+      document.querySelector('.back').href = `/${locale}/progetti/`;
+      for (const [selector, key] of Object.entries({
+        '.back': 'back', '.eyebrow': 'eyebrow', '.tagline': 'tagline', '.intro-copy': 'intro',
+        '.score:first-child span': 'score', '.score:last-child span': 'best',
+        '#restart': 'restart', '#continue': 'continue', '#retry': 'retry',
+      })) document.querySelector(selector).textContent = text[key];
+      document.querySelector('.site-nav').setAttribute('aria-label', text.navigation);
+      document.querySelector('.game').setAttribute('aria-label', text.game);
+      document.querySelector('#board').setAttribute('aria-label', text.grid);
+      document.querySelector('meta[name="description"]').content = text.description;
+      const helpTitle = document.createElement('strong');
+      helpTitle.textContent = text.helpTitle;
+      document.querySelector('.help').replaceChildren(helpTitle, document.createTextNode(text.help));
       const boardEl = document.getElementById('board');
       const background = boardEl.querySelector('.background');
       const tilesEl = document.getElementById('tiles');
@@ -76,7 +115,7 @@
       const continueButton = document.getElementById('continue');
       const scoreEl = document.getElementById('score');
       const bestEl = document.getElementById('best');
-      let board, score, won, keepPlaying, finished, animating = false, animationId = 0, queuedDirection = null;
+      let board, score, won, keepPlaying, finished, animating = false, animationId = 0;
       for (let i = 0; i < 16; i++) background.appendChild(document.createElement('div')).className = 'cell';
       let best = 0;
       try { best = Number(localStorage.getItem('2048-best')) || 0; } catch (_) {}
@@ -102,7 +141,7 @@
         tile.dataset.value = value > 2048 ? 'super' : String(value);
         tile.textContent = value;
         tile.setAttribute('role', 'gridcell');
-        tile.setAttribute('aria-label', `Riga ${r + 1}, colonna ${c + 1}: ${value}`);
+        tile.setAttribute('aria-label', text.cell(r, c, value));
         return tile;
       }
       function render(spawned = null, merged = []) {
@@ -115,13 +154,12 @@
         scoreEl.textContent = score;
         bestEl.textContent = best;
         overlay.hidden = !finished && !(won && !keepPlaying);
-        message.textContent = finished ? 'Partita finita!' : 'Hai vinto!';
+        message.textContent = finished ? text.lost : text.won;
         continueButton.hidden = finished;
       }
       function newGame() {
         animationId++;
         animating = false;
-        queuedDirection = null;
         board = Array.from({ length: 4 }, () => Array(4).fill(0));
         score = 0; won = false; keepPlaying = false; finished = false;
         addTile(); addTile(); render();
@@ -132,8 +170,7 @@
           (r < 3 && board[r + 1][c] === value) || (c < 3 && board[r][c + 1] === value)));
       }
       async function move(direction) {
-        if (animating) { queuedDirection = direction; return; }
-        if (finished || (won && !keepPlaying)) return;
+        if (animating || finished || (won && !keepPlaying)) return;
         const previous = board.map(row => row.slice());
         const next = Array.from({ length: 4 }, () => Array(4).fill(0));
         const movements = [], mergedCells = [];
@@ -175,26 +212,18 @@
         const gap = parseFloat(getComputedStyle(boardEl).getPropertyValue('--gap'));
         const step = cell.width + gap;
         tilesEl.replaceChildren();
-        const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 115;
         const animations = movements.map(({ value, r, c, toR, toC }) => {
           const tile = makeTile(value, r, c);
           tilesEl.appendChild(tile);
-          if (r === toR && c === toC) return Promise.resolve();
-          tile.classList.add('sliding');
           return tile.animate([
             { transform: 'translate(0, 0)' },
             { transform: `translate(${(toC - c) * step}px, ${(toR - r) * step}px)` }
-          ], { duration, easing: 'cubic-bezier(.22,.72,.2,1)', fill: 'forwards' }).finished.catch(() => {});
+          ], { duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 150, easing: 'ease-in-out', fill: 'forwards' }).finished.catch(() => {});
         });
         await Promise.all(animations);
         if (currentAnimation !== animationId) return;
         animating = false;
         render(spawned, mergedCells);
-        if (queuedDirection) {
-          const nextDirection = queuedDirection;
-          queuedDirection = null;
-          requestAnimationFrame(() => { if (currentAnimation === animationId) move(nextDirection); });
-        }
       }
       const keys = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right' };
       document.addEventListener('keydown', event => {

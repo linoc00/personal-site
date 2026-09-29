@@ -40,6 +40,6 @@ Per la versione inglese, crea un file con lo **stesso nome** in `src/content/blo
 - `src/content/blog/it/il-mio-primo-post.md`
 - `src/content/blog/en/il-mio-primo-post.md`
 
-Entrambi saranno raggiungibili rispettivamente su `/blog/il-mio-primo-post/` in ogni lingua. Il sito mostra solo i post della lingua selezionata.
+Saranno raggiungibili su `/it/blog/il-mio-primo-post/` e `/en/blog/il-mio-primo-post/`. Se una traduzione manca, il sito mostra il testo nell’altra lingua mantenendo la navigazione nella lingua scelta.
 
 Buona scrittura!

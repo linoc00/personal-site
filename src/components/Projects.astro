@@ -1,24 +1,18 @@
 ---
-import { useTranslations } from '../i18n/ui';
-import type { Locale } from '../i18n/ui';
-import { projects } from '../data/portfolio';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations, type Locale } from '../i18n/ui';
+import { recentProjects } from '../data/portfolio';
 import ProjectCard from './ProjectCard.astro';
-
-interface Props {
-	locale: Locale;
-}
-
+interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
-
 <section id="progetti" class="section-shell scroll-mt-20">
 	<div class="site-container">
-	<p class="eyebrow">{t('projects.eyebrow')}</p>
-	<h2 class="section-title">{t('projects.title')}</h2>
-	<p class="section-copy">{t('projects.subtitle')}</p>
-	<div class="mt-10 grid gap-6 sm:grid-cols-2">
-		{projects.map((project) => <ProjectCard project={project} locale={locale} />)}
-	</div>
+		<div class="section-heading">
+			<div><p class="eyebrow">{t('projects.eyebrow')}</p><h2 class="section-title">{t('projects.title')}</h2><p class="section-copy">{t('projects.subtitle')}</p></div>
+			<a href={getRelativeLocaleUrl(locale, '/progetti/')} class="button-secondary shrink-0">{t('projects.all')} <span aria-hidden="true">→</span></a>
+		</div>
+		<div class="project-grid mt-10">{recentProjects.map((project) => <ProjectCard project={project} locale={locale} />)}</div>
 	</div>
 </section>

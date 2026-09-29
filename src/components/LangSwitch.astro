@@ -12,8 +12,7 @@ const { locale } = Astro.props;
 const alt = getAlternateLocale(locale);
 const pathname = Astro.url.pathname;
 const stripped = pathname.replace(new RegExp('^/' + locale + '/?'), '') || '/';
-const isPost = pathname.startsWith('/' + locale + '/blog/') && stripped !== 'blog';
-const target = isPost ? getRelativeLocaleUrl(alt, '/blog/') : getRelativeLocaleUrl(alt, stripped);
+const target = getRelativeLocaleUrl(alt, stripped);
 ---
 
 <a

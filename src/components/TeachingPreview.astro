@@ -1,12 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import { localizedMaterials } from '../i18n/content';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useTranslations, type Locale } from '../i18n/ui';
 import MaterialCard from './MaterialCard.astro';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const materials = (await getCollection('materials', ({ data }) => data.lang === locale && data.featured)).sort((a, b) => a.data.order - b.data.order);
+const materials = localizedMaterials(await getCollection('materials'), locale).filter(({ data }) => data.featured);
 ---
 <section id="didattica" class="section-shell border-y border-[var(--line)] bg-[color:color-mix(in_srgb,var(--brand-soft)_42%,transparent)]">
 	<div class="site-container">
