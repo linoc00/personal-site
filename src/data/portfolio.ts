@@ -60,6 +60,18 @@ import cover4 from "../assets/blog-placeholder-4.jpg";
 export const projects: Project[] = [
   {
     title: {
+      it: "2048",
+      en: "2048",
+    },
+    description: {
+      it: "Gioca a 2048 direttamente nel browser: unisci le tessere, supera il tuo record e raggiungi 2048.",
+      en: "Play 2048 in your browser: merge tiles, beat your best score, and reach 2048.",
+    },
+    tech: ["HTML", "CSS", "JavaScript"],
+    liveUrl: "/2048/",
+  },
+  {
+    title: {
       it: "Piattaforma E-Commerce",
       en: "E-Commerce Platform",
     },

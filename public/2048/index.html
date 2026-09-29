@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf8ef">
+  <title>2048</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, Helvetica, sans-serif; background: #faf8ef; color: #776e65; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
+    main { width: min(100%, 500px); }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    h1 { font-size: clamp(64px, 18vw, 82px); line-height: 1; margin: 0; letter-spacing: -5px; }
+    .scores { display: flex; gap: 8px; }
+    .score { min-width: 92px; padding: 8px 12px; border-radius: 5px; background: #bbada0; color: white; text-align: center; font-size: 24px; font-weight: 700; line-height: 1.15; }
+    .score span { display: block; color: #eee4da; text-transform: uppercase; font-size: 12px; letter-spacing: .8px; }
+    .intro { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 18px 0 22px; }
+    .intro p { line-height: 1.4; margin: 0; }
+    button { border: 0; border-radius: 5px; background: #8f7a66; color: #fff; padding: 12px 15px; font: 700 15px Arial, sans-serif; cursor: pointer; white-space: nowrap; }
+    button:hover { background: #786451; }
+    button:focus-visible { outline: 3px solid #edc22e; outline-offset: 3px; }
+    .board { --gap: 12px; --pad: 12px; --cell: calc((100% - 2 * var(--pad) - 3 * var(--gap)) / 4); position: relative; width: 100%; aspect-ratio: 1; background: #bbada0; border-radius: 7px; touch-action: none; user-select: none; }
+    .background { position: absolute; inset: var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gap); }
+    .cell { border-radius: 4px; background: rgba(238,228,218,.35); }
+    .tiles { position: absolute; inset: 0; pointer-events: none; }
+    .tile { position: absolute; left: calc(var(--pad) + var(--col) * (var(--cell) + var(--gap))); top: calc(var(--pad) + var(--row) * (var(--cell) + var(--gap))); width: var(--cell); height: var(--cell); display: grid; place-items: center; border-radius: 4px; font-size: 48px; font-weight: 700; letter-spacing: -2px; background: #eee4da; }
+    .tile.spawn { animation: appear 150ms ease-out both; }
+    .tile.merge { animation: pop 170ms ease-out both; }
+    @keyframes appear { from { transform: scale(.25); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+    @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.13); } 100% { transform: scale(1); } }
+    .tile[data-value="2"] { background: #eee4da; }
+    .tile[data-value="4"] { background: #ede0c8; }
+    .tile[data-value="8"] { background: #f2b179; color: #f9f6f2; }
+    .tile[data-value="16"] { background: #f59563; color: #f9f6f2; }
+    .tile[data-value="32"] { background: #f67c5f; color: #f9f6f2; }
+    .tile[data-value="64"] { background: #f65e3b; color: #f9f6f2; }
+    .tile[data-value="128"] { background: #edcf72; color: #f9f6f2; font-size: 39px; }
+    .tile[data-value="256"] { background: #edcc61; color: #f9f6f2; font-size: 39px; }
+    .tile[data-value="512"] { background: #edc850; color: #f9f6f2; font-size: 39px; }
+    .tile[data-value="1024"] { background: #edc53f; color: #f9f6f2; font-size: 31px; }
+    .tile[data-value="2048"] { background: #edc22e; color: #f9f6f2; font-size: 31px; }
+    .tile[data-value="super"] { background: #3c3a32; color: #f9f6f2; font-size: 27px; }
+    .overlay { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 20px; border-radius: 7px; background: rgba(238,228,218,.76); text-align: center; }
+    .overlay[hidden] { display: none; }
+    .overlay strong { font-size: clamp(38px, 10vw, 58px); }
+    .overlay .actions { display: flex; gap: 8px; }
+    .help { margin: 22px 0 0; line-height: 1.5; }
+    .help strong { color: #776e65; }
+    @media (max-width: 420px) { .board { --gap: 9px; --pad: 9px; } .tile { font-size: 34px; } .tile[data-value="128"], .tile[data-value="256"], .tile[data-value="512"] { font-size: 29px; } .tile[data-value="1024"], .tile[data-value="2048"] { font-size: 23px; } .tile[data-value="super"] { font-size: 20px; } .score { min-width: 72px; font-size: 20px; padding: 7px; } .intro { align-items: flex-start; } .intro p { font-size: 14px; } button { padding: 10px; font-size: 14px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>2048</h1>
+      <div class="scores"><div class="score"><span>Punti</span><output id="score">0</output></div><div class="score"><span>Record</span><output id="best">0</output></div></div>
+    </header>
+    <div class="intro"><p>Unisci i numeri e raggiungi la tessera <strong>2048!</strong></p><button id="restart" type="button">Nuova partita</button></div>
+    <div class="board" id="board" role="grid" aria-label="Griglia 2048">
+      <div class="background" aria-hidden="true"></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="overlay" id="overlay" hidden><strong id="message"></strong><div class="actions"><button id="continue" type="button" hidden>Continua</button><button id="retry" type="button">Riprova</button></div></div>
+    </div>
+    <p class="help"><strong>Come si gioca:</strong> usa le frecce della tastiera, WASD o scorri sulla griglia. Due tessere uguali si uniscono quando si toccano.</p>
+  </main>
+  <script>
+    (() => {
+      const boardEl = document.getElementById('board');
+      const background = boardEl.querySelector('.background');
+      const tilesEl = document.getElementById('tiles');
+      const overlay = document.getElementById('overlay');
+      const message = document.getElementById('message');
+      const continueButton = document.getElementById('continue');
+      const scoreEl = document.getElementById('score');
+      const bestEl = document.getElementById('best');
+      let board, score, won, keepPlaying, finished, animating = false, animationId = 0;
+      for (let i = 0; i < 16; i++) background.appendChild(document.createElement('div')).className = 'cell';
+      let best = 0;
+      try { best = Number(localStorage.getItem('2048-best')) || 0; } catch (_) {}
+      bestEl.textContent = best;
+
+      function emptyCells() {
+        const cells = [];
+        board.forEach((row, r) => row.forEach((value, c) => { if (!value) cells.push([r, c]); }));
+        return cells;
+      }
+      function addTile() {
+        const cells = emptyCells();
+        if (!cells.length) return;
+        const [r, c] = cells[Math.floor(Math.random() * cells.length)];
+        board[r][c] = Math.random() < .9 ? 2 : 4;
+        return [r, c];
+      }
+      function makeTile(value, r, c, effect = '') {
+        const tile = document.createElement('div');
+        tile.className = `tile ${effect}`;
+        tile.style.setProperty('--row', r);
+        tile.style.setProperty('--col', c);
+        tile.dataset.value = value > 2048 ? 'super' : String(value);
+        tile.textContent = value;
+        tile.setAttribute('role', 'gridcell');
+        tile.setAttribute('aria-label', `Riga ${r + 1}, colonna ${c + 1}: ${value}`);
+        return tile;
+      }
+      function render(spawned = null, merged = []) {
+        tilesEl.replaceChildren();
+        board.forEach((row, r) => row.forEach((value, c) => {
+          if (value) tilesEl.appendChild(makeTile(value, r, c,
+            spawned && spawned[0] === r && spawned[1] === c ? 'spawn' :
+            merged.some(([mr, mc]) => mr === r && mc === c) ? 'merge' : ''));
+        }));
+        scoreEl.textContent = score;
+        bestEl.textContent = best;
+        overlay.hidden = !finished && !(won && !keepPlaying);
+        message.textContent = finished ? 'Partita finita!' : 'Hai vinto!';
+        continueButton.hidden = finished;
+      }
+      function newGame() {
+        animationId++;
+        animating = false;
+        board = Array.from({ length: 4 }, () => Array(4).fill(0));
+        score = 0; won = false; keepPlaying = false; finished = false;
+        addTile(); addTile(); render();
+      }
+      function hasMoves() {
+        if (emptyCells().length) return true;
+        return board.some((row, r) => row.some((value, c) =>
+          (r < 3 && board[r + 1][c] === value) || (c < 3 && board[r][c + 1] === value)));
+      }
+      async function move(direction) {
+        if (animating || finished || (won && !keepPlaying)) return;
+        const previous = board.map(row => row.slice());
+        const next = Array.from({ length: 4 }, () => Array(4).fill(0));
+        const movements = [], mergedCells = [];
+        for (let i = 0; i < 4; i++) {
+          const vertical = direction === 'up' || direction === 'down';
+          const reverse = direction === 'right' || direction === 'down';
+          const position = j => vertical ? [reverse ? 3 - j : j, i] : [i, reverse ? 3 - j : j];
+          const entries = [];
+          for (let j = 0; j < 4; j++) {
+            const [r, c] = position(j);
+            if (previous[r][c]) entries.push({ value: previous[r][c], r, c });
+          }
+          let target = 0;
+          for (let j = 0; j < entries.length; j++) {
+            const first = entries[j];
+            const [r, c] = position(target++);
+            movements.push({ ...first, toR: r, toC: c });
+            if (entries[j + 1] && entries[j + 1].value === first.value) {
+              const second = entries[++j];
+              movements.push({ ...second, toR: r, toC: c });
+              next[r][c] = first.value * 2;
+              mergedCells.push([r, c]);
+              score += next[r][c];
+              if (next[r][c] === 2048) won = true;
+            } else next[r][c] = first.value;
+          }
+        }
+        if (next.every((row, r) => row.every((value, c) => value === previous[r][c]))) return;
+        board = next;
+        if (score > best) {
+          best = score;
+          try { localStorage.setItem('2048-best', String(best)); } catch (_) {}
+        }
+        const spawned = addTile();
+        finished = !hasMoves();
+        animating = true;
+        const currentAnimation = ++animationId;
+        const cell = background.firstElementChild.getBoundingClientRect();
+        const gap = parseFloat(getComputedStyle(boardEl).getPropertyValue('--gap'));
+        const step = cell.width + gap;
+        tilesEl.replaceChildren();
+        const animations = movements.map(({ value, r, c, toR, toC }) => {
+          const tile = makeTile(value, r, c);
+          tilesEl.appendChild(tile);
+          return tile.animate([
+            { transform: 'translate(0, 0)' },
+            { transform: `translate(${(toC - c) * step}px, ${(toR - r) * step}px)` }
+          ], { duration: 150, easing: 'ease-in-out', fill: 'forwards' }).finished.catch(() => {});
+        });
+        await Promise.all(animations);
+        if (currentAnimation !== animationId) return;
+        animating = false;
+        render(spawned, mergedCells);
+      }
+      const keys = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right' };
+      document.addEventListener('keydown', event => {
+        const direction = keys[event.key] || keys[event.key.toLowerCase()];
+        if (direction) { event.preventDefault(); move(direction); }
+      });
+      let touchStart = null;
+      boardEl.addEventListener('pointerdown', event => { touchStart = [event.clientX, event.clientY]; });
+      boardEl.addEventListener('pointerup', event => {
+        if (!touchStart) return;
+        const dx = event.clientX - touchStart[0], dy = event.clientY - touchStart[1];
+        touchStart = null;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 25) return;
+        move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+      });
+      boardEl.addEventListener('pointercancel', () => { touchStart = null; });
+      document.getElementById('restart').addEventListener('click', newGame);
+      document.getElementById('retry').addEventListener('click', newGame);
+      continueButton.addEventListener('click', () => { keepPlaying = true; render(); });
+      newGame();
+    })();
+  </script>
+</body>
+</html>
