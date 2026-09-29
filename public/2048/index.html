@@ -24,9 +24,10 @@
     .background { position: absolute; inset: var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gap); }
     .cell { border-radius: 4px; background: rgba(238,228,218,.35); }
     .tiles { position: absolute; inset: 0; pointer-events: none; }
-    .tile { position: absolute; left: calc(var(--pad) + var(--col) * (var(--cell) + var(--gap))); top: calc(var(--pad) + var(--row) * (var(--cell) + var(--gap))); width: var(--cell); height: var(--cell); display: grid; place-items: center; border-radius: 4px; font-size: 48px; font-weight: 700; letter-spacing: -2px; background: #eee4da; }
-    .tile.spawn { animation: appear 150ms ease-out both; }
-    .tile.merge { animation: pop 170ms ease-out both; }
+    .tile { position: absolute; left: calc(var(--pad) + var(--col) * (var(--cell) + var(--gap))); top: calc(var(--pad) + var(--row) * (var(--cell) + var(--gap))); width: var(--cell); height: var(--cell); display: grid; place-items: center; border-radius: 4px; font-size: 48px; font-weight: 700; letter-spacing: -2px; background: #eee4da; backface-visibility: hidden; }
+    .tile.sliding { will-change: transform; }
+    .tile.spawn { animation: appear 140ms ease-out both; }
+    .tile.merge { animation: pop 150ms ease-out both; }
     @keyframes appear { from { transform: scale(.25); opacity: .3; } to { transform: scale(1); opacity: 1; } }
     @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.13); } 100% { transform: scale(1); } }
     .tile[data-value="2"] { background: #eee4da; }
@@ -47,6 +48,7 @@
     .overlay .actions { display: flex; gap: 8px; }
     .help { margin: 22px 0 0; line-height: 1.5; }
     .help strong { color: #776e65; }
+    @media (prefers-reduced-motion: reduce) { .tile.spawn, .tile.merge { animation: none; } }
     @media (max-width: 420px) { .board { --gap: 9px; --pad: 9px; } .tile { font-size: 34px; } .tile[data-value="128"], .tile[data-value="256"], .tile[data-value="512"] { font-size: 29px; } .tile[data-value="1024"], .tile[data-value="2048"] { font-size: 23px; } .tile[data-value="super"] { font-size: 20px; } .score { min-width: 72px; font-size: 20px; padding: 7px; } .intro { align-items: flex-start; } .intro p { font-size: 14px; } button { padding: 10px; font-size: 14px; } }
   </style>
 </head>
@@ -74,7 +76,7 @@
       const continueButton = document.getElementById('continue');
       const scoreEl = document.getElementById('score');
       const bestEl = document.getElementById('best');
-      let board, score, won, keepPlaying, finished, animating = false, animationId = 0;
+      let board, score, won, keepPlaying, finished, animating = false, animationId = 0, queuedDirection = null;
       for (let i = 0; i < 16; i++) background.appendChild(document.createElement('div')).className = 'cell';
       let best = 0;
       try { best = Number(localStorage.getItem('2048-best')) || 0; } catch (_) {}
@@ -119,6 +121,7 @@
       function newGame() {
         animationId++;
         animating = false;
+        queuedDirection = null;
         board = Array.from({ length: 4 }, () => Array(4).fill(0));
         score = 0; won = false; keepPlaying = false; finished = false;
         addTile(); addTile(); render();
@@ -129,7 +132,8 @@
           (r < 3 && board[r + 1][c] === value) || (c < 3 && board[r][c + 1] === value)));
       }
       async function move(direction) {
-        if (animating || finished || (won && !keepPlaying)) return;
+        if (animating) { queuedDirection = direction; return; }
+        if (finished || (won && !keepPlaying)) return;
         const previous = board.map(row => row.slice());
         const next = Array.from({ length: 4 }, () => Array(4).fill(0));
         const movements = [], mergedCells = [];
@@ -171,18 +175,26 @@
         const gap = parseFloat(getComputedStyle(boardEl).getPropertyValue('--gap'));
         const step = cell.width + gap;
         tilesEl.replaceChildren();
+        const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 115;
         const animations = movements.map(({ value, r, c, toR, toC }) => {
           const tile = makeTile(value, r, c);
           tilesEl.appendChild(tile);
+          if (r === toR && c === toC) return Promise.resolve();
+          tile.classList.add('sliding');
           return tile.animate([
             { transform: 'translate(0, 0)' },
             { transform: `translate(${(toC - c) * step}px, ${(toR - r) * step}px)` }
-          ], { duration: 150, easing: 'ease-in-out', fill: 'forwards' }).finished.catch(() => {});
+          ], { duration, easing: 'cubic-bezier(.22,.72,.2,1)', fill: 'forwards' }).finished.catch(() => {});
         });
         await Promise.all(animations);
         if (currentAnimation !== animationId) return;
         animating = false;
         render(spawned, mergedCells);
+        if (queuedDirection) {
+          const nextDirection = queuedDirection;
+          queuedDirection = null;
+          requestAnimationFrame(() => { if (currentAnimation === animationId) move(nextDirection); });
+        }
       }
       const keys = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right' };
       document.addEventListener('keydown', event => {
