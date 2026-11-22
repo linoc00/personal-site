@@ -184,6 +184,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/06-mysqli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interazione tra PHP e MySQL con MySQLi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/07-connessione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Connessione ai database con MySQLi</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -240,9 +252,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="3.1" class="anchored" data-anchor-id="cosè-una-funzione"><span class="header-section-number">3.1</span> Cos’è una funzione</h2>
 <p>Una funzione è un insieme di istruzioni che esegue un’operazione specifica. Evita di riscrivere lo stesso codice più volte: è sufficiente <strong>richiamarla</strong>, fornendole gli eventuali <strong>parametri</strong> di cui ha bisogno. Ogni funzione è caratterizzata da:</p>
 <ul>
-<li><p>un nome;</p></li>
-<li><p>i parametri richiesti (quali e quanti);</p></li>
-<li><p>il fatto di restituire o meno un valore.</p></li>
+<li>un nome;</li>
+<li>i parametri richiesti (quali e quanti);</li>
+<li>il fatto di restituire o meno un valore.</li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nome_funzione()<span class="ot">;</span> <span class="co">// nessun parametro, nessun valore restituito</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>nome_funzione(<span class="va">$a</span><span class="ot">,</span> <span class="va">$b</span>)<span class="ot">;</span> <span class="co">// due parametri</span></span>
@@ -281,13 +293,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="funzioni-sulle-variabili" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="funzioni-sulle-variabili">Funzioni sulle variabili</h3>
 <ul>
-<li><p><code>isset($var)</code>: TRUE se la variabile è definita e diversa da NULL;</p></li>
-<li><p><code>empty($var)</code>: TRUE se la variabile è vuota (stringa vuota, 0, NULL) oppure non definita;</p></li>
-<li><p><code>is_null($var)</code>: TRUE se il valore della variabile è NULL;</p></li>
-<li><p><code>is_int($var)</code>, <code>is_float($var)</code>, <code>is_string($var)</code>, <code>is_array($var)</code>: TRUE se la variabile è, rispettivamente, un intero, un decimale, una stringa, un array;</p></li>
-<li><p><code>is_numeric($var)</code>: TRUE se la variabile è un numero oppure una stringa che contiene un numero;</p></li>
-<li><p><code>unset($var)</code>: distrugge la variabile (è un costrutto del linguaggio, non una vera funzione). Dopo l’<code>unset</code>, <code>isset</code> restituisce FALSE ed <code>empty</code> restituisce TRUE;</p></li>
-<li><p><code>print_r($var)</code>: stampa il contenuto di una variabile o di un array (utile per il debug, vedi sezione precedente).</p></li>
+<li><code>isset($var)</code>: TRUE se la variabile è definita e diversa da NULL;</li>
+<li><code>empty($var)</code>: TRUE se la variabile è vuota (stringa vuota, 0, NULL) oppure non definita;</li>
+<li><code>is_null($var)</code>: TRUE se il valore della variabile è NULL;</li>
+<li><code>is_int($var)</code>, <code>is_float($var)</code>, <code>is_string($var)</code>, <code>is_array($var)</code>: TRUE se la variabile è, rispettivamente, un intero, un decimale, una stringa, un array;</li>
+<li><code>is_numeric($var)</code>: TRUE se la variabile è un numero oppure una stringa che contiene un numero;</li>
+<li><code>unset($var)</code>: distrugge la variabile (è un costrutto del linguaggio, non una vera funzione). Dopo l’<code>unset</code>, <code>isset</code> restituisce FALSE ed <code>empty</code> restituisce TRUE;</li>
+<li><code>print_r($var)</code>: stampa il contenuto di una variabile o di un array (utile per il debug, vedi sezione precedente).</li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">$a</span> <span class="op">=</span> <span class="dv">5</span><span class="ot">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">$b</span> <span class="op">=</span> <span class="kw">isset</span>(<span class="va">$a</span>)<span class="ot">;</span>        <span class="co">// TRUE</span></span>
@@ -312,22 +324,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="funzioni-sulle-stringhe" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="funzioni-sulle-stringhe">Funzioni sulle stringhe</h3>
 <ul>
-<li><p><code>strlen($str)</code>: restituisce la lunghezza della stringa in byte. Con testo UTF-8 contenente caratteri accentati, per contare i caratteri si usa <code>mb_strlen()</code> se l’estensione <code>mbstring</code> è disponibile;</p></li>
-<li><p><code>trim($str)</code>, <code>ltrim($str)</code>, <code>rtrim($str)</code>: eliminano gli spazi rispettivamente all’inizio e alla fine, solo all’inizio, solo alla fine della stringa;</p></li>
-<li><p><code>ucfirst($str)</code>: porta in maiuscolo il primo carattere della stringa;</p></li>
-<li><p><code>ucwords($str)</code>: porta in maiuscolo il primo carattere di ogni parola;</p></li>
-<li><p><code>strtolower($str)</code>, <code>strtoupper($str)</code>: convertono tutta la stringa in minuscolo o in maiuscolo;</p></li>
-<li><p><code>str_replace($cerca, $sostituisci, $str)</code>: sostituisce nella stringa tutte le occorrenze di <code>$cerca</code> con <code>$sostituisci</code> (<code>str_ireplace</code> ignora la differenza tra maiuscole e minuscole);</p></li>
-<li><p><code>strpos($str, $cerca)</code>: restituisce la posizione (a partire da 0) della prima occorrenza di <code>$cerca</code>, oppure FALSE se non è presente (<code>stripos</code> ignora maiuscole e minuscole);</p></li>
-<li><p><code>strstr($str, $cerca)</code>: restituisce la parte di stringa che parte dalla prima occorrenza di <code>$cerca</code>, oppure FALSE (<code>stristr</code> ignora maiuscole e minuscole);</p></li>
-<li><p><code>substr($str, $inizio [, $lunghezza])</code>: restituisce una porzione della stringa.</p></li>
+<li><code>strlen($str)</code>: restituisce la lunghezza della stringa in byte. Con testo UTF-8 contenente caratteri accentati, per contare i caratteri si usa <code>mb_strlen()</code> se l’estensione <code>mbstring</code> è disponibile;</li>
+<li><code>trim($str)</code>, <code>ltrim($str)</code>, <code>rtrim($str)</code>: eliminano gli spazi rispettivamente all’inizio e alla fine, solo all’inizio, solo alla fine della stringa;</li>
+<li><code>ucfirst($str)</code>: porta in maiuscolo il primo carattere della stringa;</li>
+<li><code>ucwords($str)</code>: porta in maiuscolo il primo carattere di ogni parola;</li>
+<li><code>strtolower($str)</code>, <code>strtoupper($str)</code>: convertono tutta la stringa in minuscolo o in maiuscolo;</li>
+<li><code>str_replace($cerca, $sostituisci, $str)</code>: sostituisce nella stringa tutte le occorrenze di <code>$cerca</code> con <code>$sostituisci</code> (<code>str_ireplace</code> ignora la differenza tra maiuscole e minuscole);</li>
+<li><code>strpos($str, $cerca)</code>: restituisce la posizione (a partire da 0) della prima occorrenza di <code>$cerca</code>, oppure FALSE se non è presente (<code>stripos</code> ignora maiuscole e minuscole);</li>
+<li><code>strstr($str, $cerca)</code>: restituisce la parte di stringa che parte dalla prima occorrenza di <code>$cerca</code>, oppure FALSE (<code>stristr</code> ignora maiuscole e minuscole);</li>
+<li><code>substr($str, $inizio [, $lunghezza])</code>: restituisce una porzione della stringa.</li>
 </ul>
 <p>Il funzionamento di <code>substr</code> dipende dai valori dei parametri:</p>
 <ul>
-<li><p>i caratteri si contano <strong>a partire da 0</strong>;</p></li>
-<li><p>se <code>$inizio</code> è negativo si parte dalla fine (<code>-1</code> è l’ultimo carattere);</p></li>
-<li><p>se <code>$lunghezza</code> è omessa si arriva fino alla fine della stringa;</p></li>
-<li><p>se <code>$lunghezza</code> è negativa indica quanti caratteri escludere dalla fine.</p></li>
+<li>i caratteri si contano <strong>a partire da 0</strong>;</li>
+<li>se <code>$inizio</code> è negativo si parte dalla fine (<code>-1</code> è l’ultimo carattere);</li>
+<li>se <code>$lunghezza</code> è omessa si arriva fino alla fine della stringa;</li>
+<li>se <code>$lunghezza</code> è negativa indica quanti caratteri escludere dalla fine.</li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">$s</span> <span class="op">=</span> <span class="st">"  ciao mondo  "</span><span class="ot">;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">echo</span> <span class="fu">strlen</span>(<span class="va">$s</span>)<span class="ot">;</span>                  <span class="co">// 14</span></span>

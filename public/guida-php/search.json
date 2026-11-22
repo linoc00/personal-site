@@ -164,7 +164,7 @@
     "href": "capitoli/02-strutture.html#esercizi",
     "title": "2  Strutture di controllo",
     "section": "2.9 Esercizi",
-    "text": "2.9 Esercizi\n\nData una variabile numerica, stabilire se contiene un numero positivo, negativo oppure zero.\nDato un voto da 1 a 10, stampare insufficiente, sufficiente, buono oppure ottimo usando if, elseif ed else.\nUsare switch per stampare il nome del giorno corrispondente a un numero da 1 a 7.\nStampare i numeri da 1 a 20 prima con while, poi con do...while e infine con for.\nStampare la tabellina di un numero da 1 a 10 usando un ciclo for.\nDato un array di numeri, calcolare il minimo, il massimo e la media usando foreach, senza ricorrere direttamente alle funzioni min(), max() e array_sum().\nDato un array associativo contenente nomi e voti, stampare solamente gli studenti con voto sufficiente.\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
+    "text": "2.9 Esercizi\n\nData una variabile numerica, stabilire se contiene un numero positivo, negativo oppure zero.\nDato un voto da 1 a 10, stampare insufficiente, sufficiente, buono oppure ottimo usando if, elseif ed else.\nUsare switch per stampare il nome del giorno corrispondente a un numero da 1 a 7.\nStampare i numeri da 1 a 20 prima con while, poi con do...while e infine con for.\nStampare la tabellina di un numero da 1 a 10 usando un ciclo for.\nDato un array di numeri, calcolare il minimo, il massimo e la media usando foreach, senza ricorrere direttamente alle funzioni min(), max() e array_sum().\nDato un array associativo contenente nomi, cognomi e voti, stampare solamente gli studenti con voto sufficiente in una tabella.\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Strutture di controllo</span>"
     ]
@@ -367,6 +367,306 @@
     "text": "5.5 Esercizi\n\nCreare un cookie contenente il proprio nome e visualizzarlo in una pagina PHP successiva.\nCreare un cookie contenente la lingua preferita dell’utente e visualizzare un messaggio diverso in base alla lingua scelta.\nCreare una pagina che permetta di modificare ed eliminare un cookie mantenendo coerenti le opzioni path, httponly e samesite.\nCreare una sessione nella quale salvare il nome e la classe dello studente, quindi visualizzare tali informazioni in una seconda pagina.\nCreare un semplice sistema di autenticazione simulato che memorizzi nella sessione il nome dell’utente e un valore booleano, senza salvare la password.\nCreare una pagina di logout che svuoti $_SESSION, elimini il cookie di sessione e chiami session_destroy().\n\n\n\n\n\n\n\nAvvisoIstruzioni di consegna\n\n\n\nConsegnare ogni esercizio in un file PHP diverso e numerato. Inserire tutti i file in una cartella denominata cognome_nome e consegnarla in formato compresso.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Cookie e sessioni</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html",
+    "href": "capitoli/06-mysqli.html",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "",
+    "text": "6.1 PHP e MySQL\nUno degli utilizzi principali di PHP è la realizzazione di siti web dinamici che leggono e modificano dati memorizzati in un database.\nIl funzionamento generale è il seguente:\nIl browser invia una richiesta alla pagina PHP. La pagina PHP comunica con il database, elabora i dati ricevuti e genera la risposta HTML da mostrare all’utente.\nPHP può lavorare con diversi DBMS, per esempio MySQL, MariaDB, PostgreSQL e Microsoft SQL Server. In questo capitolo ci concentreremo su MySQL e sull’estensione MySQLi.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#php-e-mysql",
+    "href": "capitoli/06-mysqli.html#php-e-mysql",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "",
+    "text": "Browser  &lt;--&gt;  Pagina PHP  &lt;--&gt;  Database MySQL\n\n\n\n\n\n\n\n\nNotaPercorso del capitolo\n\n\n\nIl capitolo segue l’ordine didattico delle slide fornite: introduzione a MySQLi, connessione al database, esecuzione delle query, lettura dei risultati e prepared statement.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#lestensione-mysqli",
+    "href": "capitoli/06-mysqli.html#lestensione-mysqli",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.2 L’estensione MySQLi",
+    "text": "6.2 L’estensione MySQLi\nMySQLi significa MySQL Improved, cioè “MySQL migliorato”. È l’estensione di PHP che mette a disposizione funzioni e metodi per comunicare con un database MySQL o MariaDB.\nMySQLi può essere usata in due modi:\n\ncon l’approccio procedurale, usando funzioni come mysqli_connect() e mysqli_query();\ncon l’approccio orientato agli oggetti, usando oggetti e metodi come new mysqli() e $mysqli-&gt;query().\n\nI due approcci permettono di svolgere le stesse operazioni. Cambia soltanto il modo in cui vengono scritte le istruzioni.\n\n\n\n\n\n\n\n\nOperazione\nApproccio procedurale\nApproccio a oggetti\n\n\n\n\nConnessione\nmysqli_connect()\nnew mysqli()\n\n\nEsecuzione di una query\nmysqli_query()\n$mysqli-&gt;query()\n\n\nLettura di una riga\nmysqli_fetch_assoc()\n$result-&gt;fetch_assoc()\n\n\nChiusura\nmysqli_close()\n$mysqli-&gt;close()\n\n\n\nMySQLi supporta anche strumenti più avanzati, come le transazioni e i prepared statement. In questo capitolo approfondiremo soprattutto i prepared statement, perché permettono di inserire dati variabili nelle query in modo corretto e sicuro.\n\n\n\n\n\n\nAvvisoAttenzione alla vecchia estensione mysql\n\n\n\nLe vecchie funzioni mysql_connect() e mysql_query() non devono più essere utilizzate. Nei programmi moderni si usano MySQLi oppure PDO.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#il-database-degli-esempi",
+    "href": "capitoli/06-mysqli.html#il-database-degli-esempi",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.3 Il database degli esempi",
+    "text": "6.3 Il database degli esempi\nNegli esempi utilizzeremo il database scuola e la tabella utente.\nCREATE DATABASE IF NOT EXISTS scuola\n\nUSE scuola;\n\nCREATE TABLE IF NOT EXISTS utente (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    cognome VARCHAR(50) NOT NULL,\n    nome VARCHAR(50) NOT NULL,\n    login VARCHAR(50) NOT NULL UNIQUE\n);\n\nINSERT INTO utente (cognome, nome, login)\nVALUES\n    ('Rossi', 'Mario', 'mrossi'),\n    ('Bianchi', 'Anna', 'abianchi'),\n    ('Verdi', 'Luca', 'lverdi');\nLa tabella contiene quattro campi:\n\nid: identificativo numerico assegnato automaticamente;\ncognome: cognome dell’utente;\nnome: nome dell’utente;\nlogin: nome utilizzato per accedere all’applicazione.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#connessione-a-mysql-con-mysqli",
+    "href": "capitoli/06-mysqli.html#connessione-a-mysql-con-mysqli",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.4 Connessione a MySQL con MySQLi",
+    "text": "6.4 Connessione a MySQL con MySQLi\nPer collegarsi al database servono quattro informazioni:\n\nhost: il computer sul quale è in esecuzione MySQL; in locale si usa normalmente localhost;\nusername: il nome dell’utente MySQL;\npassword: la password dell’utente MySQL;\ndatabase: il nome del database da utilizzare.\n\nNegli esempi seguenti i valori di username e password devono essere sostituiti con quelli configurati nel proprio ambiente di lavoro.\n\nConnessione con approccio procedurale\nNell’approccio procedurale si utilizza la funzione mysqli_connect():\n&lt;?php\n$host = \"localhost\";\n$user = \"username\"; // di default impostato root\n$password = \"password\";\n$database = \"scuola\";\n\ntry {\n    $connessione = mysqli_connect(\n        $host,\n        $user,\n        $password,\n        $database\n    );\n\n    mysqli_set_charset($connessione, \"utf8mb4\");\n\n    echo \"Connessione riuscita\";\n} catch (mysqli_sql_exception $errore) {\n    die(\"Connessione non riuscita\");\n}\n\nmysqli_close($connessione);\n?&gt;\nLa variabile $connessione rappresenta il collegamento aperto con MySQL. Verrà usata nelle successive operazioni sul database.\nIl blocco catch viene eseguito solamente se la connessione fallisce. In questo caso il programma termina mostrando un messaggio semplice.\n\n\nConnessione con approccio orientato agli oggetti\nNell’approccio orientato agli oggetti si crea un’istanza della classe mysqli:\n&lt;?php\n$host = \"localhost\";\n$user = \"username\";\n$password = \"password\";\n$database = \"scuola\";\n\ntry {\n    $mysqli = new mysqli(\n        $host,\n        $user,\n        $password,\n        $database\n    );\n\n    $mysqli-&gt;set_charset(\"utf8mb4\"); //il simbolo -&gt; permette di accedere ai metodi dell'oggetto\n\n    echo \"Connessione riuscita\";\n} catch (mysqli_sql_exception $errore) {\n    die(\"Connessione non riuscita\");\n}\n\n$mysqli-&gt;close();\n?&gt;\nIn questo caso $mysqli è un oggetto che rappresenta la connessione. Le operazioni vengono richiamate con l’operatore -&gt;.\n\n\n\n\n\n\nConsiglioQuale approccio scegliere?\n\n\n\nPer iniziare è possibile usare l’approccio procedurale, che assomiglia alle funzioni PHP già studiate. È comunque importante saper riconoscere anche l’approccio a oggetti, perché è molto diffuso negli esempi e nella documentazione.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#eseguire-una-query",
+    "href": "capitoli/06-mysqli.html#eseguire-una-query",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.5 Eseguire una query",
+    "text": "6.5 Eseguire una query\nIl lavoro con una query può essere diviso in quattro fasi.\n\n\n\nFase\nOperazione\n\n\n\n\n1. Preparazione\nsi scrive il comando SQL\n\n\n2. Esecuzione\nil comando viene inviato a MySQL\n\n\n3. Estrazione\nsi leggono le righe restituite\n\n\n4. Formattazione\ni dati vengono inseriti nella pagina HTML\n\n\n\nL’estrazione serve soprattutto con le query SELECT. La formattazione dipende invece dal risultato che si vuole mostrare nella pagina.\n\nPrima fase: preparazione\nLa query viene memorizzata in una normale stringa PHP:\n$query = \"SELECT id, cognome, nome FROM utente\";\nÈ possibile aggiungere condizioni e ordinamenti:\n$query = \"SELECT id, cognome, nome\n          FROM utente\n          WHERE id = 2\n          ORDER BY cognome\";\nQuando la query deve contenere un valore ricevuto da un form, non bisogna concatenarlo direttamente alla stringa. In seguito vedremo come usare un prepared statement.\n\n\nSeconda fase: esecuzione\nCon l’approccio procedurale la query viene eseguita con mysqli_query():\n$result = mysqli_query($connessione, $query);\nCon l’approccio a oggetti si utilizza il metodo query():\n$result = $mysqli-&gt;query($query);\nIl comportamento dipende dal tipo di query:\n\nuna SELECT restituisce un insieme di righe chiamato result set;\nuna INSERT, UPDATE o DELETE restituisce l’esito dell’operazione.\n\n\n\nTerza fase: estrazione\nLe righe del result set possono essere lette una alla volta.\nCon mysqli_fetch_array() è possibile scegliere il tipo di array restituito:\n\n\n\n\n\n\n\n\nModalità\nTipo di array\nEsempio di accesso\n\n\n\n\nMYSQLI_NUM\nindici numerici\n$riga[0]\n\n\nMYSQLI_ASSOC\nindici con il nome dei campi\n$riga[\"id\"]\n\n\nMYSQLI_BOTH\nentrambi i tipi di indice\n$riga[0] oppure $riga[\"id\"]\n\n\n\nEsempio con un array numerico:\nwhile ($riga = mysqli_fetch_array($result, MYSQLI_NUM)) {\n    echo \"ID: \" . $riga[0] . \" \";\n    echo \"Cognome: \" . $riga[1] . \" \";\n    echo \"Nome: \" . $riga[2] . \"&lt;br&gt;\";\n}\nEsempio con un array associativo:\nwhile ($riga = mysqli_fetch_array($result, MYSQLI_ASSOC)) {\n    echo \"ID: \" . $riga[\"id\"] . \" \";\n    echo \"Cognome: \" . $riga[\"cognome\"] . \" \";\n    echo \"Nome: \" . $riga[\"nome\"] . \"&lt;br&gt;\";\n}\nLa funzione mysqli_fetch_assoc() restituisce direttamente un array associativo:\nwhile ($riga = mysqli_fetch_assoc($result)) {\n    echo $riga[\"cognome\"] . \" \" . $riga[\"nome\"] . \"&lt;br&gt;\";\n}\nL’array associativo è spesso più leggibile, perché il nome del campo indica chiaramente quale dato si sta utilizzando.\n\n\nEstrazione con l’approccio a oggetti\nCon l’approccio a oggetti si usano i metodi del result set:\nwhile ($riga = $result-&gt;fetch_assoc()) {\n    echo $riga[\"cognome\"] . \" \" . $riga[\"nome\"] . \"&lt;br&gt;\";\n}\nÈ possibile usare anche:\n$riga = $result-&gt;fetch_array(MYSQLI_NUM);\n$riga = $result-&gt;fetch_array(MYSQLI_ASSOC);\n$riga = $result-&gt;fetch_array(MYSQLI_BOTH);\n\n\nQuarta fase: formattazione\nLa formattazione consiste nel costruire l’HTML da mostrare nel browser. Per esempio:\nwhile ($riga = mysqli_fetch_assoc($result)) {\n    $cognome = htmlspecialchars($riga[\"cognome\"]);\n    $nome = htmlspecialchars($riga[\"nome\"]);\n\n    echo \"&lt;p&gt;$cognome $nome&lt;/p&gt;\";\n}\nhtmlspecialchars() evita che eventuali caratteri speciali presenti nei dati vengano interpretati come codice HTML.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#numero-di-righe-restituite",
+    "href": "capitoli/06-mysqli.html#numero-di-righe-restituite",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.6 Numero di righe restituite",
+    "text": "6.6 Numero di righe restituite\nUna query può essere corretta ma non trovare alcuna riga. Per conoscere il numero di righe restituite da una SELECT si usa:\n// Approccio procedurale\n$numeroRighe = mysqli_num_rows($result);\noppure:\n// Approccio a oggetti\n$numeroRighe = $result-&gt;num_rows;\nIl valore può essere controllato prima di leggere il result set:\nif (mysqli_num_rows($result) === 0) {\n    echo \"Nessun utente trovato\";\n} else {\n    while ($riga = mysqli_fetch_assoc($result)) {\n        echo $riga[\"login\"] . \"&lt;br&gt;\";\n    }\n}",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#numero-di-righe-modificate",
+    "href": "capitoli/06-mysqli.html#numero-di-righe-modificate",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.7 Numero di righe modificate",
+    "text": "6.7 Numero di righe modificate\nDopo una query INSERT, UPDATE o DELETE, è possibile sapere quante righe sono state modificate.\n// Approccio procedurale\n$numeroRighe = mysqli_affected_rows($connessione);\n// Approccio a oggetti\n$numeroRighe = $mysqli-&gt;affected_rows;\n\n\n\n\n\n\nNotanum_rows e affected_rows\n\n\n\nnum_rows si usa per contare le righe restituite da una SELECT. affected_rows si usa per contare le righe modificate da INSERT, UPDATE o DELETE.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#chiudere-la-connessione",
+    "href": "capitoli/06-mysqli.html#chiudere-la-connessione",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.8 Chiudere la connessione",
+    "text": "6.8 Chiudere la connessione\nAl termine delle operazioni la connessione può essere chiusa.\n// Approccio procedurale\nmysqli_close($connessione);\n// Approccio a oggetti\n$mysqli-&gt;close();\nSe è stato creato un result set, è possibile liberare anche la memoria utilizzata:\n// Approccio procedurale\nmysqli_free_result($result);\n// Approccio a oggetti\n$result-&gt;free();",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#esempio-completo-con-approccio-procedurale",
+    "href": "capitoli/06-mysqli.html#esempio-completo-con-approccio-procedurale",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.9 Esempio completo con approccio procedurale",
+    "text": "6.9 Esempio completo con approccio procedurale\nIl seguente esempio riunisce le quattro fasi presentate.\n&lt;?php\ntry {\n    // Apertura della connessione\n    $connessione = mysqli_connect(\n        \"localhost\",\n        \"root\",\n        \"\",\n        \"scuola\"\n    );\n    mysqli_set_charset($connessione, \"utf8mb4\");\n\n    // 1. Preparazione della query\n    $query = \"SELECT id, cognome, nome, login\n              FROM utente\n              ORDER BY cognome, nome\";\n\n    // 2. Esecuzione della query\n    $result = mysqli_query($connessione, $query);\n\n    // 3. Estrazione e 4. formattazione\n    while ($riga = mysqli_fetch_assoc($result)) {\n        $id = (int) $riga[\"id\"];\n        $cognome = htmlspecialchars($riga[\"cognome\"]);\n        $nome = htmlspecialchars($riga[\"nome\"]);\n        $login = htmlspecialchars($riga[\"login\"]);\n\n        echo \"&lt;p&gt;\";\n        echo \"ID: $id - $cognome $nome - Login: $login\";\n        echo \"&lt;/p&gt;\";\n    }\n\n    mysqli_free_result($result);\n    mysqli_close($connessione);\n} catch (mysqli_sql_exception $errore) {\n    echo \"Errore durante l'accesso al database\";\n}\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#esempio-completo-con-approccio-orientato-agli-oggetti",
+    "href": "capitoli/06-mysqli.html#esempio-completo-con-approccio-orientato-agli-oggetti",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.10 Esempio completo con approccio orientato agli oggetti",
+    "text": "6.10 Esempio completo con approccio orientato agli oggetti\n// definizione delle variabili d'ambiente\n$host = \"localhost\"; // in alternativa anche 127.0.0.1\n$user = \"root\";\n$password = \"\";\n$database = \"scuola\";\n\ntry {\n    // Apertura della connessione\n    $mysqli = new mysqli(\n        $host,\n        $user,\n        $password,\n        $database\n    );\n    $mysqli-&gt;set_charset(\"utf8mb4\"); //il simbolo -&gt; permette di accedere ai metodi dell'oggetto\n    echo \"Connessione riuscita\";\n\n    // 1. Preparazione della query\n    $query = \"SELECT id, cognome, nome, login\n              FROM utente\n              ORDER BY cognome, nome\";\n\n    // 2. Esecuzione della query\n    $result = $mysqli-&gt;query($query);\n\n    // 3. Estrazione e 4. Formattazione\n    while ($riga = $result-&gt;fetch_assoc()) {\n        $id = (int) $riga[\"id\"];\n        $cognome = htmlspecialchars($riga[\"cognome\"]);\n        $nome = htmlspecialchars($riga[\"nome\"]);\n        $login = htmlspecialchars($riga[\"login\"]);\n\n        echo \"&lt;p&gt;\";\n        echo \"ID: $id - $cognome $nome - Login: $login\";\n        echo \"&lt;/p&gt;\";\n    }\n    \n} catch (mysqli_sql_exception $errore) {\n    die(\"Connessione non riuscita\");\n}\n\n$mysqli-&gt;close();",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#prepared-statement",
+    "href": "capitoli/06-mysqli.html#prepared-statement",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.11 Prepared statement",
+    "text": "6.11 Prepared statement\nUn prepared statement è una query nella quale la struttura SQL viene separata dai valori utilizzati.\nAl posto del valore si inserisce un punto interrogativo ?, chiamato placeholder:\nSELECT cognome, nome\nFROM utente\nWHERE id = ?\nIl valore viene associato al placeholder in un secondo momento. In questo modo un dato ricevuto dall’utente non può modificare la struttura della query.\nI prepared statement aiutano quindi a prevenire gli attacchi di SQL injection, nei quali un utente tenta di inserire comandi SQL all’interno di un campo di input.\n\nPrepared statement con approccio a oggetti\n&lt;?php\n$id = 2;\n\n// Preparazione della query\n$stmt = $mysqli-&gt;prepare(\n    \"SELECT cognome, nome FROM utente WHERE id = ?\"\n);\n\n// Associazione del valore al placeholder\n$stmt-&gt;bind_param(\"i\", $id);\n\n// Esecuzione\n$stmt-&gt;execute();\n\n// Associazione delle colonne restituite alle variabili PHP\n$stmt-&gt;bind_result($cognome, $nome);\n\n// Lettura del risultato\nif ($stmt-&gt;fetch()) {\n    echo $cognome . \" \" . $nome;\n} else {\n    echo \"Utente non trovato\";\n}\n\n$stmt-&gt;close();\n?&gt;\nLe operazioni fondamentali sono:\n\nprepare(): prepara la struttura della query;\nbind_param(): associa i valori ai placeholder;\nexecute(): esegue la query;\nbind_result(): collega le colonne restituite a variabili PHP;\nfetch(): legge una riga;\nclose(): chiude lo statement.\n\n\n\nTipi dei parametri\nIl primo argomento di bind_param() indica il tipo del valore associato:\n\n\n\nCarattere\nTipo di dato\n\n\n\n\ni\nnumero intero\n\n\nd\nnumero decimale\n\n\ns\nstringa\n\n\nb\ndato binario\n\n\n\nSe i parametri sono più di uno, i caratteri vengono scritti nello stesso ordine dei valori:\n$stmt = $mysqli-&gt;prepare(\n    \"INSERT INTO utente (cognome, nome, login)\n     VALUES (?, ?, ?)\"\n);\n\n$stmt-&gt;bind_param(\"sss\", $cognome, $nome, $login);\nLa stringa \"sss\" indica che i tre valori sono stringhe.\n\n\nPrepared statement con approccio procedurale\nLo stesso esempio può essere scritto con le funzioni procedurali:\n&lt;?php\n$id = 2;\n\n$stmt = mysqli_prepare(\n    $connessione,\n    \"SELECT cognome, nome FROM utente WHERE id = ?\"\n);\n\nmysqli_stmt_bind_param($stmt, \"i\", $id);\nmysqli_stmt_execute($stmt);\nmysqli_stmt_bind_result($stmt, $cognome, $nome);\n\nif (mysqli_stmt_fetch($stmt)) {\n    echo $cognome . \" \" . $nome;\n} else {\n    echo \"Utente non trovato\";\n}\n\nmysqli_stmt_close($stmt);\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#errori-negli-statement",
+    "href": "capitoli/06-mysqli.html#errori-negli-statement",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.12 Errori negli statement",
+    "text": "6.12 Errori negli statement\nSe uno statement non viene eseguito correttamente, MySQLi mette a disposizione il numero e il messaggio dell’errore.\n\n\n\nInformazione\nApproccio procedurale\nApproccio a oggetti\n\n\n\n\nNumero dell’errore\nmysqli_stmt_errno($stmt)\n$stmt-&gt;errno\n\n\nMessaggio dell’errore\nmysqli_stmt_error($stmt)\n$stmt-&gt;error\n\n\n\nDurante lo sviluppo queste informazioni possono aiutare a individuare il problema. In un sito pubblicato non è opportuno mostrare al visitatore i dettagli tecnici del database.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#riepilogo",
+    "href": "capitoli/06-mysqli.html#riepilogo",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.13 Riepilogo",
+    "text": "6.13 Riepilogo\n\nMySQLi permette a PHP di comunicare con MySQL o MariaDB.\nÈ possibile usare uno stile procedurale oppure uno stile orientato agli oggetti.\nPer collegarsi servono host, username, password e nome del database.\nUna query può essere divisa in preparazione, esecuzione, estrazione e formattazione.\nmysqli_fetch_assoc() legge una riga come array associativo.\nnum_rows conta le righe restituite; affected_rows conta le righe modificate.\nI prepared statement separano la query SQL dai valori e aiutano a prevenire la SQL injection.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#esercizi",
+    "href": "capitoli/06-mysqli.html#esercizi",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.14 Esercizi",
+    "text": "6.14 Esercizi\n\nCreare il database scuola e la tabella utente utilizzando lo script proposto nel capitolo.\nScrivere una pagina PHP che si colleghi al database con l’approccio procedurale e mostri tutti gli utenti ordinati per cognome.\nScrivere una pagina PHP che si colleghi al database con l’approccio ad oggetti e mostri tutti gli utenti ordinati per cognome.\nVisualizzare gli utenti prima con MYSQLI_NUM e poi con MYSQLI_ASSOC. Confrontare i due modi di accedere ai campi.\nContare il numero di utenti restituiti dalla query (SELECT) e mostrare un messaggio quando il result set è vuoto.\nCreare un prepared statement che cerchi un utente in base al suo id.\nCreare un prepared statement per inserire cognome, nome e login di un nuovo utente.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/06-mysqli.html#per-approfondire",
+    "href": "capitoli/06-mysqli.html#per-approfondire",
+    "title": "6  Interazione tra PHP e MySQL con MySQLi",
+    "section": "6.15 Per approfondire",
+    "text": "6.15 Per approfondire\n\nGuida rapida ufficiale a MySQLi\nClasse mysqli\nPrepared statement con MySQLi",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Interazione tra PHP e MySQL con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html",
+    "href": "capitoli/07-connessione.html",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "",
+    "text": "7.1 1. Introduzione\na cura del prof. Vincenzo Oliva\nISIS Valdarno San Giovanni Valdarno (AR)\nUn’applicazione PHP diventa molto più interessante quando può memorizzare e recuperare dati. Per esempio, un sito potrebbe dover gestire: - utenti - prodotti - ordini - articoli - prenotazioni - messaggi - voti - dati di un catalogo\nQueste informazioni vengono normalmente conservate in un database relazionale, come MySQL o MariaDB. PHP non contiene direttamente i dati del database: deve comunicare con il DBMS attraverso una connessione e delle query SQL.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#introduzione",
+    "href": "capitoli/07-connessione.html#introduzione",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "",
+    "text": "7.1.1 Schema di flusso base\nBrowser\n   ↓\n  PHP\n   ↓\n MySQL\n   ↓\nDatabase\nPHP riceve una richiesta, esegue eventualmente una o più query SQL e utilizza i risultati per produrre una risposta.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#le-5-fasi-fondamentali",
+    "href": "capitoli/07-connessione.html#le-5-fasi-fondamentali",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.2 2. Le 5 fasi fondamentali",
+    "text": "7.2 2. Le 5 fasi fondamentali\nPrima di vedere il codice, è importante fissare questo schema mentale. Ogni volta che PHP deve interagire con un database possiamo ragionare in 5 fasi principali:\n\nConnessione al database: PHP stabilisce una connessione con MySQL.\n$conn = new mysqli($host, $username, $password, $database);\nVerifica della connessione: Controlliamo che la connessione sia stata stabilita correttamente.\nif ($conn-&gt;connect_error) {\n    die(\"Errore di connessione: \" . $conn-&gt;connect_error);\n}\nEsecuzione delle query: PHP invia una query SQL a MySQL.\n$sql = \"SELECT * FROM utenti\";\n$result = $conn-&gt;query($sql);\nEstrazione dei risultati: Se la query restituisce dei dati, PHP li legge.\nwhile ($row = $result-&gt;fetch_assoc()) {\n    echo $row[\"nome\"];\n}\nChiusura della connessione: Quando abbiamo terminato, chiudiamo la connessione.\n$conn-&gt;close();\n\n\n7.2.1 Schema riassuntivo\nCONNESSIONE\n     ↓\n  VERIFICA\n     ↓\n   QUERY\n     ↓\n RISULTATI\n     ↓\n CHIUSURA\nQuesta sequenza sarà il filo conduttore di tutta la guida.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#connessione-al-database",
+    "href": "capitoli/07-connessione.html#connessione-al-database",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.3 3. Connessione al database",
+    "text": "7.3 3. Connessione al database\nIn questa sezione ci concentriamo soprattutto su: 1. Connessione al database 2. Verifica della connessione\nLe altre fasi verranno affrontate successivamente.\n\n7.3.1 3.1 Informazioni necessarie\nPer collegarci a MySQL abbiamo normalmente bisogno di quattro informazioni:\n$host = \"localhost\";\n$username = \"root\";\n$password = \"\";\n$database = \"negozio\";\n\n\n\n\n\n\n\nVariabile\nDescrizione\n\n\n\n\n$host\nIndica il computer/server sul quale si trova MySQL.In un ambiente locale è spesso: \"localhost\" oppure \"127.0.0.1\"\n\n\n$username\nÈ il nome dell’utente MySQL.Per esempio: \"root\"\n\n\n$password\nLa password dell’utente MySQL.In alcuni ambienti locali potrebbe essere vuota: \"\"\n\n\n$database\nÈ il nome del database al quale vogliamo accedere.Per esempio: \"negozio\"\n\n\n\n\n⚠️ Nota di sicurezza: In un ambiente reale non è buona pratica lasciare le credenziali nel codice sorgente.\n\n\n\n7.3.2 3.2 Creare la connessione con MySQLi\nPossiamo utilizzare MySQLi in modalità object-oriented:\n$conn = new mysqli($host, $username, $password, $database);\nEsempio completo:\n&lt;?php\n$host = \"localhost\";\n$username = \"root\";\n$password = \"\";\n$database = \"negozio\";\n\n$conn = new mysqli($host, $username, $password, $database);\n\n⚠️ Attenzione: Creare l’oggetto $conn non significa necessariamente che la connessione sia riuscita. Dobbiamo verificarla.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#verifica-della-connessione",
+    "href": "capitoli/07-connessione.html#verifica-della-connessione",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.4 4. Verifica della connessione",
+    "text": "7.4 4. Verifica della connessione\nMySQLi mette a disposizione $conn-&gt;connect_error per verificare se si è verificato un errore durante la connessione.\nif ($conn-&gt;connect_error) {\n    die(\"Errore di connessione: \" . $conn-&gt;connect_error);\n}\nProgramma completo con verifica:\n&lt;?php\n$host = \"localhost\";\n$username = \"root\";\n$password = \"\";\n$database = \"negozio\";\n\n$conn = new mysqli($host, $username, $password, $database);\n\nif ($conn-&gt;connect_error) {\n    die(\"Errore di connessione: \" . $conn-&gt;connect_error);\n}\n\necho \"Connessione riuscita!\";\nSe tutto funziona vedremo Connessione riuscita!. Se invece MySQL non è raggiungibile o le credenziali sono errate, viene interrotta l’esecuzione con un messaggio di errore.\n\n7.4.1 4.1 Perché usare die()?\nLa funzione die() interrompe immediatamente l’esecuzione dello script. Se la connessione fallisce, il programma non può normalmente continuare a eseguire query.\n\n\n7.4.2 4.2 Impostare il charset\nÈ buona pratica specificare il set di caratteri che utilizzeremo (utf8mb4 permette di gestire correttamente un’ampia gamma di caratteri Unicode):\n$conn-&gt;set_charset(\"utf8mb4\");\n\n\n7.4.3 4.3 Gestire gli errori con try-catch\nNel caso della connessione al database, possiamo utilizzare try-catch per gestire eventuali errori:\ntry {\n    $conn = new mysqli($host, $username, $password, $database);\n    if ($conn-&gt;connect_error) {\n        throw new Exception(\"Errore di connessione: \" . $conn-&gt;connect_error);\n    }\n} catch (Exception $e) {\n    echo \"Errore: \" . $e-&gt;getMessage();\n}",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#esecuzione-delle-query",
+    "href": "capitoli/07-connessione.html#esecuzione-delle-query",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.5 5. Esecuzione delle query",
+    "text": "7.5 5. Esecuzione delle query\nUna query SQL è una stringa contenente un comando SQL. Per esempio: SELECT * FROM utenti;\nIn PHP:\n$sql = \"SELECT * FROM utenti\";\n$result = $conn-&gt;query($sql);\nIl metodo $conn-&gt;query() invia la query al database.\n\n7.5.1 5.1 SELECT\nSupponiamo di avere questa tabella utenti così composta:\n\n\n\nID\nNOME\nEMAIL\n\n\n\n\n1\nMarco\nmarco@email.it\n\n\n2\nLuca\nluca@email.it\n\n\n3\nAnna\nanna@email.it\n\n\n\nPossiamo recuperare tutti gli utenti con la query vista sopra.\n\n\n7.5.2 5.2 Controllare se la query è riuscita\nÈ importante distinguere l’errore di connessione dall’errore nell’esecuzione della query:\n$sql = \"SELECT * FROM utenti\";\n$result = $conn-&gt;query($sql);\n\nif (!$result) {\n    die(\"Errore nella query: \" . $conn-&gt;error);\n}\nIl metodo $conn-&gt;error contiene l’eventuale messaggio di errore prodotto da MySQL.\n\n\n7.5.3 5.3 Esempio completo (Connessione + Query)\n&lt;?php\n$host = \"localhost\";\n$username = \"root\";\n$password = \"\";\n$database = \"negozio\";\n\n$conn = new mysqli($host, $username, $password, $database);\n\nif ($conn-&gt;connect_error) {\n    die(\"Errore di connessione: \" . $conn-&gt;connect_error);\n}\n\n$conn-&gt;set_charset(\"utf8mb4\");\n\n$sql = \"SELECT * FROM utenti\";\n$result = $conn-&gt;query($sql);\n\nif (!$result) {\n    die(\"Errore nella query: \" . $conn-&gt;error);\n}\n\necho \"Query eseguita correttamente.\";\n$conn-&gt;close();",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#estrazione-dei-risultati",
+    "href": "capitoli/07-connessione.html#estrazione-dei-risultati",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.6 6. Estrazione dei risultati",
+    "text": "7.6 6. Estrazione dei risultati\nUna query SELECT può restituire più righe. Per leggerle possiamo utilizzare fetch_assoc().\n\n7.6.1 6.1 fetch_assoc()\nwhile ($row = $result-&gt;fetch_assoc()) {\n    echo $row[\"nome\"] . \"&lt;br&gt;\";\n}\nAd ogni iterazione $row contiene una riga sotto forma di array associativo (da cui il nome assoc):\n$row = [\n    \"id\" =&gt; 1,\n    \"nome\" =&gt; \"Luca\",\n    \"email\" =&gt; \"luca@email.it\"\n];\n\n\n7.6.2 6.2 Visualizzare tutti gli utenti\n$sql = \"SELECT * FROM utenti\";\n$result = $conn-&gt;query($sql);\n\nif (!$result) {\n    die(\"Errore nella query: \" . $conn-&gt;error);\n}\n\nwhile ($row = $result-&gt;fetch_assoc()) {\n    echo \"ID: \" . $row[\"id\"] . \"&lt;br&gt;\";\n    echo \"Nome: \" . $row[\"nome\"] . \"&lt;br&gt;\";\n    echo \"Email: \" . $row[\"email\"] . \"&lt;br&gt;\";\n    echo \"&lt;hr&gt;\";\n}\n\n\n7.6.3 6.3 Selezionare solo alcune colonne\nNon è necessario utilizzare sempre SELECT *. Possiamo specificare le colonne desiderate:\n$sql = \"SELECT id, nome, email FROM utenti\";\n\n\n7.6.4 6.4 Utilizzare WHERE\nPossiamo filtrare i risultati:\n$sql = \"SELECT * FROM utenti WHERE id = 2\";\nOppure:\n$sql = \"SELECT * FROM utenti WHERE nome = 'Anna'\";",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#scrittura-dei-dati-insert",
+    "href": "capitoli/07-connessione.html#scrittura-dei-dati-insert",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.7 7. Scrittura dei dati (INSERT)",
+    "text": "7.7 7. Scrittura dei dati (INSERT)\nQuando inseriamo dati, la sequenza rimane la stessa (Connessione -&gt; Verifica -&gt; Query -&gt; Verifica Risultato -&gt; Chiusura), ma con INSERT non abbiamo un insieme di righe da leggere con fetch_assoc().\n\n7.7.1 7.1 Esempio di INSERT\n$sql = \"INSERT INTO utenti (nome, email) VALUES ('Giulia', 'giulia@email.it')\";\n\nif ($conn-&gt;query($sql)) {\n    echo \"Utente inserito!\";\n} else {\n    echo \"Errore: \" . $conn-&gt;error;\n}\n\n\n7.7.2 7.2 Ottenere l’ID generato\nSe id è una colonna AUTO_INCREMENT, dopo l’inserimento possiamo recuperare il nuovo ID tramite $conn-&gt;insert_id:\nif ($conn-&gt;query($sql)) {\n    echo \"Utente inserito! Nuovo ID: \" . $conn-&gt;insert_id;\n}",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#aggiornamento-dei-dati-update",
+    "href": "capitoli/07-connessione.html#aggiornamento-dei-dati-update",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.8 8. Aggiornamento dei dati (UPDATE)",
+    "text": "7.8 8. Aggiornamento dei dati (UPDATE)\nSupponiamo di voler modificare l’email dell’utente con ID 3:\n$sql = \"UPDATE utenti SET email = 'nuova@email.it' WHERE id = 3\";\n\nif ($conn-&gt;query($sql)) {\n    echo \"Utente aggiornato!\";\n} else {\n    echo \"Errore: \" . $conn-&gt;error;\n}\n\n7.8.1 ⚠️ Attenzione al WHERE\nScrivere:\nUPDATE utenti SET email = 'nuova@email.it';\nsignifica modificare tutti gli utenti. Aggiungere sempre la clausola WHERE corretta. Lo stesso concetto vale per DELETE.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#eliminazione-dei-dati-delete",
+    "href": "capitoli/07-connessione.html#eliminazione-dei-dati-delete",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.9 9. Eliminazione dei dati (DELETE)",
+    "text": "7.9 9. Eliminazione dei dati (DELETE)\n$sql = \"DELETE FROM utenti WHERE id = 3\";\n\nif ($conn-&gt;query($sql)) {\n    echo \"Utente eliminato!\";\n} else {\n    echo \"Errore: \" . $conn-&gt;error;\n}",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#query-parametrizzate-e-sicurezza",
+    "href": "capitoli/07-connessione.html#query-parametrizzate-e-sicurezza",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.10 10. Query parametrizzate e sicurezza",
+    "text": "7.10 10. Query parametrizzate e sicurezza\nSupponiamo di ricevere un valore dall’utente:\n$nome = $_POST[\"nome\"];\n$sql = \"SELECT * FROM utenti WHERE nome = '$nome'\"; // PERICOLOSO!\nQuesto tipo di vulnerabilità è chiamato SQL Injection. La soluzione consiste nell’utilizzare le prepared statements.\n\n7.10.1 10.1 Prepared statements con MySQLi\nIl carattere ? rappresenta un parametro segnaposto:\n$stmt = $conn-&gt;prepare(\"SELECT * FROM utenti WHERE nome = ?\");\n$stmt-&gt;bind_param(\"s\", $nome); // \"s\" indica che il parametro è una stringa\n$stmt-&gt;execute();\n$result = $stmt-&gt;get_result();\n\n\n7.10.2 10.2 I tipi di bind_param()\nMySQLi utilizza delle lettere per indicare il tipo dei parametri: - s → string (string) - i → integer (integer) - d → double (double) - b → blob (blob)\nEsempio con più parametri:\n$stmt-&gt;bind_param(\"si\", $nome, $eta); // stringa e intero -&gt; \"si\"\n\n\n7.10.3 10.3 Prepared statement con INSERT\n$nome = \"Giulia\";\n$email = \"giulia@email.it\";\n\n$stmt = $conn-&gt;prepare(\"INSERT INTO utenti (nome, email) VALUES (?, ?)\");\n$stmt-&gt;bind_param(\"ss\", $nome, $email);\n$stmt-&gt;execute();",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#gestione-sicura-delle-password-in-php",
+    "href": "capitoli/07-connessione.html#gestione-sicura-delle-password-in-php",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.11 11. Gestione sicura delle password in PHP",
+    "text": "7.11 11. Gestione sicura delle password in PHP\nNon bisogna mai salvare la password in chiaro nel database. Si utilizzano: - password_hash(): crea un hash sicuro della password. - password_verify(): verifica una password confrontandola con l’hash salvato.\n\n7.11.1 1. Creazione dell’hash (Registrazione)\n$password = \"ciao123\";\n$hash = password_hash($password, PASSWORD_DEFAULT);\n\n$stmt = $conn-&gt;prepare(\"INSERT INTO utenti (username, password) VALUES (?, ?)\");\n$stmt-&gt;bind_param(\"ss\", $username, $hash);\n$stmt-&gt;execute();\n\n\n7.11.2 2. Verifica della password (Login)\n$passwordInserita = \"ciao123\";\n\n// Recupera $hash dal database per quell'utente...\nif (password_verify($passwordInserita, $hash)) {\n    echo \"Password corretta\";\n} else {\n    echo \"Password errata\";\n}",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#esercizio-guidato-completo-rubrica-telefonica",
+    "href": "capitoli/07-connessione.html#esercizio-guidato-completo-rubrica-telefonica",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.12 12. Esercizio guidato completo: Rubrica telefonica",
+    "text": "7.12 12. Esercizio guidato completo: Rubrica telefonica\nRealizziamo una piccola applicazione suddivisa in più file.\n\n7.12.1 Fase 1: db.php (Connessione)\n&lt;?php\n$host = \"localhost\";\n$username = \"root\";\n$password = \"\";\n$database = \"rubrica\";\n\n$conn = new mysqli($host, $username, $password, $database);\n\nif ($conn-&gt;connect_error) {\n    die(\"Errore di connessione: \" . $conn-&gt;connect_error);\n}\n\n$conn-&gt;set_charset(\"utf8mb4\");\n?&gt;\n\n\n7.12.2 Fase 2: index.php (Visualizzazione contatti)\n&lt;?php\nrequire_once \"db.php\";\n\n$sql = \"SELECT id, nome, telefono, email FROM contatti ORDER BY nome\";\n$result = $conn-&gt;query($sql);\n\nif (!$result) {\n    die(\"Errore nella query: \" . $conn-&gt;error);\n}\n?&gt;\n&lt;!DOCTYPE html&gt;\n&lt;html lang=\"it\"&gt;\n&lt;head&gt;\n    &lt;meta charset=\"UTF-8\"&gt;\n    &lt;title&gt;Rubrica&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n    &lt;h1&gt;Rubrica telefonica&lt;/h1&gt;\n    &lt;a href=\"nuovo.php\"&gt;Inserisci nuovo contatto&lt;/a&gt;\n    &lt;hr&gt;\n\n    &lt;?php while ($row = $result-&gt;fetch_assoc()): ?&gt;\n        &lt;h2&gt;&lt;?= htmlspecialchars($row[\"nome\"]) ?&gt;&lt;/h2&gt;\n        &lt;p&gt;Telefono: &lt;?= htmlspecialchars($row[\"telefono\"]) ?&gt;&lt;/p&gt;\n        &lt;p&gt;Email: &lt;?= htmlspecialchars($row[\"email\"] ?? \"\") ?&gt;&lt;/p&gt;\n        &lt;a href=\"modifica.php?id=&lt;?= $row[\"id\"] ?&gt;\"&gt;Modifica&lt;/a&gt;\n        &lt;a href=\"elimina.php?id=&lt;?= $row[\"id\"] ?&gt;\"&gt;Elimina&lt;/a&gt;\n        &lt;hr&gt;\n    &lt;?php endwhile; ?&gt;\n\n&lt;/body&gt;\n&lt;/html&gt;\n&lt;?php $conn-&gt;close(); ?&gt;\n\n\n7.12.3 Fase 3: nuovo.php (Inserimento)\n&lt;?php\nrequire_once \"db.php\";\n\nif ($_SERVER[\"REQUEST_METHOD\"] === \"POST\") {\n    $nome = $_POST[\"nome\"];\n    $telefono = $_POST[\"telefono\"];\n    $email = $_POST[\"email\"];\n\n    $stmt = $conn-&gt;prepare(\"INSERT INTO contatti (nome, telefono, email) VALUES (?, ?, ?)\");\n    $stmt-&gt;bind_param(\"sss\", $nome, $telefono, $email);\n\n    if ($stmt-&gt;execute()) {\n        header(\"Location: index.php\");\n        exit;\n    } else {\n        echo \"Errore: \" . $stmt-&gt;error;\n    }\n}\n?&gt;\n&lt;!DOCTYPE html&gt;\n&lt;html lang=\"it\"&gt;\n&lt;head&gt;\n    &lt;meta charset=\"UTF-8\"&gt;\n    &lt;title&gt;Nuovo contatto&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n    &lt;h1&gt;Nuovo contatto&lt;/h1&gt;\n    &lt;form method=\"POST\"&gt;\n        &lt;label&gt;Nome: &lt;input type=\"text\" name=\"nome\" required&gt;&lt;/label&gt;&lt;br&gt;&lt;br&gt;\n        &lt;label&gt;Telefono: &lt;input type=\"text\" name=\"telefono\" required&gt;&lt;/label&gt;&lt;br&gt;&lt;br&gt;\n        &lt;label&gt;Email: &lt;input type=\"email\" name=\"email\"&gt;&lt;/label&gt;&lt;br&gt;&lt;br&gt;\n        &lt;button type=\"submit\"&gt;Salva&lt;/button&gt;\n    &lt;/form&gt;&lt;br&gt;\n    &lt;a href=\"index.php\"&gt;Torna alla rubrica&lt;/a&gt;\n&lt;/body&gt;\n&lt;/html&gt;\n&lt;?php $conn-&gt;close(); ?&gt;\n\n\n7.12.4 Fase 4: elimina.php (Eliminazione)\n&lt;?php\nrequire_once \"db.php\";\n\n$id = (int) $_GET[\"id\"];\n\n$stmt = $conn-&gt;prepare(\"DELETE FROM contatti WHERE id = ?\");\n$stmt-&gt;bind_param(\"i\", $id);\n\nif (!$stmt-&gt;execute()) {\n    die(\"Errore durante l'eliminazione: \" . $stmt-&gt;error);\n}\n\nheader(\"Location: index.php\");\nexit;\n?&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
+    ]
+  },
+  {
+    "objectID": "capitoli/07-connessione.html#riepilogo-finale-schema-mentale",
+    "href": "capitoli/07-connessione.html#riepilogo-finale-schema-mentale",
+    "title": "7  Connessione ai database con MySQLi",
+    "section": "7.13 13. Riepilogo finale (Schema mentale)",
+    "text": "7.13 13. Riepilogo finale (Schema mentale)\nRicorda sempre la sequenza fondamentale:\n1. CONNESSIONE  →  new mysqli(...)\n2. VERIFICA     →  if ($conn-&gt;connect_error) { die(...); }\n3. QUERY        →  $conn-&gt;query(...) o prepare(...)\n4. RISULTATI    →  fetch_assoc() o execute()\n5. CHIUSURA     →  $conn-&gt;close();",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Connessione ai database con MySQLi</span>"
     ]
   }
 ]

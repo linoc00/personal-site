@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Interazione tra PHP e MySQL con MySQLi – Guida alla programmazione PHP</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../capitoli/07-connessione.html" rel="next">
+<link href="../capitoli/05-cookie.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-36f2db2e0c24a8dfe38894d2c7306603.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nessun risultato",
+    "search-matching-documents-text": "documenti trovati",
+    "search-copy-link-title": "Copiare il link nella ricerca",
+    "search-hide-matches-text": "Nascondere i risultati aggiuntivi",
+    "search-more-match-text": "ci sono altri risultati in questo documento",
+    "search-more-matches-text": "ulteriori risultati in questo documento",
+    "search-clear-button-title": "Pulire",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancellare",
+    "search-submit-button-title": "Inviare",
+    "search-label": "Ricerca"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitoli/06-mysqli.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interazione tra PHP e MySQL con MySQLi</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Ricerca" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Guida alla programmazione PHP</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Ricerca"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefazione</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/01-introduzione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduzione a PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/02-strutture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Strutture di controllo</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/03-funzioni.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Le funzioni</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/04-interazione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Form HTML e interazione con PHP</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/05-cookie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/06-mysqli.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interazione tra PHP e MySQL con MySQLi</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitoli/07-connessione.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Connessione ai database con MySQLi</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Indice</h2>
+   
+  <ul>
+  <li><a href="#php-e-mysql" id="toc-php-e-mysql" class="nav-link active" data-scroll-target="#php-e-mysql"><span class="header-section-number">6.1</span> PHP e MySQL</a></li>
+  <li><a href="#lestensione-mysqli" id="toc-lestensione-mysqli" class="nav-link" data-scroll-target="#lestensione-mysqli"><span class="header-section-number">6.2</span> L’estensione MySQLi</a></li>
+  <li><a href="#il-database-degli-esempi" id="toc-il-database-degli-esempi" class="nav-link" data-scroll-target="#il-database-degli-esempi"><span class="header-section-number">6.3</span> Il database degli esempi</a></li>
+  <li><a href="#connessione-a-mysql-con-mysqli" id="toc-connessione-a-mysql-con-mysqli" class="nav-link" data-scroll-target="#connessione-a-mysql-con-mysqli"><span class="header-section-number">6.4</span> Connessione a MySQL con MySQLi</a>
+  <ul class="collapse">
+  <li><a href="#connessione-procedurale" id="toc-connessione-procedurale" class="nav-link" data-scroll-target="#connessione-procedurale">Connessione con approccio procedurale</a></li>
+  <li><a href="#connessione-oop" id="toc-connessione-oop" class="nav-link" data-scroll-target="#connessione-oop">Connessione con approccio orientato agli oggetti</a></li>
+  </ul></li>
+  <li><a href="#eseguire-una-query" id="toc-eseguire-una-query" class="nav-link" data-scroll-target="#eseguire-una-query"><span class="header-section-number">6.5</span> Eseguire una query</a>
+  <ul class="collapse">
+  <li><a href="#preparazione-query" id="toc-preparazione-query" class="nav-link" data-scroll-target="#preparazione-query">Prima fase: preparazione</a></li>
+  <li><a href="#esecuzione-query" id="toc-esecuzione-query" class="nav-link" data-scroll-target="#esecuzione-query">Seconda fase: esecuzione</a></li>
+  <li><a href="#estrazione-query" id="toc-estrazione-query" class="nav-link" data-scroll-target="#estrazione-query">Terza fase: estrazione</a></li>
+  <li><a href="#estrazione-oop" id="toc-estrazione-oop" class="nav-link" data-scroll-target="#estrazione-oop">Estrazione con l’approccio a oggetti</a></li>
+  <li><a href="#formattazione-query" id="toc-formattazione-query" class="nav-link" data-scroll-target="#formattazione-query">Quarta fase: formattazione</a></li>
+  </ul></li>
+  <li><a href="#numero-di-righe-restituite" id="toc-numero-di-righe-restituite" class="nav-link" data-scroll-target="#numero-di-righe-restituite"><span class="header-section-number">6.6</span> Numero di righe restituite</a></li>
+  <li><a href="#numero-di-righe-modificate" id="toc-numero-di-righe-modificate" class="nav-link" data-scroll-target="#numero-di-righe-modificate"><span class="header-section-number">6.7</span> Numero di righe modificate</a></li>
+  <li><a href="#chiudere-la-connessione" id="toc-chiudere-la-connessione" class="nav-link" data-scroll-target="#chiudere-la-connessione"><span class="header-section-number">6.8</span> Chiudere la connessione</a></li>
+  <li><a href="#esempio-completo-con-approccio-procedurale" id="toc-esempio-completo-con-approccio-procedurale" class="nav-link" data-scroll-target="#esempio-completo-con-approccio-procedurale"><span class="header-section-number">6.9</span> Esempio completo con approccio procedurale</a></li>
+  <li><a href="#esempio-completo-con-approccio-orientato-agli-oggetti" id="toc-esempio-completo-con-approccio-orientato-agli-oggetti" class="nav-link" data-scroll-target="#esempio-completo-con-approccio-orientato-agli-oggetti"><span class="header-section-number">6.10</span> Esempio completo con approccio orientato agli oggetti</a></li>
+  <li><a href="#prepared-statement" id="toc-prepared-statement" class="nav-link" data-scroll-target="#prepared-statement"><span class="header-section-number">6.11</span> Prepared statement</a>
+  <ul class="collapse">
+  <li><a href="#prepared-oop" id="toc-prepared-oop" class="nav-link" data-scroll-target="#prepared-oop">Prepared statement con approccio a oggetti</a></li>
+  <li><a href="#tipi-bind-param" id="toc-tipi-bind-param" class="nav-link" data-scroll-target="#tipi-bind-param">Tipi dei parametri</a></li>
+  <li><a href="#prepared-procedurale" id="toc-prepared-procedurale" class="nav-link" data-scroll-target="#prepared-procedurale">Prepared statement con approccio procedurale</a></li>
+  </ul></li>
+  <li><a href="#errori-negli-statement" id="toc-errori-negli-statement" class="nav-link" data-scroll-target="#errori-negli-statement"><span class="header-section-number">6.12</span> Errori negli statement</a></li>
+  <li><a href="#riepilogo" id="toc-riepilogo" class="nav-link" data-scroll-target="#riepilogo"><span class="header-section-number">6.13</span> Riepilogo</a></li>
+  <li><a href="#esercizi" id="toc-esercizi" class="nav-link" data-scroll-target="#esercizi"><span class="header-section-number">6.14</span> Esercizi</a></li>
+  <li><a href="#per-approfondire" id="toc-per-approfondire" class="nav-link" data-scroll-target="#per-approfondire"><span class="header-section-number">6.15</span> Per approfondire</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interazione tra PHP e MySQL con MySQLi</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="php-e-mysql" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="php-e-mysql"><span class="header-section-number">6.1</span> PHP e MySQL</h2>
+<p>Uno degli utilizzi principali di PHP è la realizzazione di siti web dinamici che leggono e modificano dati memorizzati in un database.</p>
+<p>Il funzionamento generale è il seguente:</p>
+<pre class="text"><code>Browser  &lt;--&gt;  Pagina PHP  &lt;--&gt;  Database MySQL</code></pre>
+<p>Il browser invia una richiesta alla pagina PHP. La pagina PHP comunica con il database, elabora i dati ricevuti e genera la risposta HTML da mostrare all’utente.</p>
+<p>PHP può lavorare con diversi DBMS, per esempio MySQL, MariaDB, PostgreSQL e Microsoft SQL Server. In questo capitolo ci concentreremo su <strong>MySQL</strong> e sull’estensione <strong>MySQLi</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Percorso del capitolo">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Percorso del capitolo
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Il capitolo segue l’ordine didattico delle slide fornite: introduzione a MySQLi, connessione al database, esecuzione delle query, lettura dei risultati e prepared statement.</p>
+</div>
+</div>
+</section>
+<section id="lestensione-mysqli" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="lestensione-mysqli"><span class="header-section-number">6.2</span> L’estensione MySQLi</h2>
+<p><strong>MySQLi</strong> significa <em>MySQL Improved</em>, cioè “MySQL migliorato”. È l’estensione di PHP che mette a disposizione funzioni e metodi per comunicare con un database MySQL o MariaDB.</p>
+<p>MySQLi può essere usata in due modi:</p>
+<ul>
+<li><p>con l’<strong>approccio procedurale</strong>, usando funzioni come <code>mysqli_connect()</code> e <code>mysqli_query()</code>;</p></li>
+<li><p>con l’<strong>approccio orientato agli oggetti</strong>, usando oggetti e metodi come <code>new mysqli()</code> e <code>$mysqli-&gt;query()</code>.</p></li>
+</ul>
+<p>I due approcci permettono di svolgere le stesse operazioni. Cambia soltanto il modo in cui vengono scritte le istruzioni.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operazione</th>
+<th>Approccio procedurale</th>
+<th>Approccio a oggetti</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Connessione</td>
+<td><code>mysqli_connect()</code></td>
+<td><code>new mysqli()</code></td>
+</tr>
+<tr class="even">
+<td>Esecuzione di una query</td>
+<td><code>mysqli_query()</code></td>
+<td><code>$mysqli-&gt;query()</code></td>
+</tr>
+<tr class="odd">
+<td>Lettura di una riga</td>
+<td><code>mysqli_fetch_assoc()</code></td>
+<td><code>$result-&gt;fetch_assoc()</code></td>
+</tr>
+<tr class="even">
+<td>Chiusura</td>
+<td><code>mysqli_close()</code></td>
+<td><code>$mysqli-&gt;close()</code></td>
+</tr>
+</tbody>
+</table>
+<p>MySQLi supporta anche strumenti più avanzati, come le transazioni e i prepared statement. In questo capitolo approfondiremo soprattutto i prepared statement, perché permettono di inserire dati variabili nelle query in modo corretto e sicuro.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Attenzione alla vecchia estensione mysql">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Avviso</span>Attenzione alla vecchia estensione mysql
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Le vecchie funzioni <code>mysql_connect()</code> e <code>mysql_query()</code> non devono più essere utilizzate. Nei programmi moderni si usano MySQLi oppure PDO.</p>
+</div>
+</div>
+</section>
+<section id="il-database-degli-esempi" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="il-database-degli-esempi"><span class="header-section-number">6.3</span> Il database degli esempi</h2>
+<p>Negli esempi utilizzeremo il database <code>scuola</code> e la tabella <code>utente</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">DATABASE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> scuola</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">USE</span> scuola;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> utente (</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    cognome <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    nome <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    login <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> utente (cognome, nome, login)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Rossi'</span>, <span class="st">'Mario'</span>, <span class="st">'mrossi'</span>),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Bianchi'</span>, <span class="st">'Anna'</span>, <span class="st">'abianchi'</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Verdi'</span>, <span class="st">'Luca'</span>, <span class="st">'lverdi'</span>);</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La tabella contiene quattro campi:</p>
+<ul>
+<li><code>id</code>: identificativo numerico assegnato automaticamente;</li>
+<li><code>cognome</code>: cognome dell’utente;</li>
+<li><code>nome</code>: nome dell’utente;</li>
+<li><code>login</code>: nome utilizzato per accedere all’applicazione.</li>
+</ul>
+</section>
+<section id="connessione-a-mysql-con-mysqli" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="connessione-a-mysql-con-mysqli"><span class="header-section-number">6.4</span> Connessione a MySQL con MySQLi</h2>
+<p>Per collegarsi al database servono quattro informazioni:</p>
+<ul>
+<li><strong>host</strong>: il computer sul quale è in esecuzione MySQL; in locale si usa normalmente <code>localhost</code>;</li>
+<li><strong>username</strong>: il nome dell’utente MySQL;</li>
+<li><strong>password</strong>: la password dell’utente MySQL;</li>
+<li><strong>database</strong>: il nome del database da utilizzare.</li>
+</ul>
+<p>Negli esempi seguenti i valori di username e password devono essere sostituiti con quelli configurati nel proprio ambiente di lavoro.</p>
+<section id="connessione-procedurale" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="connessione-procedurale">Connessione con approccio procedurale</h3>
+<p>Nell’approccio procedurale si utilizza la funzione <code>mysqli_connect()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">$host</span> <span class="op">=</span> <span class="st">"localhost"</span><span class="ot">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">$user</span> <span class="op">=</span> <span class="st">"username"</span><span class="ot">;</span> <span class="co">// di default impostato root</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">$password</span> <span class="op">=</span> <span class="st">"password"</span><span class="ot">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">$database</span> <span class="op">=</span> <span class="st">"scuola"</span><span class="ot">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$connessione</span> <span class="op">=</span> <span class="fu">mysqli_connect</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">$host</span><span class="ot">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">$user</span><span class="ot">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">$password</span><span class="ot">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">$database</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mysqli_set_charset</span>(<span class="va">$connessione</span><span class="ot">,</span> <span class="st">"utf8mb4"</span>)<span class="ot">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Connessione riuscita"</span><span class="ot">;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (<span class="bu">mysqli_sql_exception</span> <span class="va">$errore</span>) {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">die</span>(<span class="st">"Connessione non riuscita"</span>)<span class="ot">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_close</span>(<span class="va">$connessione</span>)<span class="ot">;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La variabile <code>$connessione</code> rappresenta il collegamento aperto con MySQL. Verrà usata nelle successive operazioni sul database.</p>
+<p>Il blocco <code>catch</code> viene eseguito solamente se la connessione fallisce. In questo caso il programma termina mostrando un messaggio semplice.</p>
+</section>
+<section id="connessione-oop" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="connessione-oop">Connessione con approccio orientato agli oggetti</h3>
+<p>Nell’approccio orientato agli oggetti si crea un’istanza della classe <code>mysqli</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="va">$host</span> <span class="op">=</span> <span class="st">"localhost"</span><span class="ot">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">$user</span> <span class="op">=</span> <span class="st">"username"</span><span class="ot">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">$password</span> <span class="op">=</span> <span class="st">"password"</span><span class="ot">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">$database</span> <span class="op">=</span> <span class="st">"scuola"</span><span class="ot">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$mysqli</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">mysqli</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">$host</span><span class="ot">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">$user</span><span class="ot">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">$password</span><span class="ot">,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">$database</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">$mysqli</span>-&gt;set_charset(<span class="st">"utf8mb4"</span>)<span class="ot">;</span> <span class="co">//il simbolo -&gt; permette di accedere ai metodi dell'oggetto</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Connessione riuscita"</span><span class="ot">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (<span class="bu">mysqli_sql_exception</span> <span class="va">$errore</span>) {</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">die</span>(<span class="st">"Connessione non riuscita"</span>)<span class="ot">;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="va">$mysqli</span>-&gt;close()<span class="ot">;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In questo caso <code>$mysqli</code> è un oggetto che rappresenta la connessione. Le operazioni vengono richiamate con l’operatore <code>-&gt;</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Quale approccio scegliere?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Consiglio</span>Quale approccio scegliere?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Per iniziare è possibile usare l’approccio procedurale, che assomiglia alle funzioni PHP già studiate. È comunque importante saper riconoscere anche l’approccio a oggetti, perché è molto diffuso negli esempi e nella documentazione.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="eseguire-una-query" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="eseguire-una-query"><span class="header-section-number">6.5</span> Eseguire una query</h2>
+<p>Il lavoro con una query può essere diviso in quattro fasi.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Fase</th>
+<th>Operazione</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Preparazione</td>
+<td>si scrive il comando SQL</td>
+</tr>
+<tr class="even">
+<td>2. Esecuzione</td>
+<td>il comando viene inviato a MySQL</td>
+</tr>
+<tr class="odd">
+<td>3. Estrazione</td>
+<td>si leggono le righe restituite</td>
+</tr>
+<tr class="even">
+<td>4. Formattazione</td>
+<td>i dati vengono inseriti nella pagina HTML</td>
+</tr>
+</tbody>
+</table>
+<p>L’estrazione serve soprattutto con le query <code>SELECT</code>. La formattazione dipende invece dal risultato che si vuole mostrare nella pagina.</p>
+<section id="preparazione-query" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="preparazione-query">Prima fase: preparazione</h3>
+<p>La query viene memorizzata in una normale stringa PHP:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> <span class="st">"SELECT id, cognome, nome FROM utente"</span><span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>È possibile aggiungere condizioni e ordinamenti:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">$query</span> <span class="op">=</span> <span class="st">"SELECT id, cognome, nome</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">          FROM utente</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">          WHERE id = 2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">          ORDER BY cognome"</span><span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Quando la query deve contenere un valore ricevuto da un form, non bisogna concatenarlo direttamente alla stringa. In seguito vedremo come usare un prepared statement.</p>
+</section>
+<section id="esecuzione-query" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="esecuzione-query">Seconda fase: esecuzione</h3>
+<p>Con l’approccio procedurale la query viene eseguita con <code>mysqli_query()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">$result</span> <span class="op">=</span> <span class="fu">mysqli_query</span>(<span class="va">$connessione</span><span class="ot">,</span> <span class="va">$query</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Con l’approccio a oggetti si utilizza il metodo <code>query()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">$result</span> <span class="op">=</span> <span class="va">$mysqli</span>-&gt;query(<span class="va">$query</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Il comportamento dipende dal tipo di query:</p>
+<ul>
+<li><p>una <code>SELECT</code> restituisce un insieme di righe chiamato <strong>result set</strong>;</p></li>
+<li><p>una <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code> restituisce l’esito dell’operazione.</p></li>
+</ul>
+</section>
+<section id="estrazione-query" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="estrazione-query">Terza fase: estrazione</h3>
+<p>Le righe del result set possono essere lette una alla volta.</p>
+<p>Con <code>mysqli_fetch_array()</code> è possibile scegliere il tipo di array restituito:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modalità</th>
+<th>Tipo di array</th>
+<th>Esempio di accesso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MYSQLI_NUM</code></td>
+<td>indici numerici</td>
+<td><code>$riga[0]</code></td>
+</tr>
+<tr class="even">
+<td><code>MYSQLI_ASSOC</code></td>
+<td>indici con il nome dei campi</td>
+<td><code>$riga["id"]</code></td>
+</tr>
+<tr class="odd">
+<td><code>MYSQLI_BOTH</code></td>
+<td>entrambi i tipi di indice</td>
+<td><code>$riga[0]</code> oppure <code>$riga["id"]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Esempio con un array numerico:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_array</span>(<span class="va">$result</span><span class="ot">,</span> <span class="cn">MYSQLI_NUM</span>)) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"ID: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="dv">0</span>] <span class="op">.</span> <span class="st">" "</span><span class="ot">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Cognome: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="dv">1</span>] <span class="op">.</span> <span class="st">" "</span><span class="ot">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Nome: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="dv">2</span>] <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Esempio con un array associativo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_array</span>(<span class="va">$result</span><span class="ot">,</span> <span class="cn">MYSQLI_ASSOC</span>)) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"ID: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="st">"id"</span>] <span class="op">.</span> <span class="st">" "</span><span class="ot">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Cognome: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="st">"cognome"</span>] <span class="op">.</span> <span class="st">" "</span><span class="ot">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Nome: "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="st">"nome"</span>] <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La funzione <code>mysqli_fetch_assoc()</code> restituisce direttamente un array associativo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_assoc</span>(<span class="va">$result</span>)) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$riga</span>[<span class="st">"cognome"</span>] <span class="op">.</span> <span class="st">" "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="st">"nome"</span>] <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>L’array associativo è spesso più leggibile, perché il nome del campo indica chiaramente quale dato si sta utilizzando.</p>
+</section>
+<section id="estrazione-oop" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="estrazione-oop">Estrazione con l’approccio a oggetti</h3>
+<p>Con l’approccio a oggetti si usano i metodi del result set:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="va">$result</span>-&gt;fetch_assoc()) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$riga</span>[<span class="st">"cognome"</span>] <span class="op">.</span> <span class="st">" "</span> <span class="op">.</span> <span class="va">$riga</span>[<span class="st">"nome"</span>] <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>È possibile usare anche:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">$riga</span> <span class="op">=</span> <span class="va">$result</span>-&gt;fetch_array(<span class="cn">MYSQLI_NUM</span>)<span class="ot">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">$riga</span> <span class="op">=</span> <span class="va">$result</span>-&gt;fetch_array(<span class="cn">MYSQLI_ASSOC</span>)<span class="ot">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="va">$riga</span> <span class="op">=</span> <span class="va">$result</span>-&gt;fetch_array(<span class="cn">MYSQLI_BOTH</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="formattazione-query" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="formattazione-query">Quarta fase: formattazione</h3>
+<p>La formattazione consiste nel costruire l’HTML da mostrare nel browser. Per esempio:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_assoc</span>(<span class="va">$result</span>)) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">$cognome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"cognome"</span>])<span class="ot">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">$nome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"nome"</span>])<span class="ot">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"&lt;p&gt;</span><span class="va">$cognome</span><span class="st"> </span><span class="va">$nome</span><span class="st">&lt;/p&gt;"</span><span class="ot">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>htmlspecialchars()</code> evita che eventuali caratteri speciali presenti nei dati vengano interpretati come codice HTML.</p>
+</section>
+</section>
+<section id="numero-di-righe-restituite" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="numero-di-righe-restituite"><span class="header-section-number">6.6</span> Numero di righe restituite</h2>
+<p>Una query può essere corretta ma non trovare alcuna riga. Per conoscere il numero di righe restituite da una <code>SELECT</code> si usa:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio procedurale</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="va">$numeroRighe</span> <span class="op">=</span> <span class="fu">mysqli_num_rows</span>(<span class="va">$result</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>oppure:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio a oggetti</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="va">$numeroRighe</span> <span class="op">=</span> <span class="va">$result</span>-&gt;num_rows<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Il valore può essere controllato prima di leggere il result set:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">mysqli_num_rows</span>(<span class="va">$result</span>) <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Nessun utente trovato"</span><span class="ot">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_assoc</span>(<span class="va">$result</span>)) {</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="va">$riga</span>[<span class="st">"login"</span>] <span class="op">.</span> <span class="st">"&lt;br&gt;"</span><span class="ot">;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="numero-di-righe-modificate" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="numero-di-righe-modificate"><span class="header-section-number">6.7</span> Numero di righe modificate</h2>
+<p>Dopo una query <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code>, è possibile sapere quante righe sono state modificate.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio procedurale</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="va">$numeroRighe</span> <span class="op">=</span> <span class="fu">mysqli_affected_rows</span>(<span class="va">$connessione</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio a oggetti</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="va">$numeroRighe</span> <span class="op">=</span> <span class="va">$mysqli</span>-&gt;affected_rows<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="num_rows e affected_rows">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>num_rows e affected_rows
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>num_rows</code> si usa per contare le righe restituite da una <code>SELECT</code>. <code>affected_rows</code> si usa per contare le righe modificate da <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code>.</p>
+</div>
+</div>
+</section>
+<section id="chiudere-la-connessione" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="chiudere-la-connessione"><span class="header-section-number">6.8</span> Chiudere la connessione</h2>
+<p>Al termine delle operazioni la connessione può essere chiusa.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio procedurale</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_close</span>(<span class="va">$connessione</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio a oggetti</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="va">$mysqli</span>-&gt;close()<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Se è stato creato un result set, è possibile liberare anche la memoria utilizzata:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio procedurale</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_free_result</span>(<span class="va">$result</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Approccio a oggetti</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="va">$result</span>-&gt;free()<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="esempio-completo-con-approccio-procedurale" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="esempio-completo-con-approccio-procedurale"><span class="header-section-number">6.9</span> Esempio completo con approccio procedurale</h2>
+<p>Il seguente esempio riunisce le quattro fasi presentate.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apertura della connessione</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">$connessione</span> <span class="op">=</span> <span class="fu">mysqli_connect</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"localhost"</span><span class="ot">,</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"root"</span><span class="ot">,</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">""</span><span class="ot">,</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"scuola"</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mysqli_set_charset</span>(<span class="va">$connessione</span><span class="ot">,</span> <span class="st">"utf8mb4"</span>)<span class="ot">;</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1. Preparazione della query</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="va">$query</span> <span class="op">=</span> <span class="st">"SELECT id, cognome, nome, login</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="st">              FROM utente</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="st">              ORDER BY cognome, nome"</span><span class="ot">;</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 2. Esecuzione della query</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="va">$result</span> <span class="op">=</span> <span class="fu">mysqli_query</span>(<span class="va">$connessione</span><span class="ot">,</span> <span class="va">$query</span>)<span class="ot">;</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 3. Estrazione e 4. formattazione</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="fu">mysqli_fetch_assoc</span>(<span class="va">$result</span>)) {</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">$id</span> <span class="op">=</span> (<span class="dt">int</span>) <span class="va">$riga</span>[<span class="st">"id"</span>]<span class="ot">;</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">$cognome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"cognome"</span>])<span class="ot">;</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">$nome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"nome"</span>])<span class="ot">;</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">$login</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"login"</span>])<span class="ot">;</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"&lt;p&gt;"</span><span class="ot">;</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"ID: </span><span class="va">$id</span><span class="st"> - </span><span class="va">$cognome</span><span class="st"> </span><span class="va">$nome</span><span class="st"> - Login: </span><span class="va">$login</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"&lt;/p&gt;"</span><span class="ot">;</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mysqli_free_result</span>(<span class="va">$result</span>)<span class="ot">;</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mysqli_close</span>(<span class="va">$connessione</span>)<span class="ot">;</span></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (<span class="bu">mysqli_sql_exception</span> <span class="va">$errore</span>) {</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Errore durante l'accesso al database"</span><span class="ot">;</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="esempio-completo-con-approccio-orientato-agli-oggetti" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="esempio-completo-con-approccio-orientato-agli-oggetti"><span class="header-section-number">6.10</span> Esempio completo con approccio orientato agli oggetti</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">// definizione delle variabili d'ambiente</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="va">$host</span> <span class="op">=</span> <span class="st">"localhost"</span><span class="ot">;</span> <span class="co">// in alternativa anche 127.0.0.1</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="va">$user</span> <span class="op">=</span> <span class="st">"root"</span><span class="ot">;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="va">$password</span> <span class="op">=</span> <span class="st">""</span><span class="ot">;</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="va">$database</span> <span class="op">=</span> <span class="st">"scuola"</span><span class="ot">;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span> {</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apertura della connessione</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">$mysqli</span> <span class="op">=</span> <span class="kw">new</span> <span class="bu">mysqli</span>(</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">$host</span><span class="ot">,</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">$user</span><span class="ot">,</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">$password</span><span class="ot">,</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">$database</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="va">$mysqli</span>-&gt;set_charset(<span class="st">"utf8mb4"</span>)<span class="ot">;</span> <span class="co">//il simbolo -&gt; permette di accedere ai metodi dell'oggetto</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Connessione riuscita"</span><span class="ot">;</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 1. Preparazione della query</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">$query</span> <span class="op">=</span> <span class="st">"SELECT id, cognome, nome, login</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="st">              FROM utente</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="st">              ORDER BY cognome, nome"</span><span class="ot">;</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 2. Esecuzione della query</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    <span class="va">$result</span> <span class="op">=</span> <span class="va">$mysqli</span>-&gt;query(<span class="va">$query</span>)<span class="ot">;</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 3. Estrazione e 4. Formattazione</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (<span class="va">$riga</span> <span class="op">=</span> <span class="va">$result</span>-&gt;fetch_assoc()) {</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        <span class="va">$id</span> <span class="op">=</span> (<span class="dt">int</span>) <span class="va">$riga</span>[<span class="st">"id"</span>]<span class="ot">;</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>        <span class="va">$cognome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"cognome"</span>])<span class="ot">;</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>        <span class="va">$nome</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"nome"</span>])<span class="ot">;</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">$login</span> <span class="op">=</span> <span class="fu">htmlspecialchars</span>(<span class="va">$riga</span>[<span class="st">"login"</span>])<span class="ot">;</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"&lt;p&gt;"</span><span class="ot">;</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"ID: </span><span class="va">$id</span><span class="st"> - </span><span class="va">$cognome</span><span class="st"> </span><span class="va">$nome</span><span class="st"> - Login: </span><span class="va">$login</span><span class="st">"</span><span class="ot">;</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>        <span class="kw">echo</span> <span class="st">"&lt;/p&gt;"</span><span class="ot">;</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>} <span class="cf">catch</span> (<span class="bu">mysqli_sql_exception</span> <span class="va">$errore</span>) {</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">die</span>(<span class="st">"Connessione non riuscita"</span>)<span class="ot">;</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="va">$mysqli</span>-&gt;close()<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="prepared-statement" class="level2" data-number="6.11">
+<h2 data-number="6.11" class="anchored" data-anchor-id="prepared-statement"><span class="header-section-number">6.11</span> Prepared statement</h2>
+<p>Un <strong>prepared statement</strong> è una query nella quale la struttura SQL viene separata dai valori utilizzati.</p>
+<p>Al posto del valore si inserisce un punto interrogativo <code>?</code>, chiamato <strong>placeholder</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> cognome, nome</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> utente</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> ?</span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Il valore viene associato al placeholder in un secondo momento. In questo modo un dato ricevuto dall’utente non può modificare la struttura della query.</p>
+<p>I prepared statement aiutano quindi a prevenire gli attacchi di <strong>SQL injection</strong>, nei quali un utente tenta di inserire comandi SQL all’interno di un campo di input.</p>
+<section id="prepared-oop" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="prepared-oop">Prepared statement con approccio a oggetti</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="va">$id</span> <span class="op">=</span> <span class="dv">2</span><span class="ot">;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Preparazione della query</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span> <span class="op">=</span> <span class="va">$mysqli</span>-&gt;prepare(</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SELECT cognome, nome FROM utente WHERE id = ?"</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Associazione del valore al placeholder</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span>-&gt;bind_param(<span class="st">"i"</span><span class="ot">,</span> <span class="va">$id</span>)<span class="ot">;</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Esecuzione</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span>-&gt;execute()<span class="ot">;</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co">// Associazione delle colonne restituite alle variabili PHP</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span>-&gt;bind_result(<span class="va">$cognome</span><span class="ot">,</span> <span class="va">$nome</span>)<span class="ot">;</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co">// Lettura del risultato</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$stmt</span>-&gt;fetch()) {</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$cognome</span> <span class="op">.</span> <span class="st">" "</span> <span class="op">.</span> <span class="va">$nome</span><span class="ot">;</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Utente non trovato"</span><span class="ot">;</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span>-&gt;close()<span class="ot">;</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le operazioni fondamentali sono:</p>
+<ol type="1">
+<li><code>prepare()</code>: prepara la struttura della query;</li>
+<li><code>bind_param()</code>: associa i valori ai placeholder;</li>
+<li><code>execute()</code>: esegue la query;</li>
+<li><code>bind_result()</code>: collega le colonne restituite a variabili PHP;</li>
+<li><code>fetch()</code>: legge una riga;</li>
+<li><code>close()</code>: chiude lo statement.</li>
+</ol>
+</section>
+<section id="tipi-bind-param" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="tipi-bind-param">Tipi dei parametri</h3>
+<p>Il primo argomento di <code>bind_param()</code> indica il tipo del valore associato:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Carattere</th>
+<th>Tipo di dato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>i</code></td>
+<td>numero intero</td>
+</tr>
+<tr class="even">
+<td><code>d</code></td>
+<td>numero decimale</td>
+</tr>
+<tr class="odd">
+<td><code>s</code></td>
+<td>stringa</td>
+</tr>
+<tr class="even">
+<td><code>b</code></td>
+<td>dato binario</td>
+</tr>
+</tbody>
+</table>
+<p>Se i parametri sono più di uno, i caratteri vengono scritti nello stesso ordine dei valori:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span> <span class="op">=</span> <span class="va">$mysqli</span>-&gt;prepare(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"INSERT INTO utente (cognome, nome, login)</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="st">     VALUES (?, ?, ?)"</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span>-&gt;bind_param(<span class="st">"sss"</span><span class="ot">,</span> <span class="va">$cognome</span><span class="ot">,</span> <span class="va">$nome</span><span class="ot">,</span> <span class="va">$login</span>)<span class="ot">;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La stringa <code>"sss"</code> indica che i tre valori sono stringhe.</p>
+</section>
+<section id="prepared-procedurale" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="prepared-procedurale">Prepared statement con approccio procedurale</h3>
+<p>Lo stesso esempio può essere scritto con le funzioni procedurali:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode php code-with-copy"><code class="sourceCode php"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="va">$id</span> <span class="op">=</span> <span class="dv">2</span><span class="ot">;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="va">$stmt</span> <span class="op">=</span> <span class="fu">mysqli_prepare</span>(</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">$connessione</span><span class="ot">,</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SELECT cognome, nome FROM utente WHERE id = ?"</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_stmt_bind_param</span>(<span class="va">$stmt</span><span class="ot">,</span> <span class="st">"i"</span><span class="ot">,</span> <span class="va">$id</span>)<span class="ot">;</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_stmt_execute</span>(<span class="va">$stmt</span>)<span class="ot">;</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_stmt_bind_result</span>(<span class="va">$stmt</span><span class="ot">,</span> <span class="va">$cognome</span><span class="ot">,</span> <span class="va">$nome</span>)<span class="ot">;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">mysqli_stmt_fetch</span>(<span class="va">$stmt</span>)) {</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="va">$cognome</span> <span class="op">.</span> <span class="st">" "</span> <span class="op">.</span> <span class="va">$nome</span><span class="ot">;</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">echo</span> <span class="st">"Utente non trovato"</span><span class="ot">;</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="fu">mysqli_stmt_close</span>(<span class="va">$stmt</span>)<span class="ot">;</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div><button title="Copia negli appunti" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="errori-negli-statement" class="level2" data-number="6.12">
+<h2 data-number="6.12" class="anchored" data-anchor-id="errori-negli-statement"><span class="header-section-number">6.12</span> Errori negli statement</h2>
+<p>Se uno statement non viene eseguito correttamente, MySQLi mette a disposizione il numero e il messaggio dell’errore.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Informazione</th>
+<th>Approccio procedurale</th>
+<th>Approccio a oggetti</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Numero dell’errore</td>
+<td><code>mysqli_stmt_errno($stmt)</code></td>
+<td><code>$stmt-&gt;errno</code></td>
+</tr>
+<tr class="even">
+<td>Messaggio dell’errore</td>
+<td><code>mysqli_stmt_error($stmt)</code></td>
+<td><code>$stmt-&gt;error</code></td>
+</tr>
+</tbody>
+</table>
+<p>Durante lo sviluppo queste informazioni possono aiutare a individuare il problema. In un sito pubblicato non è opportuno mostrare al visitatore i dettagli tecnici del database.</p>
+</section>
+<section id="riepilogo" class="level2" data-number="6.13">
+<h2 data-number="6.13" class="anchored" data-anchor-id="riepilogo"><span class="header-section-number">6.13</span> Riepilogo</h2>
+<ul>
+<li>MySQLi permette a PHP di comunicare con MySQL o MariaDB.</li>
+<li>È possibile usare uno stile procedurale oppure uno stile orientato agli oggetti.</li>
+<li>Per collegarsi servono host, username, password e nome del database.</li>
+<li>Una query può essere divisa in preparazione, esecuzione, estrazione e formattazione.</li>
+<li><code>mysqli_fetch_assoc()</code> legge una riga come array associativo.</li>
+<li><code>num_rows</code> conta le righe restituite; <code>affected_rows</code> conta le righe modificate.</li>
+<li>I prepared statement separano la query SQL dai valori e aiutano a prevenire la SQL injection.</li>
+</ul>
+</section>
+<section id="esercizi" class="level2" data-number="6.14">
+<h2 data-number="6.14" class="anchored" data-anchor-id="esercizi"><span class="header-section-number">6.14</span> Esercizi</h2>
+<ol type="1">
+<li>Creare il database <code>scuola</code> e la tabella <code>utente</code> utilizzando lo script proposto nel capitolo.</li>
+<li>Scrivere una pagina PHP che si colleghi al database con l’approccio procedurale e mostri tutti gli utenti ordinati per cognome.</li>
+<li>Scrivere una pagina PHP che si colleghi al database con l’approccio <strong>ad oggetti</strong> e mostri tutti gli utenti ordinati per cognome.</li>
+<li>Visualizzare gli utenti prima con <code>MYSQLI_NUM</code> e poi con <code>MYSQLI_ASSOC</code>. Confrontare i due modi di accedere ai campi.</li>
+<li>Contare il numero di utenti restituiti dalla query (SELECT) e mostrare un messaggio quando il result set è vuoto.</li>
+<li>Creare un prepared statement che cerchi un utente in base al suo <code>id</code>.</li>
+<li>Creare un prepared statement per inserire cognome, nome e login di un nuovo utente.</li>
+</ol>
+</section>
+<section id="per-approfondire" class="level2" data-number="6.15">
+<h2 data-number="6.15" class="anchored" data-anchor-id="per-approfondire"><span class="header-section-number">6.15</span> Per approfondire</h2>
+<ul>
+<li><a href="https://www.php.net/manual/it/mysqli.quickstart.php">Guida rapida ufficiale a MySQLi</a></li>
+<li><a href="https://www.php.net/manual/it/class.mysqli.php">Classe mysqli</a></li>
+<li><a href="https://www.php.net/manual/it/mysqli.quickstart.prepared-statements.php">Prepared statement con MySQLi</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiato!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiato!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../capitoli/05-cookie.html" class="pagination-link" aria-label="Cookie e sessioni">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cookie e sessioni</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../capitoli/07-connessione.html" class="pagination-link" aria-label="Connessione ai database con MySQLi">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Connessione ai database con MySQLi</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
